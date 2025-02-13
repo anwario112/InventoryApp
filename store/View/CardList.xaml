@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.CardList">
+    <StackLayout>
+        <CollectionView x:Name="ItemsCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BackgroundColor="White" CornerRadius="10" HasShadow="True">
+                        <StackLayout>
+                            <Label Text="{Binding ItemNum}" FontSize="Medium" />
+                            <Label Text="{Binding ItemName}" FontSize="Small" />
+                            <Label Text="{Binding Barcode}" FontSize="Small" />
+                            <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="Small" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentView>

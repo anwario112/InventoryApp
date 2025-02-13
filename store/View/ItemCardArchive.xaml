@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.ItemCardArchive"
+             Title="ItemCardArchive">
+    <CollectionView ItemsSource="{Binding ItemArchive}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Padding="20">
+                    <Image Source="exit.png" HeightRequest="20" Margin="0,0,40,0" WidthRequest="20" HorizontalOptions="End" VerticalOptions="Start">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteArchive}" 
+                                                 CommandParameter="{Binding .}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                        <StackLayout VerticalOptions="Center">
+                            <Label Text="{Binding ItemName}" FontSize="18" />
+                            <Label Text="{Binding ScanningNum}" />
+                            <Label Text="{Binding Quantity}" />
+                            <Label Text="{Binding Unit}" />
+                        </StackLayout>
+
+                        <Image Source="restore.png" HeightRequest="25"  WidthRequest="25" Margin="0,40,0,0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RestoreArchive}" 
+                                                      CommandParameter="{Binding .}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+
+                    <BoxView HeightRequest="2" BackgroundColor="{StaticResource teal}"  WidthRequest="340" Margin="20,5,0,5" />
+                </StackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</ContentPage>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="store.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:store"
+    xmlns:s="clr-namespace:store.View"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="{StaticResource teal}"
+    Shell.TitleColor="White"
+    Title="store">
+
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate s:LoginPage}"
+        Route="LoginPage" />
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <ShellSection Title="Scan Barcode" Route="TransferData">
+        <ShellContent ContentTemplate="{DataTemplate s:TransferData}" />
+    </ShellSection>
+</Shell>

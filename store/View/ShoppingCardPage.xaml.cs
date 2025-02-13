@@ -1,0 +1,54 @@
+using store.Models;
+using store.ViewModels;
+using System.Diagnostics;
+
+namespace store.View;
+
+public partial class ShoppingCardPage : ContentPage
+{
+
+    private readonly shoppingCards _fetchCardList;
+    public string Username { get;set; }
+
+    public ShoppingCardPage(string username)
+	{
+		InitializeComponent();
+		_fetchCardList = new shoppingCards();
+        BindingContext = _fetchCardList;
+        Username = username;
+        LoadShoppingCartItems(Username);
+    }
+
+    private async void LoadShoppingCartItems(string username)
+    {
+        await _fetchCardList.LoadShoppingCartItems(username);
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        var item = e.Parameter as dynamic;
+
+        if (item != null)
+        {
+            
+            Debug.WriteLine($"Item ID: {item.ID}"); 
+            bool isDeleted = await _fetchCardList.DeleteShoppingCartItem(item.ID, Username);
+
+            if (isDeleted)
+            {
+                await _fetchCardList.LoadShoppingCartItems(Username);
+            }
+            else
+            {
+                Debug.WriteLine("Failed to delete the item.");
+            }
+        }
+    }
+
+    private async void SendShoppingCards(object sender, TappedEventArgs e)
+    {
+        await _fetchCardList.SendDataToApi(Username);
+    }
+
+
+}

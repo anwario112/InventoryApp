@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.RakCard">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" 
+            Stroke="Transparent"
+            StrokeThickness="2"
+            BackgroundColor="{StaticResource White}"
+            HeightRequest="90"
+            WidthRequest="350" 
+            Margin="10,30,10,-40">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="15" />
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
+            </Border.GestureRecognizers>
+
+            <Grid Padding="0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <BoxView WidthRequest="10" 
+                     BackgroundColor="{StaticResource teal}" 
+                     HorizontalOptions="Start" 
+                     VerticalOptions="Fill" />
+
+                <StackLayout Orientation="Vertical" 
+                         HorizontalOptions="Start" 
+                         VerticalOptions="Center" 
+                         Spacing="5" 
+                         Padding="16,0" 
+                         Margin="20,0,0,0">
+                 
+                    <Label x:Name="RakName" FontSize="18" FontAttributes="Bold" FontFamily="roman"/>
+                    <Label x:Name="Date"/>
+                </StackLayout>
+
+
+                <Image Grid.Column="2" 
+                       Source="exit.png" 
+                       WidthRequest="20" 
+                       HeightRequest="20" 
+                       VerticalOptions="Center" 
+                       HorizontalOptions="End" 
+                       Margin="0,-35,10,0">
+
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+        </Border>
+
+
+        <StackLayout Grid.Row="1" Padding="10">
+
+        </StackLayout>
+    </Grid>
+</ContentView>

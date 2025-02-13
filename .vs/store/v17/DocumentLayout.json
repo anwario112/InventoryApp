@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\store\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\viewmodels\\shoppinglistfetch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\shoppinglistfetch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\shoppingpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\shoppingpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\shoppingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\shoppingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 100,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 95,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ShoppingListFetch.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\ShoppingListFetch.cs",
+              "RelativeDocumentMoniker": "store\\ViewModels\\ShoppingListFetch.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\ShoppingListFetch.cs",
+              "RelativeToolTip": "store\\ViewModels\\ShoppingListFetch.cs",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAAABwBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-13T14:00:29.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ShoppingPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml.cs",
+              "RelativeDocumentMoniker": "store\\View\\ShoppingPage.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml.cs",
+              "RelativeToolTip": "store\\View\\ShoppingPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-13T14:00:01.747Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ShoppingPage.xaml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml",
+              "RelativeDocumentMoniker": "store\\View\\ShoppingPage.xaml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml",
+              "RelativeToolTip": "store\\View\\ShoppingPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-02-13T13:59:57.277Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+               x:Class="store.View.ConnectionBox"
+               xmlns:vm="clr-namespace:store.ViewModels">
+
+    <toolkit:Popup.BindingContext>
+        <vm:SaveConnection />
+    </toolkit:Popup.BindingContext>
+    <VerticalStackLayout Spacing="20" Padding="15">
+
+        <StackLayout Grid.Row="0" 
+                Orientation="Horizontal" 
+                IsVisible="{Binding IsSuccessMessageVisible}" 
+                HorizontalOptions="Center" 
+                VerticalOptions="Start" 
+                Margin="10">
+
+            <Image Source="check.png" 
+              WidthRequest="20" 
+              HeightRequest="20" 
+              VerticalOptions="Center" />
+
+            <Label Text="{Binding SuccessMessage}" 
+              TextColor="Green" 
+              VerticalOptions="Center" 
+              Margin="5,0,0,0" />
+        </StackLayout>
+
+        <Border Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="400">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"/>
+            </Border.StrokeShape>
+
+            
+            <StackLayout Orientation="Vertical" Spacing="10" Padding="10">
+
+                <ur:TextField Title="ServerName" 
+                 BorderColor="{StaticResource teal}" 
+                              Text="{Binding ServerName}"
+                 WidthRequest="250" />
+
+
+                <ur:TextField Title="Database Name"
+                              WidthRequest="250"
+                              Text="{Binding DatabaseName}"
+                              BorderColor="{StaticResource teal}"
+                              x:Name="DatabaseName" />
+
+                <ur:TextField Title="Username"
+                             WidthRequest="250"
+                              Text="{Binding Username}"
+                             BorderColor="{StaticResource teal}"
+                             x:Name="Username"/>
+                <ur:TextField Title="Year"
+                      WidthRequest="250"
+                              Text="{Binding Year}"
+                      BorderColor="{StaticResource teal}"
+                      x:Name="Year" />
+                <ur:TextField Title="Password"
+                     WidthRequest="250"
+                              Text="{Binding Password}"
+                     BorderColor="{StaticResource teal}"
+                     x:Name="Password" />
+                <Button Text="Save" x:Name="saveData" BackgroundColor="{StaticResource teal}" Command="{Binding SaveCommand}" Clicked="saveData_Clicked"/>
+
+            </StackLayout>
+        </Border>
+    </VerticalStackLayout>
+</toolkit:Popup>

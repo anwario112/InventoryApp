@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             x:Class="store.View.EditQuantityPopup">
+    <Border Stroke="Transparent"
+        StrokeThickness="2"
+        BackgroundColor="{StaticResource White}"
+        HeightRequest="250" WidthRequest="300">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="10"/>
+        </Border.StrokeShape>
+        <StackLayout Padding="10">
+
+            <Label Text="Set Item Quantity" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Start" 
+               FontSize="19" 
+               Margin="0,10,0,0"/>
+
+            <ur:TextField x:Name="QuantityField" 
+                      Title="Quantity" 
+                      Keyboard="Numeric" 
+                      Margin="0,10,0,0"/>
+
+            <StackLayout Orientation="Horizontal" 
+                     HorizontalOptions="End" 
+                    Margin="0,20,0,0">
+
+                <Button Text="Set" 
+                   Clicked="EditQuantity"
+                    BackgroundColor="{StaticResource teal}" 
+                    WidthRequest="100" Margin="0,0,80,0"/>
+
+            </StackLayout>
+
+        </StackLayout>
+    </Border>
+</toolkit:Popup>

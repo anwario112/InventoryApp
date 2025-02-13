@@ -1,0 +1,45 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             x:Class="store.View.ChangePopup">
+    <Border Stroke="Transparent"
+        StrokeThickness="2"
+        BackgroundColor="{StaticResource White}"
+        HeightRequest="300" WidthRequest="400">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="10"/>
+        </Border.StrokeShape>
+        <StackLayout Padding="10">
+
+            <Label Text="Change Item Barcode" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Start" 
+               FontSize="19" 
+               Margin="0,10,0,0"/>
+
+            <ur:TextField x:Name="ItemNumField" 
+                      Title="ItemNum" 
+                      Text="{Binding ItemNum, Mode=TwoWay}"
+                      Margin="0,10,0,0"
+                      TextChanged="ItemNumField_TextChanged"/>
+
+            <Label Text="Select Unit:" 
+                   FontSize="16" 
+                   Margin="0,10,0,0"/>
+
+            <Picker x:Name="UnitComboBox" 
+            ItemsSource="{Binding UnitDescs}" 
+             SelectedItem="{Binding SelectedUnit}" 
+            Title="Select Unit" 
+            Margin="0,10,0,0"   BackgroundColor="{StaticResource Gray400}"/>
+
+            <Button Text="Set" 
+
+               Clicked="Button_Clicked"
+               BackgroundColor="{StaticResource teal}" 
+               WidthRequest="100" Margin="0,20,0,0"/>
+
+        </StackLayout>
+    </Border>
+</toolkit:Popup>
