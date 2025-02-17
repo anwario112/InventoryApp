@@ -338,3 +338,7 @@ C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\user.png
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\login.png
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\archive.png
+C:\Users\USER\source\repos\store\store\bin\Debug\net9.0-maccatalyst\maccatalyst-x64\Newtonsoft.Json.dll
+C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\shoppingcart.png
+C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\r\Resources\checked.png
+C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\store.sourcelink.json

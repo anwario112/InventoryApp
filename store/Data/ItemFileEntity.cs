@@ -2,6 +2,7 @@
 using store.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,8 +108,25 @@ namespace store.Data
             var item = await _dbContext.ItemFile
                 .AsNoTracking() 
                 .FirstOrDefaultAsync(i => i.ItemNum == itemNum);
+            Debug.WriteLine($"itemID:{item.ItemID}");
 
             return item?.ItemID; 
+        }
+
+        public async Task<string> GetPriceByItemId(int itemId)
+        {
+            if (itemId <= 0)
+            {
+                throw new ArgumentException("ItemID must be greater than zero.", nameof(itemId));
+            }
+
+            var item = await _dbContext.ItemFile
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.ItemID == itemId);
+
+            Debug.WriteLine($"the price:{item.Price}");
+
+            return item?.Price;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace store.ViewModels
 
         public async Task InsertApiData()
         {
-            string url = "https://7e8f-213-204-95-71.ngrok-free.app/api/items";
+            string url = "https://33fa-213-204-95-59.ngrok-free.app/api/items";
 
             try
             {

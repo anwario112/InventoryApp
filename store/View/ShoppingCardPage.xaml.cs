@@ -1,6 +1,7 @@
 using store.Models;
 using store.ViewModels;
 using System.Diagnostics;
+ using Microsoft.Maui.Controls; 
 
 namespace store.View;
 
@@ -8,6 +9,7 @@ public partial class ShoppingCardPage : ContentPage
 {
 
     private readonly shoppingCards _fetchCardList;
+   
     public string Username { get;set; }
 
     public ShoppingCardPage(string username)
@@ -47,7 +49,31 @@ public partial class ShoppingCardPage : ContentPage
 
     private async void SendShoppingCards(object sender, TappedEventArgs e)
     {
-        await _fetchCardList.SendDataToApi(Username);
+       var isSaved= await _fetchCardList.SaveInvoice(Username);
+
+        if (isSaved)
+        {
+            invoiceSavedLabel.Text = "Invoice is Saved!";
+            invoiceSavedLabel.TextColor = Colors.Green;
+
+            invoiceSavedLabel.IsVisible = true;
+
+            await Task.Delay(3000);
+            invoiceSavedLabel.IsVisible= false;
+            
+
+        }
+        else
+        {
+
+            invoiceSavedLabel.Text = "Failed To save invoice!";
+            invoiceSavedLabel.TextColor = Colors.Red;
+            invoiceSavedLabel.IsVisible = true;
+
+            await Task.Delay(3000);
+            invoiceSavedLabel.IsVisible = false;
+
+        }
     }
 
 

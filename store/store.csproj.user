@@ -32,6 +32,12 @@
     <MauiXaml Update="View\ExportPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="View\InvoiceDetails.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="View\InvoicePage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="View\ItemCard.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

@@ -223,7 +223,7 @@
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
                 HeightRequest="60" WidthRequest="350"  
-                Margin="10,0,40,130" x:Name="SettingsBorder">
+                Margin="10,-15,40,130" x:Name="SettingsBorder">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="15" />
             </Border.StrokeShape>
@@ -249,7 +249,40 @@
             </StackLayout>
         </Border>
 
-        <Button x:Name="LogoutButton"
+
+
+            <Border Grid.Row="6" Grid.ColumnSpan="2"
+          Stroke="Transparent"
+          StrokeThickness="2"
+          BackgroundColor="{StaticResource White}"
+          HeightRequest="60" WidthRequest="350"  
+          Margin="10,-15,40,270" >
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="InvoiceTapped" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="bill.png" 
+                 HorizontalOptions="Center" 
+                 VerticalOptions="Center" 
+                 HeightRequest="35" 
+                 WidthRequest="50" />
+                    <Label Text="Invoice" 
+                 VerticalOptions="Center"
+                 FontSize="20"
+                 FontAttributes="Bold"
+                 TextColor="{StaticResource Gray500}"  Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 HeightRequest="30"
+                 Margin="150,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+            <Button x:Name="LogoutButton"
                 Text="Logout"
                 BackgroundColor="{StaticResource teal}"
                 HorizontalOptions="End"

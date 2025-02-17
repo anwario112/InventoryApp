@@ -23,6 +23,12 @@ namespace store.Data
         public DbSet<ExportedSection> ExportedSection { get; set; }
         public DbSet<ExportedCard> ExportedCard { get; set; }
         public DbSet<ShoppingCard> ShoppingCard { get; set; }
+        public DbSet<Invoice> Invoice { get; set; }
+        public DbSet<InvoiceDetails> invoiceDetails { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Country>Country { get; set; }
+        public DbSet<City>City { get; set; }
+        public DbSet<Street> Street { get; set; }
 
 
 
@@ -128,11 +134,94 @@ namespace store.Data
 
 
 
+            modelBuilder.Entity<Invoice>()
+               .HasIndex(i => i.InvoiceTypeID)
+               .HasDatabaseName("IX_Invoice_InvoiceTypeID");
+
+
+            modelBuilder.Entity<Invoice>()
+                .HasIndex(i => i.CurrencyID)
+                .HasDatabaseName("IX_Invoice_CurrencyID");
+
+
+            modelBuilder.Entity<Invoice>()
+                .HasIndex(i => i.BranchID)
+                .HasDatabaseName("IX_Invoice_BranchID");
+
+
+            modelBuilder.Entity<Invoice>()
+                .HasIndex(i => i.TVA)
+                .HasDatabaseName("IX_Invoice_TVA");
+
+
+            modelBuilder.Entity<Invoice>()
+                .HasIndex(i => i.CustomerID)
+                .HasDatabaseName("IX_Invoice_CustomerID");
+
+
+            modelBuilder.Entity<Invoice>()
+                 .HasIndex(i => i.CashierID) 
+                .HasDatabaseName("IX_Invoice_CashierID");
+
+
+
+            modelBuilder.Entity<InvoiceDetails>()
+                .HasIndex(id => id.InvoiceID)
+                .HasDatabaseName("IX_InvoiceDetails_InvoiceID");
+
+
+            modelBuilder.Entity<InvoiceDetails>()
+                .HasIndex(id => id.ItemID)
+                .HasDatabaseName("IX_InvoiceDetails_ItemID");
+
+
+            modelBuilder.Entity<InvoiceDetails>()
+                .HasIndex(id => id.UnitID)
+                .HasDatabaseName("IX_InvoiceDetails_UnitID");
+
+
+            modelBuilder.Entity<InvoiceDetails>()
+                .HasIndex(id => id.TVA)
+                .HasDatabaseName("IX_InvoiceDetails_TVA");
+
+
+            modelBuilder.Entity<City>()
+                .HasIndex(c => c.CityNum)
+                .HasDatabaseName("IX_City_CityNum");
+
+
+            modelBuilder.Entity<City>()
+                .HasIndex(c => c.CityName)
+                .HasDatabaseName("IX_City_CityName");
+
+
+          
+            modelBuilder.Entity<Street>()
+                .HasIndex(s => s.StreetNum)
+                .HasDatabaseName("IX_Street_StreetNum");
+
+
+            modelBuilder.Entity<Street>()
+                .HasIndex(s => s.StreetDesc)
+                .HasDatabaseName("IX_Street_StreetDesc");
+
+
+            modelBuilder.Entity<Customer>()
+               .HasIndex(c => c.Phone)
+               .HasDatabaseName("IX_Customer_Phone");
+
+
+
+            modelBuilder.Entity<Customer>()
+                 .HasIndex(c => c.CustomerNum)
+                 .HasDatabaseName("IX_Customer_CustomerNum");
+
+
 
         }
 
 
-       
+
 
 
 

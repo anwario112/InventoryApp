@@ -99,6 +99,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.ExportPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ExportPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ExportPage.xaml
 
+[C:/Users/USER/source/repos/store/store/View/InvoiceDetails.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoiceDetails.xaml
+build_metadata.AdditionalFiles.TargetPath = View\InvoiceDetails.xaml
+build_metadata.AdditionalFiles.RelativePath = View\InvoiceDetails.xaml
+
+[C:/Users/USER/source/repos/store/store/View/InvoicePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoicePage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\InvoicePage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\InvoicePage.xaml
+
 [C:/Users/USER/source/repos/store/store/View/ItemCard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemCard.xaml

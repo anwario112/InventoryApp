@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              x:Class="store.View.ShoppingCardPage"
              Title="ShoppingCardPage"
              BackgroundColor="{StaticResource Gray1000}">
 
     <ScrollView>
         <StackLayout>
+
+            <Label x:Name="invoiceSavedLabel"  
+              
+              
+               FontSize="16"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="False" />
+
+            <Border  Stroke="Transparent"
+                                StrokeThickness="2"
+                                BackgroundColor="{StaticResource White}"
+                                HeightRequest="350"
+                                WidthRequest="350"
+                                Margin="10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <StackLayout >
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" >
+                        <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding FirstName}"/>
+                        <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding LastName}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                        <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Country}"/>
+                        <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding City}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                        <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Phone}"/>
+                        <ur:TextField Title="Street" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Street}"/>
+                    </StackLayout>
+                    <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CompanyName}"/>
+                    <ur:TextField Title="Address" WidthRequest="280"  Text="{Binding Address}"/>
+                </StackLayout>
+
+            </Border>
             <CollectionView ItemsSource="{Binding ShoppingCartItems}" 
                             ItemSizingStrategy="MeasureAllItems" 
                             Margin="0,0,0,10">
@@ -98,7 +135,7 @@
                     <TapGestureRecognizer Tapped="SendShoppingCards" />
                 </Border.GestureRecognizers>
                 <StackLayout HorizontalOptions="Center" Margin="0,7,0,0">
-                    <Label Text="Send" FontFamily="roman" TextColor="White" FontSize="20" />
+                    <Label Text="Save" FontFamily="roman" TextColor="White" FontSize="18" />
                 </StackLayout>
             </Border>
         </StackLayout>

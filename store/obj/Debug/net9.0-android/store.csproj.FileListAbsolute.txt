@@ -1140,3 +1140,5 @@ C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\resizetizer\r\dr
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\resizetizer\r\drawable\checked.png
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\resizetizer\r\drawable\shoppingcart.png
 C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\android\assets\x86_64\Newtonsoft.Json.dll
+C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\store.sourcelink.json
+C:\Users\USER\source\repos\store\store\obj\Debug\net9.0-android\resizetizer\r\drawable\bill.png

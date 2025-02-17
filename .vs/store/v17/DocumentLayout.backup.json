@@ -1,7 +1,44 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\store\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\invoicedetails.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\invoicedetails.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\invoicedetails.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\invoicedetails.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\viewmodels\\invoiceviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\invoiceviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\dto\\invoicewithcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\dto\\invoicewithcustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\invoicepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\invoicepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\invoicepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\invoicepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\data\\customerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\data\\customerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\models\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\models\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +46,120 @@
       "DocumentGroups": [
         {
           "DockedWidth": 95,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoiceDetails.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoiceDetails.xaml.cs",
+              "RelativeDocumentMoniker": "store\\View\\InvoiceDetails.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoiceDetails.xaml.cs",
+              "RelativeToolTip": "store\\View\\InvoiceDetails.xaml.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAkwAYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T18:18:21.921Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InvoiceDetails.xaml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoiceDetails.xaml",
+              "RelativeDocumentMoniker": "store\\View\\InvoiceDetails.xaml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoiceDetails.xaml",
+              "RelativeToolTip": "store\\View\\InvoiceDetails.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-02-15T18:18:17.402Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InvoiceWithCustomer.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\DTO\\InvoiceWithCustomer.cs",
+              "RelativeDocumentMoniker": "store\\DTO\\InvoiceWithCustomer.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\DTO\\InvoiceWithCustomer.cs",
+              "RelativeToolTip": "store\\DTO\\InvoiceWithCustomer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T18:12:22.512Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InvoicePage.xaml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoicePage.xaml",
+              "RelativeDocumentMoniker": "store\\View\\InvoicePage.xaml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoicePage.xaml",
+              "RelativeToolTip": "store\\View\\InvoicePage.xaml",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAFUAAABfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-02-15T13:20:50.45Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\Customer.cs",
+              "RelativeDocumentMoniker": "store\\Models\\Customer.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\Customer.cs",
+              "RelativeToolTip": "store\\Models\\Customer.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T13:16:06.796Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InvoiceViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\InvoiceViewModel.cs",
+              "RelativeDocumentMoniker": "store\\ViewModels\\InvoiceViewModel.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\InvoiceViewModel.cs",
+              "RelativeToolTip": "store\\ViewModels\\InvoiceViewModel.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAnwLcAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T13:14:48.353Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Invoice.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\Invoice.cs",
+              "RelativeDocumentMoniker": "store\\Models\\Invoice.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\Invoice.cs",
+              "RelativeToolTip": "store\\Models\\Invoice.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA8wB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T13:15:10.15Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "InvoicePage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoicePage.xaml.cs",
+              "RelativeDocumentMoniker": "store\\View\\InvoicePage.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InvoicePage.xaml.cs",
+              "RelativeToolTip": "store\\View\\InvoicePage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T13:31:50.335Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CustomerEntity.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\CustomerEntity.cs",
+              "RelativeDocumentMoniker": "store\\Data\\CustomerEntity.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\CustomerEntity.cs",
+              "RelativeToolTip": "store\\Data\\CustomerEntity.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAIwC4AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T11:20:25.334Z"
             }
           ]
         }

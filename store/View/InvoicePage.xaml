@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       
+             xmlns:converters="clr-namespace:store.Converters"
+             x:Class="store.View.InvoicePage"
+             Title="InvoicePage">
+
+  
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateToRelativeTimeConverter x:Key="DateToRelativeTime" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        
+        <Border Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource Gray1000}"
+                HeightRequest="35" WidthRequest="300"  
+                Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Start">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="25" />
+            </Border.StrokeShape>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="0">
+
+                <Border BackgroundColor="{Binding UnsentBackgroundColor}"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="140"
+                        VerticalOptions="Center"
+                        Margin="0,0,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Label Text="unsent" 
+                           FontSize="18" 
+                           TextColor="{Binding UnsentTextColor}" 
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectUnsentCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Border>
+
+                <Label Text=" | " 
+                       FontSize="18" 
+                       VerticalOptions="Center"  
+                       Margin="0,0,0,0"/>
+
+                <Border BackgroundColor="{Binding SentBackgroundColor}"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="140"
+                        VerticalOptions="Center"
+                        Margin="0,0,10,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Label Text="Sent" 
+                           FontSize="18" 
+                           TextColor="{Binding SentTextColor}" 
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectSentCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Border>
+            </StackLayout>
+        </Border>
+        <StackLayout>
+            <Label Text="Viewed" Padding="20" TextColor="{StaticResource Gray300}" FontSize="18" HorizontalTextAlignment="Start"/>
+        </StackLayout>
+        <CollectionView ItemsSource="{Binding FilteredInvoices}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Vertical" Padding="10">
+                        <StackLayout Orientation="Horizontal">
+                           
+                            <Border WidthRequest="50" HeightRequest="50" Stroke="Transparent" StrokeThickness="2" BackgroundColor="{StaticResource Gray200}" Margin="20,0,0,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="25" />
+                                   
+                                </Border.StrokeShape>
+                                <Label Text="{Binding Initials}" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,0,0"/>
+                            </Border>
+
+                            <Grid Padding="10" WidthRequest="300" HorizontalOptions="FillAndExpand">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                   
+                                    <ColumnDefinition Width="Auto" />
+                                    
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout Grid.Column="0" VerticalOptions="Center">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding FirstName}" FontSize="20" Margin="0,0,10,0"/>
+                                       
+                                        <Label Text="{Binding LastName}" FontSize="20"/>
+                                      
+                                    </StackLayout>
+                                    <Label Text="{Binding Invoice.InvoiceNum, StringFormat='Invoice #{0}'}" FontSize="18" TextColor="{StaticResource Gray400}" Margin="0,5,0,0"/>
+                                   
+                                </StackLayout>
+
+                                <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End">
+                                    <Label Text="{Binding Invoice.Total, StringFormat='${0:F2}'}" FontSize="18" Margin="0,0,0,5"/>
+                                    <Label Text="{Binding Invoice.DateCreated, Converter={StaticResource DateToRelativeTime}}" TextColor="{StaticResource Gray300}" FontSize="18"/>
+                                  
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+
+                        <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray100}" HorizontalOptions="FillAndExpand" WidthRequest="350" Margin="0,10,0,0"/>
+
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ItemTappedCommand}" 
+                                        CommandParameter="{Binding .}" />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </StackLayout>
+
+</ContentPage>

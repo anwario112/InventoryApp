@@ -54,6 +54,7 @@ appiconWideTile.scale-400.png
 archive.scale-100.png
 cardbarcode.scale-100.png
 check.scale-100.png
+checked.scale-100.png
 connection.scale-100.png
 dollar.scale-100.png
 dotnet_bot.scale-100.png
@@ -71,6 +72,7 @@ save.scale-100.png
 search.scale-100.png
 setting.scale-100.png
 shopping.scale-100.png
+shoppingcart.scale-100.png
 transfer.scale-100.png
 user.scale-100.png
 splashSplashScreen.scale-100.png

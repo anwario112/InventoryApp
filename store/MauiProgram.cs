@@ -7,6 +7,8 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.Marshalling.IIUnknownCacheStrategy;
 using store.Models;
+using Android.Content;
+
 
 
 
@@ -60,7 +62,9 @@ namespace store
 
 
 
-                
+
+
+
 
 
 

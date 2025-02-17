@@ -86,6 +86,11 @@ namespace store
         {
             Navigation.PushAsync(new View.ShoppingPage(authService.Username));
         }
+
+        private void InvoiceTapped(object sender, TappedEventArgs e)
+        {
+            Navigation.PushAsync(new View.InvoicePage(authService.Username));
+        }
     }
 
 }
