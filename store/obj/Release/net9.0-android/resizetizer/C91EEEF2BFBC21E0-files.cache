@@ -1,12 +1,18 @@
 ﻿obj\Release\net9.0-android\resizetizer\r\drawable\add.png
+obj\Release\net9.0-android\resizetizer\r\drawable\additem.png
 obj\Release\net9.0-android\resizetizer\r\drawable\archive.png
+obj\Release\net9.0-android\resizetizer\r\drawable\bill.png
+obj\Release\net9.0-android\resizetizer\r\drawable\camera.png
 obj\Release\net9.0-android\resizetizer\r\drawable\cardbarcode.png
 obj\Release\net9.0-android\resizetizer\r\drawable\check.png
+obj\Release\net9.0-android\resizetizer\r\drawable\checked.png
 obj\Release\net9.0-android\resizetizer\r\drawable\connection.png
 obj\Release\net9.0-android\resizetizer\r\drawable\dollar.png
 obj\Release\net9.0-android\resizetizer\r\drawable\exit.png
 obj\Release\net9.0-android\resizetizer\r\drawable\export.png
+obj\Release\net9.0-android\resizetizer\r\drawable\gold.png
 obj\Release\net9.0-android\resizetizer\r\drawable\login.png
+obj\Release\net9.0-android\resizetizer\r\drawable\minus.png
 obj\Release\net9.0-android\resizetizer\r\drawable\next.png
 obj\Release\net9.0-android\resizetizer\r\drawable\port.png
 obj\Release\net9.0-android\resizetizer\r\drawable\restore.png
@@ -14,6 +20,7 @@ obj\Release\net9.0-android\resizetizer\r\drawable\save.png
 obj\Release\net9.0-android\resizetizer\r\drawable\search.png
 obj\Release\net9.0-android\resizetizer\r\drawable\setting.png
 obj\Release\net9.0-android\resizetizer\r\drawable\shopping.png
+obj\Release\net9.0-android\resizetizer\r\drawable\shoppingcart.png
 obj\Release\net9.0-android\resizetizer\r\drawable\transfer.png
 obj\Release\net9.0-android\resizetizer\r\drawable\user.png
 obj\Release\net9.0-android\resizetizer\r\drawable-hdpi\dotnet_bot.png

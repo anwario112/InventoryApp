@@ -11,10 +11,10 @@ namespace store.Models
     public class ItemUnit
     {
         public int Id { get; set; }
-        public string UnitDesc { get; set; }
+        public string? UnitDesc { get; set; }
 
         [JsonConverter(typeof(IntConverter))]
-        public int ItemID { get; set; }
+        public int? ItemID { get; set; }
 
 
 

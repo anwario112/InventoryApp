@@ -26,7 +26,7 @@ namespace store.Models
         public string Year { get; set; }
 
         [Column("Password")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
     }
 }

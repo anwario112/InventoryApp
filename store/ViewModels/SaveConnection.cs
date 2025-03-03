@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace store.ViewModels
 {
@@ -121,61 +122,70 @@ namespace store.ViewModels
 
         public async Task SaveConnect()
         {
-            if (!string.IsNullOrEmpty(ServerName) &&
-                !string.IsNullOrEmpty(DatabaseName) &&
-                !string.IsNullOrEmpty(Username) &&
-                !string.IsNullOrEmpty(Password) &&
-                !string.IsNullOrEmpty(Year))
+            try
             {
-                Debug.WriteLine($"Checking if connection exists {ServerName},{DatabaseName},{Username},{Year},{Password}");
-                
-                var connectionExists = await _connectionEntity.GetConnection(null, null, null, null, null);
-
-                if (connectionExists.Any())
+                if (!string.IsNullOrEmpty(ServerName) &&
+                    !string.IsNullOrEmpty(DatabaseName) &&
+                    !string.IsNullOrEmpty(Username) &&
+                    !string.IsNullOrEmpty(Year))
                 {
-                    Debug.WriteLine($"CONNECTION found, Updating");
-                   
-                    var connectionExist = connectionExists.First();
-                    connectionExist.ServerName = ServerName;
-                    connectionExist.DatabaseName = DatabaseName;
-                    connectionExist.Username = Username;
-                    connectionExist.Password = Password;
-                    connectionExist.Year = Year;
+                    Debug.WriteLine($"Checking if connection exists {ServerName},{DatabaseName},{Username},{Year},{Password}");
 
-                    // Update the connection in the database
-                    await _connectionEntity.UpdateData(connectionExist);
-                    Debug.WriteLine($"Data is updated");
-                    SuccessMessage = "Data updated successfully!";
-                  
-                  
+                    var connectionExists = await _connectionEntity.GetConnection(null, null, null, null, null);
+
+                    if (connectionExists.Any())
+                    {
+                        Debug.WriteLine($"CONNECTION found, Updating");
+
+                        var connectionExist = connectionExists.First();
+                        connectionExist.ServerName = ServerName;
+                        connectionExist.DatabaseName = DatabaseName;
+                        connectionExist.Username = Username;
+                        connectionExist.Password = Password;
+                        connectionExist.Year = Year;
+
+                        await _connectionEntity.UpdateData(connectionExist);
+                        Debug.WriteLine($"Data is updated");
+                        SuccessMessage = "Data updated successfully!";
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Creating new Connection");
+
+                        var connection = new Connection
+                        {
+                            ServerName = ServerName,
+                            DatabaseName = DatabaseName,
+                            Username = Username,
+                            Year = Year,
+                            Password = Password
+                        };
+
+                        await _connectionEntity.AddData(connection);
+                        Debug.WriteLine($"New connection saved");
+                        SuccessMessage = "Saved";
+                    }
+                    IsSuccessMessageVisible = true;
+
+                    await Task.Delay(3000);
+                    IsSuccessMessageVisible = false;
                 }
                 else
                 {
-                    Debug.WriteLine($"Creating new Connection");
-                 
-                    var connection = new Connection
-                    {
-                        ServerName = ServerName,
-                        DatabaseName = DatabaseName,
-                        Username = Username,
-                        Year = Year,
-                        Password = Password
-                    };
-
-                    await _connectionEntity.AddData(connection);
-                    Debug.WriteLine($"New connection saved");
-                    SuccessMessage = "Saved";
-                  
+                    Debug.WriteLine("Please fill in all fields.");
                 }
-                IsSuccessMessageVisible = true;
-
-                await Task.Delay(3000);
-                IsSuccessMessageVisible = false;
-      
             }
-            else
+            catch (DbUpdateException dbEx)
             {
-                Debug.WriteLine("Please fill in all fields.");
+                Debug.WriteLine($"Database update error: {dbEx.InnerException?.Message}");
+                SuccessMessage = "Failed to save data: " + dbEx.InnerException?.Message;
+                IsSuccessMessageVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred: {ex.Message}");
+                SuccessMessage = "An error occurred: " + ex.Message;
+                IsSuccessMessageVisible = true;
             }
         }
 

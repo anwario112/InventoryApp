@@ -19,6 +19,7 @@ namespace store.Models
         public string? Floor { get; set; }
         public int? BranchID { get; set; }
         public int? TvaNum { get; set; }
-       
+        public int? CountryID { get; set; }
+
     }
 }

@@ -21,7 +21,7 @@ namespace store.Models
         public int Quantity { get; set; }
 
         [Column("Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
         public int SectionID { get; set; }
 
         [ForeignKey("SectionID")]

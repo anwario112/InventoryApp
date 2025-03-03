@@ -9,7 +9,7 @@
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
-                HeightRequest="60"  WidthRequest="350"
+                HeightRequest="60"  WidthRequest="320"
                 Margin="10,30,10,200">
          
             <Border.StrokeShape>
@@ -34,7 +34,7 @@
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        HeightRequest="30"
-                       Margin="30,0,0,0"/>
+                       Margin="-5,0,0,0"/>
             </StackLayout>
         </Border>
 
@@ -43,7 +43,7 @@
          Stroke="Transparent"
          StrokeThickness="2"
          BackgroundColor="{StaticResource White}"
-         HeightRequest="60"  WidthRequest="350"
+         HeightRequest="60"  WidthRequest="320"
          Margin="10,30,10,60">
 
             <Border.StrokeShape>
@@ -68,7 +68,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 HeightRequest="30"
-                Margin="140,0,0,0"/>
+                Margin="105,0,0,0"/>
             </StackLayout>
         </Border>
 
@@ -78,7 +78,7 @@
           Stroke="Transparent"
           StrokeThickness="2"
           BackgroundColor="{StaticResource White}"
-          HeightRequest="60"  WidthRequest="350"
+          HeightRequest="60"  WidthRequest="320"
           Margin="10,-250,10,10">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="15" />
@@ -101,7 +101,7 @@
                  HorizontalOptions="Center"
                  VerticalOptions="Center"
                  HeightRequest="30"
-                 Margin="160,0,0,0"/>
+                 Margin="130,0,0,0"/>
             </StackLayout>
         </Border>
     </Grid>

@@ -5,9 +5,9 @@
              xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              x:Class="store.View.LoginPage"
              Title="LoginPage">
-
-    <Grid>
-        <!-- Path shape -->
+    <ScrollView>
+        <Grid>
+       
         <Path Fill="#047bf9" 
               Data="m-229.99995,-7.0942l816.9999,0l0,100.06955c-326.93655,96.04298 -450.49995,96.17533 -816.9999,16.46451l0,-116.53406z" />
 
@@ -53,4 +53,5 @@
             </Border>
         </StackLayout>
     </Grid>
+    </ScrollView>
 </ContentPage>

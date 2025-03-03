@@ -126,7 +126,7 @@ namespace store.ViewModels
                 {
                     foreach (var itemCard in cards)
                     {
-                        await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
+                        await writer.WriteLineAsync($"{itemCard.ScanningNum}, {itemCard.Quantity},{itemCard.Unit}");
                         Debug.WriteLine($"Written to file: {itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
                     }
                 }
@@ -206,7 +206,7 @@ namespace store.ViewModels
                 {
                     foreach (var itemCard in cards)
                     {
-                        await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
+                        await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.Quantity},{itemCard.Unit}");
                         Debug.WriteLine($"Written to file: {itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
                     }
                 }
@@ -294,7 +294,7 @@ namespace store.ViewModels
             {
                 foreach (var itemCard in CardList)
                 {
-                    await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
+                    await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.Quantity},{itemCard.Unit}");
                     Debug.WriteLine($"Written to file: {itemCard.ScanningNum},{itemCard.ItemName}, Quantity: {itemCard.Quantity},{itemCard.Unit}");
                 }
             }

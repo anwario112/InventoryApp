@@ -2,64 +2,109 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="store.View.TransferData"
               xmlns:local="clr-namespace:store.View"
+              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
-              BackgroundColor="{StaticResource Gray1000}">
+             xmlns:Camera="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"         
+             BackgroundColor="{StaticResource Gray1000}">
 
     <Grid RowDefinitions="Auto, *">
 
         <Grid Grid.Row="0" BackgroundColor="{StaticResource teal}" Padding="10">
-            
-            <Grid RowDefinitions="Auto, Auto">
-                
-                <Label 
-                    Grid.Row="0"
-                    Text="Scan Barcode"
-                    TextColor="White"
-                    FontFamily="roman"
-                    Padding="10,10,10,5"
-                    FontSize="22" />
- 
-                <Border 
-                    Grid.Row="1"
-                    BackgroundColor="#20FFFFFF" 
-                    Stroke="Transparent"
-                    StrokeThickness="1"
-                    Padding="5"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Center"
-                   
-                    Margin="10,10,10,10">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
-                    </Border.StrokeShape>
-                    <Grid>
-                       
-                        <Image 
-                            Source="search.png" 
-                            VerticalOptions="Center" 
-                            HorizontalOptions="Start"
-                            WidthRequest="20" 
-                            HeightRequest="20" 
-                            Margin="5,0,0,0" />
 
-                      
+            <Grid RowDefinitions="Auto, Auto">
+
+                <Label 
+
+                    Grid.Row="0"
+
+                    Text="Scan Barcode"
+
+                    TextColor="White"
+
+                    FontFamily="roman"
+
+                    Padding="10,10,10,5"
+
+                    FontSize="22" />
+
+
+                <Border 
+
+                    Grid.Row="1"
+
+                    BackgroundColor="#20FFFFFF" 
+
+                    Stroke="Transparent"
+
+                    StrokeThickness="1"
+
+                    Padding="5"
+
+                    HorizontalOptions="Fill"
+
+                    VerticalOptions="Center"
+
+                    Margin="10,10,10,10">
+
+                    <Border.StrokeShape>
+
+                        <RoundRectangle CornerRadius="10" />
+
+                    </Border.StrokeShape>
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*" />
+                            
+
+                            <ColumnDefinition Width="Auto" />
+                          
+
+                        </Grid.ColumnDefinitions>
+
+
                         <Entry 
-                            Placeholder="Search  to add an Item "
+
+                            Placeholder="Search to add an Item"
+
                             BackgroundColor="Transparent"
+
                             TextColor="White"
+
                             FontFamily="roman"
+
                             HorizontalOptions="FillAndExpand"
-                            Margin="30,0,0,0"
-                             HeightRequest="10"
+
+                            Margin="0,0,5,0"
+
+                            HeightRequest="40"
+
                             x:Name="Barcode"
+
                             IsVisible="true"
-                             TextChanged="Entry_TextChanged"/>
+
+                            TextChanged="Entry_TextChanged"/>
+
+                        <Image Source="camera.png" HeightRequest="25" WidthRequest="25" HorizontalOptions="End" Margin="0,0,20,0">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCameraImageTapped" />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+
+                     
+                        
+
                     </Grid>
+
                 </Border>
+
             </Grid>
 
 
-          
+
 
             <Border  
                 WidthRequest="150" 
@@ -125,6 +170,33 @@
                 </Image.GestureRecognizers>
             </Image>
         </Grid>
+
+        <StackLayout HorizontalOptions="Fill" VerticalOptions="End" Margin="0,0,0,-100">
+
+            <Border WidthRequest="260" 
+
+                    HeightRequest="45" 
+
+                    VerticalOptions="Center" 
+
+                    HorizontalOptions="Center" 
+
+                    BackgroundColor="{StaticResource White}"
+
+                    Stroke="White"
+
+                    StrokeThickness="2"
+
+                    Padding="0"  x:Name="errorMessage" IsVisible="False">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <Label TextColor="red" FontSize="20" x:Name="errorLabel"  HorizontalOptions="Center" />
+
+            </Border>
+
+        </StackLayout>
 
     </Grid>
 </ContentPage>

@@ -21,6 +21,7 @@ namespace store.Data
         {
             throw new NotImplementedException();
         }
+       
 
         public async Task AddDataRange(List<ItemUnit> tables)
         {

@@ -6,7 +6,7 @@
             StrokeThickness="2"
             BackgroundColor="{StaticResource White}"
             HeightRequest="110"
-            WidthRequest="350"
+            WidthRequest="310"
             Margin="10">
 
         <Border.StrokeShape>
@@ -75,7 +75,7 @@
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="End" 
                          VerticalOptions="Center" 
-                         Margin="0,60,180,0">
+                         Margin="10,60,180,0">
 
                 <Button Text="Change" 
                         BackgroundColor="Transparent" 
@@ -83,7 +83,7 @@
                         VerticalOptions="Center" 
                         HorizontalOptions="FillAndExpand" 
                         Padding="10" 
-                        FontSize="16"
+                        FontSize="12"
                         Clicked="Button_Clicked" />
 
                 <Button Text="Packing" 
@@ -92,8 +92,8 @@
                         VerticalOptions="Center" 
                         HorizontalOptions="FillAndExpand" 
                         Padding="10" 
-                        FontSize="16"
-                        Clicked="Button_Clicked_1" />
+                        FontSize="13"
+                        Clicked="Button_Clicked_1" Margin="10,0,0,0"/>
             </StackLayout>
 
      
@@ -107,8 +107,8 @@
                         VerticalOptions="Center" 
                         HorizontalOptions="FillAndExpand" 
                         Padding="10" 
-                        FontSize="16"
-                        Clicked="EditClicked" />
+                        FontSize="13"
+                        Clicked="EditClicked"  />
             </StackLayout>
         </Grid>
     </Border>

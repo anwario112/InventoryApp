@@ -1,7 +1,7 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using store.Api;
 using store.Data;
+using store.DTO;
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -23,13 +23,14 @@ namespace store.ViewModels
 
         private readonly HttpHelper _httpHelper;
 
-       
+
         private readonly ItemCardEntity _itemCardEntity;
         private readonly ItemFileEntity _itemFile;
         private readonly ItemBarcodeEntity _itemBarcode;
         private readonly ItemUnitEntity _itemUnit;
         private readonly SectionEntity _sectionEntity;
-     
+        private readonly ConnectionEntity connectionEntity;
+
         private readonly ExportedRakEntity _exportedRakEntity;
         private readonly ExportedSectionEntity _exportedSectionEntity;
         private readonly ExportedCardEntity _exportedCardEntity;
@@ -49,16 +50,17 @@ namespace store.ViewModels
         public InsertDataApi(HttpHelper httpHelper)
         {
             _httpHelper = httpHelper;
-          
+
             _itemCardEntity = new ItemCardEntity();
             _itemBarcode = new ItemBarcodeEntity();
             _itemFile = new ItemFileEntity();
             _itemUnit = new ItemUnitEntity();
             _sectionEntity = new SectionEntity();
-           
+
             _exportedRakEntity = new ExportedRakEntity();
             _exportedSectionEntity = new ExportedSectionEntity();
             _exportedCardEntity = new ExportedCardEntity();
+            connectionEntity = new ConnectionEntity();
         }
 
 
@@ -67,11 +69,22 @@ namespace store.ViewModels
 
         public async Task InsertApiData()
         {
-            string url = "https://33fa-213-204-95-59.ngrok-free.app/api/items";
+            string url = " https://7962-185-114-88-228.ngrok-free.app/api/items";
 
             try
             {
-                var response = await _httpHelper.GetResponse(url).ConfigureAwait(false);
+                string apiKey = "12345-ABCDE-67890-FGHIJ";
+                string secretKey = "S3cr3tK3y!@#2023";
+
+                var connectionData = await connectionEntity.FetchConnectionData();
+                if (connectionData == null)
+                {
+                    Debug.WriteLine("Connection data is null. Cannot proceed with API request.");
+                    return;
+                }
+
+                var httpHelper = new HttpHelper(apiKey, secretKey);
+                var response = await _httpHelper.GetResponse(url, connectionData.ServerName, connectionData.DatabaseName, connectionData.Username, connectionData.Password, connectionData.Year).ConfigureAwait(false);
                 Debug.WriteLine($"Raw API Response: {response}");
 
                 if (!string.IsNullOrEmpty(response))
@@ -80,91 +93,148 @@ namespace store.ViewModels
                 }
                 else
                 {
-                    Debug.WriteLine("Data not found");
+                    Debug.WriteLine("No data received from the API.");
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Debug.WriteLine($"HTTP request failed: {httpEx.Message}");
+                if (httpEx.StatusCode.HasValue)
+                {
+                    Debug.WriteLine($"HTTP status code: {httpEx.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error fetching data from API: {ex}");
+                Debug.WriteLine($"Error fetching data from API: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                }
             }
         }
+
+
 
 
         private async Task InsertDataToDatabase(string jsonResponse)
         {
             try
             {
+                Debug.WriteLine($"Raw API Response: {jsonResponse}");
 
-                var data = JsonSerializer.Deserialize<Dictionary<string, List<object>>>(jsonResponse);
-                if (data == null)
+                if (string.IsNullOrWhiteSpace(jsonResponse))
+                {
+                    Debug.WriteLine("JSON response is empty.");
+                    return;
+                }
+
+                List<ApiQueryDTO> queryResults;
+                try
+                {
+                    var wrapper = JsonSerializer.Deserialize<ApiResponseWrapper>(jsonResponse);
+                    queryResults = wrapper?.DataQuery1;
+                }
+                catch (JsonException ex)
+                {
+                    Debug.WriteLine($"JSON deserialization failed: {ex.Message}");
+                    return;
+                }
+
+                if (queryResults == null || queryResults.Count == 0)
                 {
                     Debug.WriteLine("No data to process.");
                     return;
                 }
 
-
-                await _itemUnit.ClearData();
-                Debug.WriteLine("Item data cleared.");
-
-
-                if (data.ContainsKey("data_query1"))
-                {
-                    var options = new JsonSerializerOptions
-                    {
-
-                        Converters = { new IntConverter() }
-
-                    };
-                    var items = JsonSerializer.Deserialize<List<ItemFile>>(JsonSerializer.Serialize(data["data_query1"]));
-                    if (items != null && items.Count > 0)
-                    {
-                        await _itemFile.AddDataRange(items);
-                        Debug.WriteLine("Data from query1 inserted into ItemFile table successfully.");
-                    }
-                    else
-                    {
-                        Debug.WriteLine("No items to insert from query1.");
-                    }
-                }
                
 
-                if (data.ContainsKey("data_query2"))
+                
+                await _itemUnit.ClearData();
+
+                
+                var distinctItemFileData = queryResults
+                    .DistinctBy(q => q.ItemNum)
+                    .Select(q =>
+                    {
+                        if (!int.TryParse(q.ItemID, out int itemId))
+                        {
+                            itemId = 0;
+                        }
+
+                        if (!double.TryParse(q.Price, out double priceDouble))
+                        {
+                            priceDouble = 0;
+                        }
+                        decimal price = (decimal)priceDouble;
+
+                        return new ItemFile
+                        {
+                            ItemID = itemId,
+                            ItemNum = q.ItemNum,
+                            ItemName = q.ItemName,
+                            Price = price.ToString(),
+                            ImageUrl = q.ImageUrl
+                        };
+                    })
+                    .ToList();
+
+             
+           
+
+              
+                await _itemFile.AddDataRange(distinctItemFileData);
+                Debug.WriteLine("Data inserted into ItemFile table successfully.");
+
+               
+                var itemBarcodeData = queryResults
+                    .Select(q =>
+                    {
+                        if (!int.TryParse(q.ItemID, out int itemId))
+                        {
+                            itemId = 0;
+                        }
+
+                        if (!double.TryParse(q.BarcodePrice, out double barcodePriceDouble))
+                        {
+                            barcodePriceDouble = 0;
+                        }
+                        decimal barcodePrice = (decimal)barcodePriceDouble;
+
+                        return new ItemBarcode
+                        {
+                            ItemID = itemId,
+                            Barcode = q.Barcode,
+                            price = barcodePrice,
+                            UnitDesc = q.UnitDesc
+                        };
+                    })
+                    .ToList();
+
+              
+                await _itemBarcode.AddDataRange(itemBarcodeData);
+                Debug.WriteLine("Data inserted into ItemBarcode table successfully.");
+
+
+                var unitData = queryResults
+                .GroupBy(q => new { q.ItemID, q.ItemNumUnit }) 
+                .Select(g => g.First()) 
+                .Select(q =>
                 {
-                    var options = new JsonSerializerOptions
+                    int itemId = int.TryParse(q.ItemID, out int parsedId) ? parsedId : 0;
+                    string unitDesc = string.IsNullOrEmpty(q.ItemNumUnit) ? "N/A" : q.ItemNumUnit;
+                    return new ItemUnit
                     {
-                        Converters = { new IntConverter() }
-
+                        ItemID = itemId,
+                        UnitDesc = unitDesc
                     };
-                    var unitItems = JsonSerializer.Deserialize<List<ItemBarcode>>(JsonSerializer.Serialize(data["data_query2"]));
-                    if (unitItems != null && unitItems.Count > 0)
-                    {
-                        await _itemBarcode.AddDataRange(unitItems);
-                        Debug.WriteLine("Data from query2 inserted into ItemBarcode table successfully.");
-                    }
-                    else
-                    {
-                        Debug.WriteLine("No unit items to insert from query2.");
-                    }
-                }
+                })
+                .ToList();
 
-                if (data.ContainsKey("data_query3"))
-                {
-                    var options = new JsonSerializerOptions
-                    {
-                        Converters = { new IntConverter() }
 
-                    };
-                    var unitItems = JsonSerializer.Deserialize<List<ItemUnit>>(JsonSerializer.Serialize(data["data_query2"]));
-                    if (unitItems != null && unitItems.Count > 0)
-                    {
-                        await _itemUnit.AddDataRange(unitItems);
-                        Debug.WriteLine("Data from query3 inserted into UnitItem table successfully.");
-                    }
-                    else
-                    {
-                        Debug.WriteLine("No unit items to insert from query2.");
-                    }
-                }
+
+                await _itemUnit.AddDataRange(unitData);
+                Debug.WriteLine("Data inserted into UnitFile table successfully.");
             }
             catch (Exception ex)
             {
@@ -177,7 +247,6 @@ namespace store.ViewModels
         }
 
 
-
         public async Task<ItemBarcode> GetItemByBarcode(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
@@ -187,7 +256,7 @@ namespace store.ViewModels
 
             Debug.WriteLine($"Scanned barcode: {barcode}");
 
-           
+
             var (itemBarcode, itemName, unitDesc) = await _itemBarcode.GetItemByBarcode(barcode);
 
             if (itemBarcode == null)
@@ -196,11 +265,11 @@ namespace store.ViewModels
             }
             else
             {
-              
+
                 Debug.WriteLine($"Item found: Barcode={itemBarcode.Barcode}, Name={itemName}, UnitDesc={unitDesc}");
             }
 
-            return itemBarcode; 
+            return itemBarcode;
         }
 
         public async Task<ItemCard> GetItemDetails(string barcode)
@@ -282,12 +351,12 @@ namespace store.ViewModels
 
                 if (rakNameExists)
                 {
-                    // RakName exists
+
                     var existingSectionID = await _exportedSectionEntity.GetSectionIdByName(sectionName);
 
                     if (sectionNameExists && existingSectionID.HasValue && itemCards != null && itemCards.Any())
                     {
-                        // Both RakName and SectionName exist, update the item cards
+
                         foreach (var itemCard in itemCards)
                         {
                             var existingCard = await _exportedCardEntity.GetItemByScanningNum(itemCard.ScanningNum);
@@ -321,7 +390,7 @@ namespace store.ViewModels
                     }
                     else if (!sectionNameExists)
                     {
-                        // SectionName does not exist, create a new section and insert item cards
+
                         var rakID = await _exportedRakEntity.GetIdByRakName(rakName);
                         Debug.WriteLine($"The RakID that will be inserted in ExportedSection: RakID={rakID}");
 
@@ -358,7 +427,7 @@ namespace store.ViewModels
                 }
                 else
                 {
-                   
+
                     var exportRak = new ExportedRak
                     {
                         ExportedRakName = rakName,

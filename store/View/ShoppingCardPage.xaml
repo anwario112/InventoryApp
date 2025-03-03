@@ -1,143 +1,296 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-              xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              x:Class="store.View.ShoppingCardPage"
-             Title="ShoppingCardPage"
+             Title="{Binding Title}"
              BackgroundColor="{StaticResource Gray1000}">
 
     <ScrollView>
         <StackLayout>
 
             <Label x:Name="invoiceSavedLabel"  
-              
-              
-               FontSize="16"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               IsVisible="False" />
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   IsVisible="False" />
 
-            <Border  Stroke="Transparent"
-                                StrokeThickness="2"
-                                BackgroundColor="{StaticResource White}"
-                                HeightRequest="350"
-                                WidthRequest="350"
-                                Margin="10">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="15" />
-                </Border.StrokeShape>
-                <StackLayout >
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" >
-                        <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding FirstName}"/>
-                        <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding LastName}"/>
+            <StackLayout x:Name="ShoppingCartUI" IsVisible="True">
+                <Border Stroke="Transparent"
+                        StrokeThickness="2"
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="350"
+                        WidthRequest="350"
+                        Margin="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding FirstName}"/>
+                            <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding LastName}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Country}"/>
+                            <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding City}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Phone}"/>
+                         
+                        </StackLayout>
+                        <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CompanyName}"/>
+                        <ur:TextField Title="Address" WidthRequest="280" Text="{Binding Address}"/>
                     </StackLayout>
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                        <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Country}"/>
-                        <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding City}"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                        <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Phone}"/>
-                        <ur:TextField Title="Street" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Street}"/>
-                    </StackLayout>
-                    <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CompanyName}"/>
-                    <ur:TextField Title="Address" WidthRequest="280"  Text="{Binding Address}"/>
-                </StackLayout>
+                </Border>
 
-            </Border>
-            <CollectionView ItemsSource="{Binding ShoppingCartItems}" 
-                            ItemSizingStrategy="MeasureAllItems" 
-                            Margin="0,0,0,10">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Stroke="Transparent"
-                                StrokeThickness="2"
-                                BackgroundColor="{StaticResource White}"
-                                HeightRequest="100"
-                                WidthRequest="350"
-                                Margin="10">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="15" />
-                            </Border.StrokeShape>
-
-                            <Grid Padding="0">
-
-                                <Image Source="exit.png" HeightRequest="20" WidthRequest="20" HorizontalOptions="End" Margin="0,0,10,60">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                                <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
-                                       HeightRequest="60" 
-                                       WidthRequest="60"                              
-                                       VerticalOptions="Center" 
-                                       HorizontalOptions="Start" Margin="10,-10,0,0"  />
-
-                                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="70,0,0,0">
-                                    <Label Text="{Binding ItemName}" 
-                                           VerticalOptions="Center"
-                                           FontSize="14"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource Gray500}"  
-                                           Margin="0,-5,0,0"/>
-
-                                    <Label Text="{Binding ItemNum}" 
-                                           VerticalOptions="Center"
-                                           FontSize="14" 
-                                           TextColor="{StaticResource Gray500}"  
-                                           Margin="0,-5,0,0"/>
-                                    <Label Text="{Binding Quantity, Converter={StaticResource QuantityConverter}, StringFormat='Qty: {0}'}" 
-                                           VerticalOptions="Center"
-                                           FontSize="14" 
-                                           TextColor="{StaticResource Gray500}"  
-                                           Margin="0,-5,0,0"/>
-
-                                    <Label Text="{Binding Price, StringFormat='Price: ${0:F2}'}"  
-                                           VerticalOptions="Center"
-                                           FontSize="14" 
-                                           TextColor="{StaticResource Gray500}"  
-                                           Margin="0,-5,0,0"/>
-                                </StackLayout>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <Border Stroke="Transparent"
+                <CollectionView ItemsSource="{Binding ShoppingCartItems}" 
+                ItemSizingStrategy="MeasureAllItems" 
+                Margin="0,0,0,10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="Transparent"
                     StrokeThickness="2"
                     BackgroundColor="{StaticResource White}"
                     HeightRequest="100"
                     WidthRequest="350"
                     Margin="10">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="15" />
-                </Border.StrokeShape>
-                <StackLayout Padding="20">
-                    <Label Text="Order summary"  FontFamily="roman" FontAttributes="Bold"/>
-                    <Label Text="Total Price :" FontFamily="roman" TextColor="{StaticResource Gray500}" Padding="5" HorizontalOptions="Start"/>
-                    <Label Text="{Binding TotalPrice, StringFormat='${0:F2}'}" 
-                           FontSize="16" 
-                           TextColor="{StaticResource Gray500}" 
-                           Margin="0,-25,30,0"  HorizontalOptions="End"/>
-                </StackLayout>
-            </Border>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="15" />
+                                </Border.StrokeShape>
+                                <Grid Padding="0">
+                                    <Image Source="exit.png" HeightRequest="20" WidthRequest="20" HorizontalOptions="End" Margin="0,0,10,60">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                    <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
+                           HeightRequest="60" 
+                           WidthRequest="60"                              
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Start" Margin="10,-10,0,0"  />
+                                    <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="70,0,0,0">
+                                        <Label Text="{Binding ItemName}" 
+                               VerticalOptions="Center"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray500}"  
+                               Margin="0,-5,0,0"/>
+                                        <Label Text="{Binding ItemNum}" 
+                               VerticalOptions="Center"
+                               FontSize="14" 
+                               TextColor="{StaticResource Gray500}"  
+                               Margin="0,-5,0,0"/>
+                                        <Label Text="{Binding Quantity, Converter={StaticResource QuantityConverter}, StringFormat='Qty: {0}'}" 
+                               VerticalOptions="Center"
+                               FontSize="14" 
+                               TextColor="{StaticResource Gray500}"  
+                               Margin="0,-5,0,0"/>
+                                        <Label Text="{Binding Price, StringFormat='Price: ${0:F2}'}"  
+                               VerticalOptions="Center"
+                               FontSize="14" 
+                               TextColor="{StaticResource Gray500}"  
+                               Margin="0,-5,0,0"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-            <Border Stroke="Transparent"
-                    StrokeThickness="2"
-                    BackgroundColor="{StaticResource teal}"
-                    HeightRequest="50"
-                    WidthRequest="350"
-                    Margin="10">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="10" />
-                </Border.StrokeShape>
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="SendShoppingCards" />
-                </Border.GestureRecognizers>
-                <StackLayout HorizontalOptions="Center" Margin="0,7,0,0">
-                    <Label Text="Save" FontFamily="roman" TextColor="White" FontSize="18" />
+                <Border Stroke="Transparent"
+                        StrokeThickness="2"
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="100"
+                        WidthRequest="350"
+                        Margin="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <StackLayout Padding="20">
+                        <Label Text="Order summary"  FontFamily="roman" FontAttributes="Bold"/>
+                        <Label Text="Total Price :" FontFamily="roman" TextColor="{StaticResource Gray500}" Padding="5" HorizontalOptions="Start"/>
+                        <Label Text="{Binding TotalPrice, StringFormat='${0:F2}'}" 
+                               FontSize="16" 
+                               TextColor="{StaticResource Gray500}" 
+                               Margin="0,-25,30,0"  HorizontalOptions="End"/>
+                    </StackLayout>
+                </Border>
+
+                <Border Stroke="Transparent"
+                        StrokeThickness="2"
+                        BackgroundColor="{StaticResource teal}"
+                        HeightRequest="50"
+                        WidthRequest="350"
+                        Margin="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SendShoppingCards" />
+                    </Border.GestureRecognizers>
+                    <StackLayout HorizontalOptions="Center" Margin="0,7,0,0">
+                        <Label Text="Save" FontFamily="roman" TextColor="White" FontSize="18" />
+                    </StackLayout>
+                </Border>
+            </StackLayout>
+
+
+            <StackLayout x:Name="InvoiceUI" IsVisible="False">
+                
+                <Border Stroke="Transparent"
+                 StrokeThickness="2"
+                 BackgroundColor="{StaticResource White}"
+                 HeightRequest="350"
+                 WidthRequest="350"
+                 Margin="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerFirstName}"/>
+                            <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerLastName}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerCountry}"/>
+                            <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerCity}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerPhone}"/>
+                          
+                        </StackLayout>
+                        <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CustomerCompany}"/>
+                        <ur:TextField Title="Address" WidthRequest="280" Text="{Binding CustomerAddress}"/>
+                    </StackLayout>
+                </Border>
+
+                <StackLayout>
+                    <CollectionView ItemsSource="{Binding InvoiceItems}" 
+                ItemSizingStrategy="MeasureAllItems" 
+                Margin="0,0,0,10">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Transparent"
+                                StrokeThickness="2"
+                                BackgroundColor="{StaticResource White}"
+                                HeightRequest="100"
+                                WidthRequest="350"
+                                Margin="10">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="15" />
+                                    </Border.StrokeShape>
+
+                                    <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *">
+                                    
+                                        <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
+                           HeightRequest="60" 
+                           WidthRequest="60"                              
+                           VerticalOptions="Center" 
+                           HorizontalOptions="Start" 
+                           Margin="10,0,10,0" />
+
+                                        <StackLayout Orientation="Vertical" Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding ItemName}" 
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray500}"  
+                               Margin="0,5,0,0"/>
+
+                                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                                <Label Text="{Binding Price, StringFormat='${0:F2}'}" 
+                                   FontSize="14" 
+                                   TextColor="{StaticResource Gray500}"/>
+                                                <Label Text="{Binding Quantity, StringFormat='x {0}'}" 
+                                   FontSize="14" 
+                                   TextColor="{StaticResource Gray500}"/>
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                        <Grid Grid.Column="2" VerticalOptions="Center">
+                                            <Label Text="{Binding TotalNet, StringFormat='${0:F2}'}"  
+                                       FontSize="16" 
+                                       TextColor="{StaticResource Black}"  
+                                       HorizontalOptions="End"  
+                                       Margin="0,40,40,0"/>
+
+                                            <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *, Auto">
+                                                <Image Source="exit.png" HeightRequest="23" WidthRequest="23"
+                                                        HorizontalOptions="End"
+                                                        Margin="196,-30,10,30">    
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnExitTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Grid>
+                                           
+
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
+                        <Image Source="additem.png" HeightRequest="25" WidthRequest="25" 
+                   VerticalOptions="Center" 
+                               >
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnAddItemTapped" />
+                            </Image.GestureRecognizers>
+
+                        </Image>
+                        <Label Text="Add Item" 
+                   VerticalOptions="Center" 
+                   FontSize="17" 
+                   TextColor="{StaticResource Gray500}" 
+                   Margin="5,0,0,0"/>
+                    </StackLayout>
                 </StackLayout>
-            </Border>
+
+                <Border Stroke="Transparent"
+                        StrokeThickness="2"
+                        BackgroundColor="{StaticResource White}"
+                        HeightRequest="100"
+                        WidthRequest="350"
+                        Margin="10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <StackLayout Padding="20">
+                        <Label Text="Order summary" FontFamily="roman" FontAttributes="Bold"/>
+                        <Label Text="Total Price :" FontFamily="roman" TextColor="{StaticResource Gray500}" Padding="5" HorizontalOptions="Start"/>
+                        <Label 
+                            Text="{Binding TotalString, StringFormat='${0:F2}'}"
+                               FontSize="16" 
+                               TextColor="{StaticResource Gray500}" 
+                               Margin="0,-25,30,0"  HorizontalOptions="End"/>
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource teal}"
+                HeightRequest="50"
+                WidthRequest="350"
+                Margin="10" x:Name="invoiceStatus">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SendData" />
+                    </Border.GestureRecognizers>
+                    <StackLayout HorizontalOptions="Center" Margin="0,10,0,0">
+                        <Label Text="Send" 
+                       FontFamily="roman" 
+                       TextColor="White" 
+                       FontSize="16" 
+                       IsEnabled="{Binding IsSendButtonEnabled}" />
+                    </StackLayout>
+                </Border>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -15,7 +15,7 @@
             StrokeThickness="2"
             BackgroundColor="{StaticResource White}"
             HeightRequest="90"
-            WidthRequest="350" 
+            WidthRequest="320" 
             Margin="10,30,10,-40">
 
             <Border.StrokeShape>

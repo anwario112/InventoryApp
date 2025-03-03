@@ -25,9 +25,9 @@ namespace store.Models
 
 
         [Column("UnitDesc")]
-        public string UnitDesc { get; set; }
+        public string? UnitDesc { get; set; }
 
-        public decimal price { get; set; }
+        public decimal? price { get; set; }
 
         [JsonConverter(typeof(IntConverter))]
         public int ItemID { get; set; }

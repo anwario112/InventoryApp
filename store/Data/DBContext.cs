@@ -28,7 +28,7 @@ namespace store.Data
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Country>Country { get; set; }
         public DbSet<City>City { get; set; }
-        public DbSet<Street> Street { get; set; }
+      
 
 
 
@@ -196,14 +196,7 @@ namespace store.Data
 
 
           
-            modelBuilder.Entity<Street>()
-                .HasIndex(s => s.StreetNum)
-                .HasDatabaseName("IX_Street_StreetNum");
-
-
-            modelBuilder.Entity<Street>()
-                .HasIndex(s => s.StreetDesc)
-                .HasDatabaseName("IX_Street_StreetDesc");
+         
 
 
             modelBuilder.Entity<Customer>()
@@ -219,6 +212,10 @@ namespace store.Data
 
 
         }
+
+
+       
+
 
 
 

@@ -5,6 +5,7 @@ OpenSans-Semibold.ttf
 OPTITimes-Roman.otf
 OPTITimesRoman-Italic.otf
 add.scale-100.png
+additem.scale-100.png
 appicon.ico
 appiconLargeTile.scale-100.png
 appiconLargeTile.scale-125.png
@@ -52,6 +53,8 @@ appiconWideTile.scale-150.png
 appiconWideTile.scale-200.png
 appiconWideTile.scale-400.png
 archive.scale-100.png
+bill.scale-100.png
+camera.scale-100.png
 cardbarcode.scale-100.png
 check.scale-100.png
 checked.scale-100.png
@@ -64,7 +67,9 @@ dotnet_bot.scale-200.png
 dotnet_bot.scale-400.png
 exit.scale-100.png
 export.scale-100.png
+gold.scale-100.png
 login.scale-100.png
+minus.scale-100.png
 next.scale-100.png
 port.scale-100.png
 restore.scale-100.png

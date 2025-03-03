@@ -18,13 +18,13 @@ namespace store.Models
 
 
         [Column("ItemNum")]
-        public string ItemNum { get; set; }
+        public string? ItemNum { get; set; }
 
         [Column("ItemName")]
-        public string ItemName { get; set; }
+        public string? ItemName { get; set; }
 
         [Column("Price")]
-        public string Price { get; set; }
+        public string? Price { get; set; }
 
         [Column("ImageUrl")]
         public string? ImageUrl { get; set; }
@@ -32,7 +32,7 @@ namespace store.Models
 
 
         [JsonConverter(typeof(IntConverter))]
-        public int ItemID { get; set; }
+        public int? ItemID { get; set; }
 
      
 

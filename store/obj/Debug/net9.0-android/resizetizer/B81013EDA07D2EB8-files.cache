@@ -1,6 +1,8 @@
 ﻿obj\Debug\net9.0-android\resizetizer\r\drawable\add.png
+obj\Debug\net9.0-android\resizetizer\r\drawable\additem.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\archive.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\bill.png
+obj\Debug\net9.0-android\resizetizer\r\drawable\camera.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\cardbarcode.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\check.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\checked.png
@@ -8,7 +10,9 @@ obj\Debug\net9.0-android\resizetizer\r\drawable\connection.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\dollar.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\exit.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\export.png
+obj\Debug\net9.0-android\resizetizer\r\drawable\gold.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\login.png
+obj\Debug\net9.0-android\resizetizer\r\drawable\minus.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\next.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\port.png
 obj\Debug\net9.0-android\resizetizer\r\drawable\restore.png

@@ -15,10 +15,10 @@ namespace store
         private AuthenticationService authService;
 
 
-        public MainPage(AuthenticationService authService)
+        public MainPage(AuthenticationService authService,string apiKey="12345-ABCDE-67890-FGHIJ", string secretKey= "S3cr3tK3y!@#2023")
         {
             InitializeComponent();
-            var httpHelper = new HttpHelper();
+            var httpHelper = new HttpHelper(apiKey, secretKey);
 
             db = new DBContext();
             this.authService = authService;
@@ -84,7 +84,7 @@ namespace store
 
         private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
-            Navigation.PushAsync(new View.ShoppingPage(authService.Username));
+            Navigation.PushAsync(new View.ShoppingPage("Shopping Page", authService.Username));
         }
 
         private void InvoiceTapped(object sender, TappedEventArgs e)

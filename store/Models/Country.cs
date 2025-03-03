@@ -11,5 +11,8 @@ namespace store.Models
         public int ID { get; set; }
         public int CountryCode { get; set; }
         public string CountryName { get; set; }
+       
+
+
     }
 }

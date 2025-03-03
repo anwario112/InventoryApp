@@ -1,5 +1,5 @@
 ﻿using store.Data;
-using store.DTO; // Make sure to include the DTO namespace
+using store.DTO; 
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -79,6 +79,7 @@ namespace store.ViewModels
 
         public Command SelectUnsentCommand { get; }
         public Command SelectSentCommand { get; }
+        public string Username { get; private set; }
 
         public InvoiceViewModel(string username)
         {
@@ -87,9 +88,10 @@ namespace store.ViewModels
             SelectUnsentCommand = new Command(OnUnsentTapped);
             SelectSentCommand = new Command(OnSentTapped);
             ItemTappedCommand = new Command<InvoiceWithCustomer>(OnItemTapped);
-            FilteredInvoices = new ObservableCollection<InvoiceWithCustomer>(); 
-
+            FilteredInvoices = new ObservableCollection<InvoiceWithCustomer>();
+            Username = username;
             LoadUser(username);
+            OnUnsentTapped();
         }
 
         private async void LoadUser(string username)
@@ -175,15 +177,11 @@ namespace store.ViewModels
             if (tappedInvoice != null)
             {
                 Debug.WriteLine($"Tapped on Invoice: {tappedInvoice.Invoice.InvoiceNum}");
-                await Application.Current.MainPage.Navigation.PushAsync(new View.InvoiceDetails(
-
-                   tappedInvoice.Invoice.InvoiceNum,
-
-                   tappedInvoice.FirstName,
-
-                   tappedInvoice.LastName));
+                await Application.Current.MainPage.Navigation.PushAsync(new View.ShoppingCardPage(Username, "invoice", tappedInvoice.Invoice.InvoiceNum));
             }
         }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

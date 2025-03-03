@@ -7,6 +7,24 @@ communitytoolkit.maui.core.views.MauiPopup;crc64159f3caeb1269279.MauiPopup
 CommunityToolkit.Maui.Core.Views.MauiSemanticOrderView, CommunityToolkit.Maui.Core;crc64159f3caeb1269279.MauiSemanticOrderView
 CommunityToolkit.Maui.Core.Views.MauiSemanticOrderView;crc64159f3caeb1269279.MauiSemanticOrderView
 communitytoolkit.maui.core.views.MauiSemanticOrderView;crc64159f3caeb1269279.MauiSemanticOrderView
+CommunityToolkit.Maui.Core.Services.FragmentLifecycleManager, CommunityToolkit.Maui.Core;crc6436e425876cb621d9.FragmentLifecycleManager
+CommunityToolkit.Maui.Core.Services.FragmentLifecycleManager;crc6436e425876cb621d9.FragmentLifecycleManager
+communitytoolkit.maui.core.services.FragmentLifecycleManager;crc6436e425876cb621d9.FragmentLifecycleManager
+FFImageLoading.Drawables.FFAnimatedDrawable, FFImageLoading.Maui;crc643d7034af174d7324.FFAnimatedDrawable
+FFImageLoading.Drawables.FFAnimatedDrawable;crc643d7034af174d7324.FFAnimatedDrawable
+ffimageloading.drawables.FFAnimatedDrawable;crc643d7034af174d7324.FFAnimatedDrawable
+FFImageLoading.Drawables.FFBitmapDrawable, FFImageLoading.Maui;crc643d7034af174d7324.FFBitmapDrawable
+FFImageLoading.Drawables.FFBitmapDrawable;crc643d7034af174d7324.FFBitmapDrawable
+ffimageloading.drawables.FFBitmapDrawable;crc643d7034af174d7324.FFBitmapDrawable
+FFImageLoading.Drawables.SelfDisposingBitmapDrawable, FFImageLoading.Maui;crc643d7034af174d7324.SelfDisposingBitmapDrawable
+FFImageLoading.Drawables.SelfDisposingBitmapDrawable;crc643d7034af174d7324.SelfDisposingBitmapDrawable
+ffimageloading.drawables.SelfDisposingBitmapDrawable;crc643d7034af174d7324.SelfDisposingBitmapDrawable
+FFImageLoading.Cache.LRUCache, FFImageLoading.Maui;crc64642f8023aa683dcb.LRUCache
+FFImageLoading.Cache.LRUCache;crc64642f8023aa683dcb.LRUCache
+ffimageloading.cache.LRUCache;crc64642f8023aa683dcb.LRUCache
+FFImageLoading.Maui.Platform.DroidImageView, FFImageLoading.Maui;crc64a518922fab5519f8.DroidImageView
+FFImageLoading.Maui.Platform.DroidImageView;crc64a518922fab5519f8.DroidImageView
+ffimageloading.maui.platform.DroidImageView;crc64a518922fab5519f8.DroidImageView
 Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform+DefaultRenderer, Microsoft.Maui.Controls.Compatibility;crc6477f0d89a9cfd64b1.Platform_DefaultRenderer
 Microsoft.Maui.Controls.Compatibility.Platform.Android.Platform.DefaultRenderer;crc6477f0d89a9cfd64b1.Platform_DefaultRenderer
 microsoft.maui.controls.compatibility.platform.android.Platform_DefaultRenderer;crc6477f0d89a9cfd64b1.Platform_DefaultRenderer
@@ -370,6 +388,9 @@ microsoft.maui.MauiApplication_ActivityLifecycleCallbacks;crc6488302ad6e9e4df1a.
 Microsoft.Maui.IImageLoaderCallback, Microsoft.Maui;com.microsoft.maui.ImageLoaderCallback
 Microsoft.Maui.IImageLoaderCallback;com.microsoft.maui.ImageLoaderCallback
 com.microsoft.maui.ImageLoaderCallback;com.microsoft.maui.ImageLoaderCallback
+Microsoft.Maui.IPlatformShadowDrawable, Microsoft.Maui;com.microsoft.maui.PlatformShadowDrawable
+Microsoft.Maui.IPlatformShadowDrawable;com.microsoft.maui.PlatformShadowDrawable
+com.microsoft.maui.PlatformShadowDrawable;com.microsoft.maui.PlatformShadowDrawable
 Microsoft.Maui.Platform.AccessibilityDelegateCompatWrapper, Microsoft.Maui;crc6452ffdc5b34af3a0f.AccessibilityDelegateCompatWrapper
 Microsoft.Maui.Platform.AccessibilityDelegateCompatWrapper;crc6452ffdc5b34af3a0f.AccessibilityDelegateCompatWrapper
 microsoft.maui.platform.AccessibilityDelegateCompatWrapper;crc6452ffdc5b34af3a0f.AccessibilityDelegateCompatWrapper
@@ -655,6 +676,177 @@ androidx.browser.customtabs.KeepAliveService;crc64396a3fe5f8138e3f.KeepAliveServ
 AndroidX.Browser.CustomTabs.IEngagementSignalsCallback, Xamarin.AndroidX.Browser;androidx.browser.customtabs.EngagementSignalsCallback
 AndroidX.Browser.CustomTabs.IEngagementSignalsCallback;androidx.browser.customtabs.EngagementSignalsCallback
 androidx.browser.customtabs.EngagementSignalsCallback;androidx.browser.customtabs.EngagementSignalsCallback
+AndroidX.Camera.Core.ImageAnalysis+IAnalyzer, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageAnalysis$Analyzer
+AndroidX.Camera.Core.ImageAnalysis.IAnalyzer;androidx.camera.core.ImageAnalysis$Analyzer
+androidx.camera.core.ImageAnalysis$Analyzer;androidx.camera.core.ImageAnalysis$Analyzer
+AndroidX.Camera.Core.ImageCapture+IOnImageSavedCallback, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageCapture$OnImageSavedCallback
+AndroidX.Camera.Core.ImageCapture.IOnImageSavedCallback;androidx.camera.core.ImageCapture$OnImageSavedCallback
+androidx.camera.core.ImageCapture$OnImageSavedCallback;androidx.camera.core.ImageCapture$OnImageSavedCallback
+AndroidX.Camera.Core.Preview+ISurfaceProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.Preview$SurfaceProvider
+AndroidX.Camera.Core.Preview.ISurfaceProvider;androidx.camera.core.Preview$SurfaceProvider
+androidx.camera.core.Preview$SurfaceProvider;androidx.camera.core.Preview$SurfaceProvider
+AndroidX.Camera.Core.VideoCapture+IOnVideoSavedCallback, Xamarin.AndroidX.Camera.Core;androidx.camera.core.VideoCapture$OnVideoSavedCallback
+AndroidX.Camera.Core.VideoCapture.IOnVideoSavedCallback;androidx.camera.core.VideoCapture$OnVideoSavedCallback
+androidx.camera.core.VideoCapture$OnVideoSavedCallback;androidx.camera.core.VideoCapture$OnVideoSavedCallback
+AndroidX.Camera.Core.ICamera, Xamarin.AndroidX.Camera.Core;androidx.camera.core.Camera
+AndroidX.Camera.Core.ICamera;androidx.camera.core.Camera
+androidx.camera.core.Camera;androidx.camera.core.Camera
+AndroidX.Camera.Core.ICameraControl, Xamarin.AndroidX.Camera.Core;androidx.camera.core.CameraControl
+AndroidX.Camera.Core.ICameraControl;androidx.camera.core.CameraControl
+androidx.camera.core.CameraControl;androidx.camera.core.CameraControl
+AndroidX.Camera.Core.ICameraInfo, Xamarin.AndroidX.Camera.Core;androidx.camera.core.CameraInfo
+AndroidX.Camera.Core.ICameraInfo;androidx.camera.core.CameraInfo
+androidx.camera.core.CameraInfo;androidx.camera.core.CameraInfo
+AndroidX.Camera.Core.IExposureState, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ExposureState
+AndroidX.Camera.Core.IExposureState;androidx.camera.core.ExposureState
+androidx.camera.core.ExposureState;androidx.camera.core.ExposureState
+AndroidX.Camera.Core.IExtendableBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ExtendableBuilder
+AndroidX.Camera.Core.IExtendableBuilder;androidx.camera.core.ExtendableBuilder
+androidx.camera.core.ExtendableBuilder;androidx.camera.core.ExtendableBuilder
+AndroidX.Camera.Core.IImageInfo, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageInfo
+AndroidX.Camera.Core.IImageInfo;androidx.camera.core.ImageInfo
+androidx.camera.core.ImageInfo;androidx.camera.core.ImageInfo
+AndroidX.Camera.Core.IImageProxyPlaneProxy, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageProxy$PlaneProxy
+AndroidX.Camera.Core.IImageProxyPlaneProxy;androidx.camera.core.ImageProxy$PlaneProxy
+androidx.camera.core.ImageProxy$PlaneProxy;androidx.camera.core.ImageProxy$PlaneProxy
+AndroidX.Camera.Core.IImageProxy, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageProxy
+AndroidX.Camera.Core.IImageProxy;androidx.camera.core.ImageProxy
+androidx.camera.core.ImageProxy;androidx.camera.core.ImageProxy
+AndroidX.Camera.Core.IImageReaderProxyProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.ImageReaderProxyProvider
+AndroidX.Camera.Core.IImageReaderProxyProvider;androidx.camera.core.ImageReaderProxyProvider
+androidx.camera.core.ImageReaderProxyProvider;androidx.camera.core.ImageReaderProxyProvider
+AndroidX.Camera.Core.SurfaceRequest+ITransformationInfoListener, Xamarin.AndroidX.Camera.Core;androidx.camera.core.SurfaceRequest$TransformationInfoListener
+AndroidX.Camera.Core.SurfaceRequest.ITransformationInfoListener;androidx.camera.core.SurfaceRequest$TransformationInfoListener
+androidx.camera.core.SurfaceRequest$TransformationInfoListener;androidx.camera.core.SurfaceRequest$TransformationInfoListener
+AndroidX.Camera.Core.UseCase+IEventCallback, Xamarin.AndroidX.Camera.Core;androidx.camera.core.UseCase$EventCallback
+AndroidX.Camera.Core.UseCase.IEventCallback;androidx.camera.core.UseCase$EventCallback
+androidx.camera.core.UseCase$EventCallback;androidx.camera.core.UseCase$EventCallback
+AndroidX.Camera.Core.UseCase+IStateChangeCallback, Xamarin.AndroidX.Camera.Core;androidx.camera.core.UseCase$StateChangeCallback
+AndroidX.Camera.Core.UseCase.IStateChangeCallback;androidx.camera.core.UseCase$StateChangeCallback
+androidx.camera.core.UseCase$StateChangeCallback;androidx.camera.core.UseCase$StateChangeCallback
+AndroidX.Camera.Core.Internal.ITargetConfigBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.internal.TargetConfig$Builder
+AndroidX.Camera.Core.Internal.ITargetConfigBuilder;androidx.camera.core.internal.TargetConfig$Builder
+androidx.camera.core.internal.TargetConfig$Builder;androidx.camera.core.internal.TargetConfig$Builder
+AndroidX.Camera.Core.Internal.ITargetConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.internal.TargetConfig
+AndroidX.Camera.Core.Internal.ITargetConfig;androidx.camera.core.internal.TargetConfig
+androidx.camera.core.internal.TargetConfig;androidx.camera.core.internal.TargetConfig
+AndroidX.Camera.Core.Internal.IThreadConfigBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.internal.ThreadConfig$Builder
+AndroidX.Camera.Core.Internal.IThreadConfigBuilder;androidx.camera.core.internal.ThreadConfig$Builder
+androidx.camera.core.internal.ThreadConfig$Builder;androidx.camera.core.internal.ThreadConfig$Builder
+AndroidX.Camera.Core.Internal.IUseCaseEventConfigBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.internal.UseCaseEventConfig$Builder
+AndroidX.Camera.Core.Internal.IUseCaseEventConfigBuilder;androidx.camera.core.internal.UseCaseEventConfig$Builder
+androidx.camera.core.internal.UseCaseEventConfig$Builder;androidx.camera.core.internal.UseCaseEventConfig$Builder
+AndroidX.Camera.Core.Internal.IUseCaseEventConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.internal.UseCaseEventConfig
+AndroidX.Camera.Core.Internal.IUseCaseEventConfig;androidx.camera.core.internal.UseCaseEventConfig
+androidx.camera.core.internal.UseCaseEventConfig;androidx.camera.core.internal.UseCaseEventConfig
+AndroidX.Camera.Core.Impl.CaptureConfig+IOptionUnpacker, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CaptureConfig$OptionUnpacker
+AndroidX.Camera.Core.Impl.CaptureConfig.IOptionUnpacker;androidx.camera.core.impl.CaptureConfig$OptionUnpacker
+androidx.camera.core.impl.CaptureConfig$OptionUnpacker;androidx.camera.core.impl.CaptureConfig$OptionUnpacker
+AndroidX.Camera.Core.Impl.ICamcorderProfileProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CamcorderProfileProvider
+AndroidX.Camera.Core.Impl.ICamcorderProfileProvider;androidx.camera.core.impl.CamcorderProfileProvider
+androidx.camera.core.impl.CamcorderProfileProvider;androidx.camera.core.impl.CamcorderProfileProvider
+AndroidX.Camera.Core.Impl.ICameraCaptureResult, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraCaptureResult
+AndroidX.Camera.Core.Impl.ICameraCaptureResult;androidx.camera.core.impl.CameraCaptureResult
+androidx.camera.core.impl.CameraCaptureResult;androidx.camera.core.impl.CameraCaptureResult
+AndroidX.Camera.Core.Impl.ICameraConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraConfig
+AndroidX.Camera.Core.Impl.ICameraConfig;androidx.camera.core.impl.CameraConfig
+androidx.camera.core.impl.CameraConfig;androidx.camera.core.impl.CameraConfig
+AndroidX.Camera.Core.Impl.ICameraControlInternal, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraControlInternal
+AndroidX.Camera.Core.Impl.ICameraControlInternal;androidx.camera.core.impl.CameraControlInternal
+androidx.camera.core.impl.CameraControlInternal;androidx.camera.core.impl.CameraControlInternal
+AndroidX.Camera.Core.Impl.ICameraDeviceSurfaceManagerProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraDeviceSurfaceManager$Provider
+AndroidX.Camera.Core.Impl.ICameraDeviceSurfaceManagerProvider;androidx.camera.core.impl.CameraDeviceSurfaceManager$Provider
+androidx.camera.core.impl.CameraDeviceSurfaceManager$Provider;androidx.camera.core.impl.CameraDeviceSurfaceManager$Provider
+AndroidX.Camera.Core.Impl.ICameraDeviceSurfaceManager, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraDeviceSurfaceManager
+AndroidX.Camera.Core.Impl.ICameraDeviceSurfaceManager;androidx.camera.core.impl.CameraDeviceSurfaceManager
+androidx.camera.core.impl.CameraDeviceSurfaceManager;androidx.camera.core.impl.CameraDeviceSurfaceManager
+AndroidX.Camera.Core.Impl.ICameraFactoryProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraFactory$Provider
+AndroidX.Camera.Core.Impl.ICameraFactoryProvider;androidx.camera.core.impl.CameraFactory$Provider
+androidx.camera.core.impl.CameraFactory$Provider;androidx.camera.core.impl.CameraFactory$Provider
+AndroidX.Camera.Core.Impl.ICameraFactory, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraFactory
+AndroidX.Camera.Core.Impl.ICameraFactory;androidx.camera.core.impl.CameraFactory
+androidx.camera.core.impl.CameraFactory;androidx.camera.core.impl.CameraFactory
+AndroidX.Camera.Core.Impl.ICameraInfoInternal, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraInfoInternal
+AndroidX.Camera.Core.Impl.ICameraInfoInternal;androidx.camera.core.impl.CameraInfoInternal
+androidx.camera.core.impl.CameraInfoInternal;androidx.camera.core.impl.CameraInfoInternal
+AndroidX.Camera.Core.Impl.ICameraInternal, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CameraInternal
+AndroidX.Camera.Core.Impl.ICameraInternal;androidx.camera.core.impl.CameraInternal
+androidx.camera.core.impl.CameraInternal;androidx.camera.core.impl.CameraInternal
+AndroidX.Camera.Core.Impl.ICaptureBundle, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CaptureBundle
+AndroidX.Camera.Core.Impl.ICaptureBundle;androidx.camera.core.impl.CaptureBundle
+androidx.camera.core.impl.CaptureBundle;androidx.camera.core.impl.CaptureBundle
+AndroidX.Camera.Core.Impl.ICaptureProcessor, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CaptureProcessor
+AndroidX.Camera.Core.Impl.ICaptureProcessor;androidx.camera.core.impl.CaptureProcessor
+androidx.camera.core.impl.CaptureProcessor;androidx.camera.core.impl.CaptureProcessor
+AndroidX.Camera.Core.Impl.ICaptureStage, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.CaptureStage
+AndroidX.Camera.Core.Impl.ICaptureStage;androidx.camera.core.impl.CaptureStage
+androidx.camera.core.impl.CaptureStage;androidx.camera.core.impl.CaptureStage
+AndroidX.Camera.Core.Impl.IConfigOptionMatcher, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.Config$OptionMatcher
+AndroidX.Camera.Core.Impl.IConfigOptionMatcher;androidx.camera.core.impl.Config$OptionMatcher
+androidx.camera.core.impl.Config$OptionMatcher;androidx.camera.core.impl.Config$OptionMatcher
+AndroidX.Camera.Core.Impl.IConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.Config
+AndroidX.Camera.Core.Impl.IConfig;androidx.camera.core.impl.Config
+androidx.camera.core.impl.Config;androidx.camera.core.impl.Config
+AndroidX.Camera.Core.Impl.IConfigProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ConfigProvider
+AndroidX.Camera.Core.Impl.IConfigProvider;androidx.camera.core.impl.ConfigProvider
+androidx.camera.core.impl.ConfigProvider;androidx.camera.core.impl.ConfigProvider
+AndroidX.Camera.Core.Impl.IImageInfoProcessor, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageInfoProcessor
+AndroidX.Camera.Core.Impl.IImageInfoProcessor;androidx.camera.core.impl.ImageInfoProcessor
+androidx.camera.core.impl.ImageInfoProcessor;androidx.camera.core.impl.ImageInfoProcessor
+AndroidX.Camera.Core.Impl.IImageInputConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageInputConfig
+AndroidX.Camera.Core.Impl.IImageInputConfig;androidx.camera.core.impl.ImageInputConfig
+androidx.camera.core.impl.ImageInputConfig;androidx.camera.core.impl.ImageInputConfig
+AndroidX.Camera.Core.Impl.IImageOutputConfigBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageOutputConfig$Builder
+AndroidX.Camera.Core.Impl.IImageOutputConfigBuilder;androidx.camera.core.impl.ImageOutputConfig$Builder
+androidx.camera.core.impl.ImageOutputConfig$Builder;androidx.camera.core.impl.ImageOutputConfig$Builder
+AndroidX.Camera.Core.Impl.IImageProxyBundle, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageProxyBundle
+AndroidX.Camera.Core.Impl.IImageProxyBundle;androidx.camera.core.impl.ImageProxyBundle
+androidx.camera.core.impl.ImageProxyBundle;androidx.camera.core.impl.ImageProxyBundle
+AndroidX.Camera.Core.Impl.IImageReaderProxyOnImageAvailableListener, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener
+AndroidX.Camera.Core.Impl.IImageReaderProxyOnImageAvailableListener;androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener
+androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener;androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener
+AndroidX.Camera.Core.Impl.IImageReaderProxy, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ImageReaderProxy
+AndroidX.Camera.Core.Impl.IImageReaderProxy;androidx.camera.core.impl.ImageReaderProxy
+androidx.camera.core.impl.ImageReaderProxy;androidx.camera.core.impl.ImageReaderProxy
+AndroidX.Camera.Core.Impl.IMutableConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.MutableConfig
+AndroidX.Camera.Core.Impl.IMutableConfig;androidx.camera.core.impl.MutableConfig
+androidx.camera.core.impl.MutableConfig;androidx.camera.core.impl.MutableConfig
+AndroidX.Camera.Core.Impl.IObservableObserver, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.Observable$Observer
+AndroidX.Camera.Core.Impl.IObservableObserver;androidx.camera.core.impl.Observable$Observer
+androidx.camera.core.impl.Observable$Observer;androidx.camera.core.impl.Observable$Observer
+AndroidX.Camera.Core.Impl.IObservable, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.Observable
+AndroidX.Camera.Core.Impl.IObservable;androidx.camera.core.impl.Observable
+androidx.camera.core.impl.Observable;androidx.camera.core.impl.Observable
+AndroidX.Camera.Core.Impl.IQuirk, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.Quirk
+AndroidX.Camera.Core.Impl.IQuirk;androidx.camera.core.impl.Quirk
+androidx.camera.core.impl.Quirk;androidx.camera.core.impl.Quirk
+AndroidX.Camera.Core.Impl.IReadableConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.ReadableConfig
+AndroidX.Camera.Core.Impl.IReadableConfig;androidx.camera.core.impl.ReadableConfig
+androidx.camera.core.impl.ReadableConfig;androidx.camera.core.impl.ReadableConfig
+AndroidX.Camera.Core.Impl.IUseCaseConfigBuilder, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.UseCaseConfig$Builder
+AndroidX.Camera.Core.Impl.IUseCaseConfigBuilder;androidx.camera.core.impl.UseCaseConfig$Builder
+androidx.camera.core.impl.UseCaseConfig$Builder;androidx.camera.core.impl.UseCaseConfig$Builder
+AndroidX.Camera.Core.Impl.IUseCaseConfig, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.UseCaseConfig
+AndroidX.Camera.Core.Impl.IUseCaseConfig;androidx.camera.core.impl.UseCaseConfig
+androidx.camera.core.impl.UseCaseConfig;androidx.camera.core.impl.UseCaseConfig
+AndroidX.Camera.Core.Impl.IUseCaseConfigFactoryProvider, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.UseCaseConfigFactory$Provider
+AndroidX.Camera.Core.Impl.IUseCaseConfigFactoryProvider;androidx.camera.core.impl.UseCaseConfigFactory$Provider
+androidx.camera.core.impl.UseCaseConfigFactory$Provider;androidx.camera.core.impl.UseCaseConfigFactory$Provider
+AndroidX.Camera.Core.Impl.IUseCaseConfigFactory, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.UseCaseConfigFactory
+AndroidX.Camera.Core.Impl.IUseCaseConfigFactory;androidx.camera.core.impl.UseCaseConfigFactory
+androidx.camera.core.impl.UseCaseConfigFactory;androidx.camera.core.impl.UseCaseConfigFactory
+AndroidX.Camera.Core.Impl.SessionConfig+IErrorListener, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.SessionConfig$ErrorListener
+AndroidX.Camera.Core.Impl.SessionConfig.IErrorListener;androidx.camera.core.impl.SessionConfig$ErrorListener
+androidx.camera.core.impl.SessionConfig$ErrorListener;androidx.camera.core.impl.SessionConfig$ErrorListener
+AndroidX.Camera.Core.Impl.SessionConfig+IErrorListenerImplementor, Xamarin.AndroidX.Camera.Core;mono.androidx.camera.core.impl.SessionConfig_ErrorListenerImplementor
+AndroidX.Camera.Core.Impl.SessionConfig.IErrorListenerImplementor;mono.androidx.camera.core.impl.SessionConfig_ErrorListenerImplementor
+mono.androidx.camera.core.impl.SessionConfig_ErrorListenerImplementor;mono.androidx.camera.core.impl.SessionConfig_ErrorListenerImplementor
+AndroidX.Camera.Core.Impl.SessionConfig+IOptionUnpacker, Xamarin.AndroidX.Camera.Core;androidx.camera.core.impl.SessionConfig$OptionUnpacker
+AndroidX.Camera.Core.Impl.SessionConfig.IOptionUnpacker;androidx.camera.core.impl.SessionConfig$OptionUnpacker
+androidx.camera.core.impl.SessionConfig$OptionUnpacker;androidx.camera.core.impl.SessionConfig$OptionUnpacker
+AndroidX.Camera.View.Video.IOnVideoSavedCallback, Xamarin.AndroidX.Camera.View;androidx.camera.view.video.OnVideoSavedCallback
+AndroidX.Camera.View.Video.IOnVideoSavedCallback;androidx.camera.view.video.OnVideoSavedCallback
+androidx.camera.view.video.OnVideoSavedCallback;androidx.camera.view.video.OnVideoSavedCallback
 AndroidX.Core.Util.IConsumer, Xamarin.AndroidX.Core;androidx.core.util.Consumer
 AndroidX.Core.Util.IConsumer;androidx.core.util.Consumer
 androidx.core.util.Consumer;androidx.core.util.Consumer
@@ -937,6 +1129,9 @@ com.google.android.material.appbar.AppBarLayout$OnOffsetChangedListener;com.goog
 Google.Android.Material.AppBar.AppBarLayout+IOnOffsetChangedListenerImplementor, Xamarin.Google.Android.Material;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
 Google.Android.Material.AppBar.AppBarLayout.IOnOffsetChangedListenerImplementor;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
 mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor;mono.com.google.android.material.appbar.AppBarLayout_OnOffsetChangedListenerImplementor
+Google.Common.Util.Concurrent.IListenableFuture, Xamarin.Google.Guava.ListenableFuture;com.google.common.util.concurrent.ListenableFuture
+Google.Common.Util.Concurrent.IListenableFuture;com.google.common.util.concurrent.ListenableFuture
+com.google.common.util.concurrent.ListenableFuture;com.google.common.util.concurrent.ListenableFuture
 Kotlin.IFunction, Xamarin.Kotlin.StdLib;kotlin.Function
 Kotlin.IFunction;kotlin.Function
 kotlin.Function;kotlin.Function
@@ -1033,6 +1228,9 @@ kotlinx.serialization.encoding.Encoder;kotlinx.serialization.encoding.Encoder
 KotlinX.Serialization.Descriptors.ISerialDescriptor, Xamarin.KotlinX.Serialization.Core.Jvm;kotlinx.serialization.descriptors.SerialDescriptor
 KotlinX.Serialization.Descriptors.ISerialDescriptor;kotlinx.serialization.descriptors.SerialDescriptor
 kotlinx.serialization.descriptors.SerialDescriptor;kotlinx.serialization.descriptors.SerialDescriptor
+ZXing.Net.Maui.FrameAnalyzer, ZXing.Net.MAUI;crc6477b0797571f03227.FrameAnalyzer
+ZXing.Net.Maui.FrameAnalyzer;crc6477b0797571f03227.FrameAnalyzer
+zxing.net.maui.FrameAnalyzer;crc6477b0797571f03227.FrameAnalyzer
 store.MainActivity, store;crc647e8fbbd9be7fc51e.MainActivity
 store.MainActivity;crc647e8fbbd9be7fc51e.MainActivity
 store.MainActivity;crc647e8fbbd9be7fc51e.MainActivity

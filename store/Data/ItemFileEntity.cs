@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -74,12 +75,14 @@ namespace store.Data
                                      itemBarcode.UnitDesc,
                                      itemBarcode.price
                                  })
-                                 .AsNoTracking() 
-                                 .Distinct() 
+                                 .AsNoTracking()
+                                 .Distinct()
                                  .ToListAsync();
 
-            
-            return results.Select(r => (r.Barcode, r.UnitDesc, r.price)).ToList();
+
+            return results
+                .Select(r => (r.Barcode, r.UnitDesc, r.price ?? 0))
+                .ToList();
         }
 
 
@@ -104,13 +107,13 @@ namespace store.Data
                 throw new ArgumentException("ItemNum cannot be null or empty.", nameof(itemNum));
             }
 
-          
+
             var item = await _dbContext.ItemFile
-                .AsNoTracking() 
+                .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.ItemNum == itemNum);
             Debug.WriteLine($"itemID:{item.ItemID}");
 
-            return item?.ItemID; 
+            return item?.ItemID;
         }
 
         public async Task<string> GetPriceByItemId(int itemId)
@@ -127,6 +130,49 @@ namespace store.Data
             Debug.WriteLine($"the price:{item.Price}");
 
             return item?.Price;
+        }
+
+        public async Task<(string ItemBarcode, string ItemName, string UnitDesc)> GetItemByBarcodes(string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                Debug.WriteLine("Barcode is null or empty.");
+                throw new ArgumentException("Barcode cannot be null or empty.", nameof(barcode));
+            }
+
+            Debug.WriteLine($"Searching in ItemFile table for barcode: {barcode}");
+
+            try
+            {
+               
+                var result = await (
+                    from itemfile in _dbContext.ItemFile
+                    join itemUnit in _dbContext.ItemUnit
+                    on itemfile.ItemID equals itemUnit.ItemID into itemUnitGroup
+                    from itemUnit in itemUnitGroup.DefaultIfEmpty()
+                    where itemfile.ItemNum == barcode
+                    select new
+                    {
+                        ItemBarcode = itemfile.ItemNum,
+                        ItemName = itemfile.ItemName,
+                        UnitDesc = itemUnit != null ? itemUnit.UnitDesc : null 
+                    }
+                ).FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    Debug.WriteLine($"No item found for barcode: {barcode}");
+                    return (null, null, null);
+                }
+
+                Debug.WriteLine($"Item found: Barcode={result.ItemBarcode}, Name={result.ItemName}, UnitDesc={result.UnitDesc ?? "N/A"}");
+                return (result.ItemBarcode, result.ItemName, result.UnitDesc);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while retrieving item details for barcode: {barcode}. Error: {ex.Message}");
+                throw;
+            }
         }
     }
 }

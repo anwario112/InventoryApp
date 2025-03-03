@@ -8,23 +8,31 @@
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" ColumnDefinitions="*,*" RowSpacing="10">
 
-        <ActivityIndicator x:Name="LoadingIndicator"
-                           IsVisible="False"
-                           IsRunning="False"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" 
-                           Grid.Row="0"
-                           Margin="0,20,0,0" />
+           
+            <Grid x:Name="ActivityIndicatorRow"
+              Grid.Row="0"
+              Grid.ColumnSpan="2"
+              HeightRequest="0">
+             
+                <ActivityIndicator x:Name="LoadingIndicator"
+                               IsVisible="False"
+                               IsRunning="True"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               Margin="0,20,0,0" />
+            </Grid>
 
-        <Label x:Name="LoadingCompleteLabel"
+          
+            <Label x:Name="LoadingCompleteLabel"
                Text="Loading Complete!"
                TextColor="Green"
                HorizontalOptions="Center"
                VerticalOptions="Center"
-               IsVisible="False" 
-               Grid.Row="1" />
+               IsVisible="False"
+               Grid.Row="0"
+               Grid.ColumnSpan="2" />
 
-        <Label Grid.Row="0" Grid.ColumnSpan="2"
+            <Label Grid.Row="1" Grid.ColumnSpan="2"
                x:Name="usernameLabel"
                HorizontalOptions="Start"
                VerticalOptions="Center"
@@ -32,7 +40,8 @@
                FontSize="24"
                Margin="0,10,0,0" />
 
-        <Label Grid.Row="1" Grid.ColumnSpan="2"
+            <!-- Operations Label -->
+            <Label Grid.Row="2" Grid.ColumnSpan="2"
                Text="Operations"
                TextColor="{StaticResource Gray400}"
                HorizontalOptions="Start"
@@ -41,144 +50,150 @@
                FontSize="18"
                Margin="0,-10,0,10" />
 
-        <Border Grid.Row="2" Grid.Column="0"
+
+
+            <Border Grid.Row="3" Grid.Column="0"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource purpleLight}"
                 HeightRequest="150"
                 Margin="10,5,10,10">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="20" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="InventoryTapped" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
-                <Image Source="Transfer.png" 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="InventoryTapped" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Image Source="Transfer.png" 
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
                        HeightRequest="40"
                        WidthRequest="50" 
                        Margin="15,20,80,40" />
-                <Label Text="Inventory" 
+                    <Label Text="Inventory" 
                        FontFamily="OpenSansRegular"
                        FontSize="18" 
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,-25,0,0" />
-                <Label Text="Barcode Scanner" 
+                    <Label Text="Barcode Scanner" 
                        FontFamily="OpenSansRegular"
                        FontSize="15" 
                        TextColor="{StaticResource Gray500}"
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,5,0,0" />
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-        <Border Grid.Row="3" Grid.Column="0"
+         
+            <Border Grid.Row="4" Grid.Column="0"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource sea}"
                 HeightRequest="150"
                 Margin="10,5,10,10">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="20" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="ExportData" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
-                <Image Source="export.png" 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ExportData" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Image Source="export.png" 
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
                        HeightRequest="40"
                        WidthRequest="50" 
                        Margin="15,20,80,40" />
-                <Label Text="Export file" 
+                    <Label Text="Export file" 
                        FontFamily="OpenSansRegular"
                        FontSize="18" 
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,-25,0,0" />
-                <Label Text="3 saved file" 
+                    <Label Text="3 saved file" 
                        FontFamily="OpenSansRegular"
                        FontSize="15" 
                        TextColor="{StaticResource Gray500}"
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,5,0,0" />
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-        <Border Grid.Row="2" Grid.Column="1"
+            
+            <Border Grid.Row="3" Grid.Column="1"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource lightOrange}"
                 HeightRequest="150"
-                                Margin="10,5,10,10">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="20" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="importData" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
-                <Image Source="port.png" 
+                Margin="10,5,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="importData" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Image Source="port.png" 
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
                        HeightRequest="40"
                        WidthRequest="50" 
                        Margin="15,20,80,40" />
-                <Label Text="Import Data" 
+                    <Label Text="Import Data" 
                        FontFamily="OpenSansRegular"
                        FontSize="18" 
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,-25,0,0" />
-                <Label Text="3 saved file" 
+                    <Label Text="3 saved file" 
                        FontFamily="OpenSansRegular"
                        FontSize="15" 
                        TextColor="{StaticResource Gray500}"
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,5,0,0" />
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-        <Border Grid.Row="3" Grid.Column="1"
+           
+            <Border Grid.Row="4" Grid.Column="1"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource pink}"
                 HeightRequest="150"
                 Margin="10,5,10,10">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="20" />
-            </Border.StrokeShape>
-            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
-                <Image Source="dollar.png" 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Image Source="dollar.png" 
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
                        HeightRequest="40"
                        WidthRequest="50" 
                        Margin="15,20,80,40" />
-                <Label Text="Item Price" 
+                    <Label Text="Item Price" 
                        FontFamily="OpenSansRegular"
                        FontSize="18" 
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,-25,0,0" />
-                <Label Text="Get item details" 
+                    <Label Text="Get item details" 
                        FontFamily="OpenSansRegular"
                        FontSize="15" 
                        TextColor="{StaticResource Gray500}"
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,5,0,0" />
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-        <Label Grid.Row="4" Grid.ColumnSpan="2"
+          
+            <Label Grid.Row="5" Grid.ColumnSpan="2"
                Text="Inventory"
                TextColor="{StaticResource Gray400}"
                HorizontalOptions="Start"
@@ -187,71 +202,71 @@
                FontSize="20"
                Margin="0,-20,0,0" />
 
-        <Border Grid.Row="5" Grid.ColumnSpan="2"
+           
+            <Border Grid.Row="6" Grid.ColumnSpan="2"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
                 HeightRequest="60" WidthRequest="350"  
                 Margin="10,0,40,10" x:Name="ShoppingBorder">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="15" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
-                <Image Source="shopping.png" 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="shopping.png" 
                        HorizontalOptions="Center" 
                        VerticalOptions="Center" 
                        HeightRequest="35" 
                        WidthRequest="50" />
-                <Label Text="Shopping List" 
+                    <Label Text="Shopping List" 
                        VerticalOptions="Center"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="{StaticResource Gray500}"  Margin="0,-5,0,0"/>
-                <Image Source="next.png" 
+                    <Image Source="next.png" 
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        HeightRequest="30"
                        Margin="100,0,0,0"/>
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-        <Border Grid.Row="6" Grid.ColumnSpan="2"
+            <Border Grid.Row="7" Grid.ColumnSpan="2"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
                 HeightRequest="60" WidthRequest="350"  
                 Margin="10,-15,40,130" x:Name="SettingsBorder">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="15" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnSettingsTapped" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
-                <Image Source="setting.png" 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="setting.png" 
                        HorizontalOptions="Center" 
                        VerticalOptions="Center" 
                        HeightRequest="35" 
                        WidthRequest="50" />
-                <Label Text="Settings" 
+                    <Label Text="Settings" 
                        VerticalOptions="Center"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="{StaticResource Gray500}"  Margin="0,-5,0,0"/>
-                <Image Source="next.png" 
+                    <Image Source="next.png" 
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        HeightRequest="30"
                        Margin="150,0,0,0"/>
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
-
-
-            <Border Grid.Row="6" Grid.ColumnSpan="2"
+      
+            <Border Grid.Row="7" Grid.ColumnSpan="2"
           Stroke="Transparent"
           StrokeThickness="2"
           BackgroundColor="{StaticResource White}"
@@ -289,8 +304,8 @@
                 VerticalOptions="End"
                 Margin="10,0,10,40"
                 Clicked="LogoutTap"
-                Grid.Row="7"
+                Grid.Row="8"
                 Grid.Column="1" />
-    </Grid>
+        </Grid>
     </ScrollView>
 </ContentPage>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace store.Data
 {
     public class ShoppingCardEntity : IDataHelper<ShoppingCard>
@@ -38,9 +39,25 @@ namespace store.Data
             throw new NotImplementedException();
         }
 
-        public Task UpdateData(ShoppingCard table)
+        public async Task UpdateData(ShoppingCard updatedShoppingCard)
         {
-            throw new NotImplementedException();
+           
+            var existingCard = await dBContext.ShoppingCard
+                .FirstOrDefaultAsync(card => card.ID == updatedShoppingCard.ID);
+
+            if (existingCard != null)
+            {
+                
+                existingCard.Quantity = updatedShoppingCard.Quantity;
+                existingCard.Price = updatedShoppingCard.Price;
+
+               
+                await dBContext.SaveChangesAsync();
+            }
+            else
+            {
+                Debug.WriteLine($"ShoppingCard with ID {updatedShoppingCard.ID} not found.");
+            }
         }
 
         public async Task<int> GetShoppingCartCount(int userId)
@@ -128,6 +145,12 @@ namespace store.Data
                 Debug.WriteLine($"Error deleting item: {ex.Message}");
                 return false;
             }
+        }
+
+        public async Task<ShoppingCard> GetShoppingCartItemByUser(int userId, int itemId)
+        {
+            return await dBContext.ShoppingCard
+                .FirstOrDefaultAsync(cartItem => cartItem.UserID == userId && cartItem.ItemID == itemId);
         }
     }
 }

@@ -18,17 +18,19 @@ namespace store.View
             InitializeComponent();
 
             ItemName = itemName;
-
             Barcode = barcode;
-
             UnitDesc = unitDesc;
-
-
             SectionID = sectionID;
             ItemID = itemID;
             Debug.WriteLine($"in quantityPopup:ItemName:{ItemName},barcode:{Barcode},unitdesc:{UnitDesc}");
 
+           
+
+                
         }
+
+        
+
 
         private void Button_Clicked(object sender, EventArgs e)
         {

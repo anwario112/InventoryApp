@@ -12,8 +12,8 @@
             <converters:DateToRelativeTimeConverter x:Key="DateToRelativeTime" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <StackLayout>
+    <ScrollView>
+        <StackLayout>
         
         <Border Stroke="Transparent"
                 StrokeThickness="2"
@@ -106,7 +106,7 @@
                                         <Label Text="{Binding LastName}" FontSize="20"/>
                                       
                                     </StackLayout>
-                                    <Label Text="{Binding Invoice.InvoiceNum, StringFormat='Invoice #{0}'}" FontSize="18" TextColor="{StaticResource Gray400}" Margin="0,5,0,0"/>
+                                    <Label Text="{Binding Invoice.InvoiceNum, StringFormat='Invoice #{0}'}" FontSize="15" TextColor="{StaticResource Gray400}" Margin="0,5,0,0"/>
                                    
                                 </StackLayout>
 
@@ -130,5 +130,5 @@
         </CollectionView>
 
     </StackLayout>
-
+    </ScrollView>
 </ContentPage>

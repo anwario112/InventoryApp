@@ -29,7 +29,7 @@ namespace store.ViewModels
         private readonly CustomerEntity _customerEntity;
         private readonly CountryEntity _countryEntity;
         private readonly CityEntity _cityEntity;
-        private readonly StreetEntity _streetEntity;
+        
 
         private ObservableCollection<dynamic> _shoppingCartItems;
 
@@ -43,6 +43,31 @@ namespace store.ViewModels
                 if (_shoppingCartItems != value)
                 {
                     _shoppingCartItems = value;
+
+                    OnPropertyChanged();
+
+                }
+
+            }
+
+        }
+
+        private ObservableCollection<Models.InvoiceDetails> _invoiceItems;
+        public ObservableCollection<Models.InvoiceDetails> InvoiceItems
+
+        {
+
+            get => _invoiceItems;
+
+            set
+
+            {
+
+                if (_invoiceItems != value)
+
+                {
+
+                    _invoiceItems = value;
 
                     OnPropertyChanged();
 
@@ -213,8 +238,8 @@ namespace store.ViewModels
             _customerEntity = new CustomerEntity();
             _countryEntity = new CountryEntity();
             _cityEntity = new CityEntity();
-            _streetEntity = new StreetEntity();
-
+           
+            InvoiceItems = new ObservableCollection<Models.InvoiceDetails>();
         }
 
         public async Task LoadShoppingCartItems(string username)
@@ -265,102 +290,46 @@ namespace store.ViewModels
 
 
         public async Task<bool> SaveInvoice(string username)
-
         {
-
             try
-
             {
-
                 if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address))
-
                 {
-
                     return false;
-
                 }
 
-
-                // Create or get Customer
-
-                var customer = new Customer
-
-                {
-
-                    FirstName = FirstName,
-
-                    LastName = LastName,
-
-                    CustomerNum = Math.Abs(Guid.NewGuid().GetHashCode()),
-
-                    Phone = Phone,
-
-                    Company = CompanyName,
-
-                    Address = Address,
-
-                };
-
-                Debug.WriteLine($"Customer info: FirstName: {customer.FirstName}, LastName: {customer.LastName}, Phone: {customer.Phone}, Company: {customer.Company}, Address: {customer.Address}");
-
-                await _customerEntity.AddData(customer);
-
-                Debug.WriteLine("Customer is saved");
-
-
-                // Check for existing Country
-
+              
                 var existingCountry = await _countryEntity.GetCountryByCountryName(Country);
-
                 int countryId;
 
                 if (existingCountry != null)
-
                 {
-
-                    countryId = existingCountry.ID; // Use existing country ID
-
+                    countryId = existingCountry.ID;
                     Debug.WriteLine($"Country already exists: {existingCountry.CountryName}, ID: {countryId}");
-
                 }
-
                 else
-
                 {
-
+                    
                     var countryData = new Country
-
                     {
-
-                        CountryCode = Math.Abs(Guid.NewGuid().GetHashCode()),
-
+                        CountryCode = Math.Abs(Guid.NewGuid().GetHashCode()), 
                         CountryName = Country
-
                     };
 
                     await _countryEntity.AddData(countryData);
-
-                    countryId = countryData.CountryCode; 
-
+                    countryId = countryData.ID; 
                     Debug.WriteLine($"New country added: {countryData.CountryName}, ID: {countryId}");
-
                 }
 
-
-                
-
                 var existingCity = await _cityEntity.GetCityIdByCityName(City);
-
                 int cityId;
 
                 if (existingCity != null)
                 {
-                    cityId = existingCity.Value; 
-                   
+                    cityId = existingCity.Value;
                 }
                 else
                 {
-
                     var cityData = new City
                     {
                         CityNum = Math.Abs(Guid.NewGuid().GetHashCode()),
@@ -369,78 +338,40 @@ namespace store.ViewModels
                     };
 
                     await _cityEntity.AddData(cityData);
-
-                    cityId = cityData.CityNum; 
-
-                    Debug.WriteLine($"New city added: {cityData.CityName}, ID: {cityId}");
-
+                    cityId = cityData.ID;
+                    Debug.WriteLine($"New city added: {cityData.CityName}, ID: {cityId},countryID:{cityData.CountyID}");
                 }
 
-
-                
-
-                var existingStreet = await _streetEntity.GetStreetIdByStreetDesc(Street);
-
-                int streetId;
-
-                if (existingStreet != null)
-
+              
+                var customer = new Customer
                 {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    CustomerNum = Math.Abs(Guid.NewGuid().GetHashCode()),
+                    Phone = Phone,
+                    Company = CompanyName,
+                    Address = Address,
+                    CountryID = countryId 
+                };
 
-                    streetId = existingStreet.Value;
+                Debug.WriteLine($"Customer info: FirstName: {customer.FirstName}, LastName: {customer.LastName}, Phone: {customer.Phone}, Company: {customer.Company}, Address: {customer.Address}, CountryID: {customer.CountryID}");
 
-                    Debug.WriteLine($"Street already exists: ID: {streetId}");
+                await _customerEntity.AddData(customer);
+                Debug.WriteLine("Customer is saved");
 
-                }
-
-                else
-
-                {
-
-                    var streetData = new Street
-
-                    {
-
-                        StreetNum = Math.Abs(Guid.NewGuid().GetHashCode()),
-
-                        StreetDesc = Street,
-
-                        CityID = cityId
-
-                    };
-
-                    await _streetEntity.AddData(streetData);
-
-                    streetId = streetData.StreetNum; 
-
-                    Debug.WriteLine($"New street added: {streetData.StreetDesc}, ID: {streetId}");
-
-                }
-
-
-                
                 var customerID = await _customerEntity.GetCustomerIDByPhone(Phone);
                 int userID = await _userEntity.FindUser(username) ?? 0;
                 var cards = await _shoppingCardEntity.GetShoppingCartItems(userID);
                 var totalPrice = await _shoppingCardEntity.CalculateTotalPrice(userID);
 
-
                 var invoice = new Invoice
-
                 {
-
                     InvoiceNum = Math.Abs(Guid.NewGuid().GetHashCode()),
-
                     UserID = userID,
-
                     Total = totalPrice.ToString(),
-
                     CustomerID = customerID,
-
                     Status = "Not Sent"
-
                 };
-
 
                 Debug.WriteLine($"InvoiceNum: {invoice.InvoiceNum}, CustomerID: {invoice.CustomerID}, UserID: {invoice.UserID}, Total: {invoice.Total}, Status: {invoice.Status}");
 
@@ -448,10 +379,9 @@ namespace store.ViewModels
 
                 int? invoiceID = await _invoiceEntity.GetIdByInvoiceNum(invoice.InvoiceNum);
 
-
                 var invoiceDetailsList = new List<Models.InvoiceDetails>();
 
-
+            
                 foreach (var item in cards)
                 {
                     if (item == null)
@@ -460,13 +390,12 @@ namespace store.ViewModels
                         continue;
                     }
 
-
+                 
                     int itemID = await _itemFileEntity.GetItemIdByItemNum(item.ItemNum);
                     Debug.WriteLine($"The itemID is: {itemID}");
 
-
+                
                     var price = await _itemFileEntity.GetPriceByItemId(itemID);
-
                     Debug.WriteLine($"The price of the item is: {price}");
 
                     var invoiceDetail = new Models.InvoiceDetails
@@ -476,45 +405,29 @@ namespace store.ViewModels
                         Quantity = item.Quantity,
                         Price = price,
                         TotalNet = item.Price
-
                     };
 
-
+                  
                     invoiceDetailsList.Add(invoiceDetail);
-
                 }
-
 
                 if (invoiceDetailsList.Count > 0)
                 {
-
                     await _invoiceDetailsEntity.AddDataRange(invoiceDetailsList);
-
                     Debug.WriteLine("All invoice details saved successfully.");
-
-                    return true; 
-
+                    return true;
                 }
                 else
                 {
-
                     Debug.WriteLine("No invoice details to save.");
                     return false;
-
                 }
-
             }
-
             catch (Exception ex)
-
             {
-
                 Debug.WriteLine($"Error sending data to API: {ex.Message}");
-
-                return false; 
-
+                return false;
             }
-
         }
 
 

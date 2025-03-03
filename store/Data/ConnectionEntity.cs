@@ -50,5 +50,14 @@ namespace store.Data
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Connection> FetchConnectionData()
+        {
+            var connectionEntity = new ConnectionEntity();
+  
+            var connections = await connectionEntity.GetConnection(null, null, null, null, null);
+            
+            return connections.FirstOrDefault();
+        }
     }
 }

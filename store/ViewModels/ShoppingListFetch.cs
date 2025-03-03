@@ -9,17 +9,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using store.Data;
 using store.Models;
+using store.Service;
 
 namespace store.ViewModels
 {
     public class ShoppingListFetch : INotifyPropertyChanged
     {
+      
         private readonly ItemFileEntity _itemFileEntity;
         private ObservableCollection<ItemFile> _allItems; 
         private ObservableCollection<ItemFile> _displayedItems;
         private Dictionary<string, int> _itemQuantities;
         private readonly UserEntity _userEntity;
         private readonly ShoppingCardEntity _shoppingCardEntity;
+        private readonly InvoiceDetailsEntity _invoiceDetailsEntity;
+        private readonly InvoiceEntity _invoiceEntity;
+        private readonly ItemCacheService _cacheService;
+        
+
+
+      
+
+
 
         private int _currentPage = 1;
         private const int _pageSize = 20;
@@ -109,6 +120,10 @@ namespace store.ViewModels
             _itemQuantities = new Dictionary<string, int>();
             _userEntity = new UserEntity();
             _shoppingCardEntity = new ShoppingCardEntity();
+            _invoiceDetailsEntity = new InvoiceDetailsEntity();
+            _invoiceEntity = new InvoiceEntity();
+            _cacheService = new ItemCacheService();
+
 
         }
 
@@ -129,18 +144,33 @@ namespace store.ViewModels
         {
             try
             {
-                var (items, totalItems) = await _itemFileEntity.GetAllItems(1, int.MaxValue);
+                var cachedItems = await Task.Run(() => _cacheService.GetCachedItems());
+                if (cachedItems != null)
+                {
+                    Debug.WriteLine("Data fetched from cache.");
+                    AllItems = cachedItems;
+                    _totalItems = cachedItems.Count;
+                    OnPropertyChanged(nameof(TotalPages));
+                    UpdateDisplayedItems();
+                    return;
+                }
 
-               
+                Debug.WriteLine("Fetching data from the database...");
 
-                AllItems = new ObservableCollection<ItemFile>(items);
+                var (items, totalItems) = await _itemFileEntity.GetAllItems(1, int.MaxValue).ConfigureAwait(false);
+
+                _cacheService.UpdateCache(new ObservableCollection<ItemFile>(items));
+
+                AllItems = _cacheService.GetCachedItems();
                 _totalItems = totalItems;
                 OnPropertyChanged(nameof(TotalPages));
                 UpdateDisplayedItems();
+
+                Debug.WriteLine("Data fetched from the database and cached.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching items: {ex.Message}");
+                Debug.WriteLine($"Error fetching items: {ex.Message}");
             }
         }
 
@@ -250,7 +280,7 @@ namespace store.ViewModels
         }
 
 
-        public async Task AddToShoppingCart(string username, string itemNum, string quantity, string totalPrice)
+        public async Task AddToShoppingCart(string username, string itemNum, string quantity, string unitPrice)
         {
             int userId = await _userEntity.FindUser(username) ?? 0;
             int? itemIDNullable = await _itemFileEntity.GetItemIdByItemNum(itemNum);
@@ -258,24 +288,43 @@ namespace store.ViewModels
             if (!itemIDNullable.HasValue)
             {
                 Debug.WriteLine($"Item with ItemNum '{itemNum}' not found.");
-                return; 
+                return;
             }
 
-            int itemID = itemIDNullable.Value; 
+            int itemID = itemIDNullable.Value;
 
-            var shoppingCartItem = new Models.ShoppingCard
+            var existingCartItem = await _shoppingCardEntity.GetShoppingCartItemByUser(userId, itemID);
+
+            if (existingCartItem != null)
             {
-                UserID = userId,
-                ItemID = itemID,
-                Quantity = quantity,
-                Price = totalPrice
-            };
-            await _shoppingCardEntity.AddData(shoppingCartItem);
-            
-            Debug.WriteLine($"inserted to cart: {shoppingCartItem.ItemID}, Quantity: {shoppingCartItem.Quantity}, Total Price: {shoppingCartItem.Price},UserID:{shoppingCartItem.UserID}");
+                
+                int newQuantity = int.Parse(existingCartItem.Quantity) + int.Parse(quantity);
+                existingCartItem.Quantity = newQuantity.ToString();
+
+              
+                decimal existingPrice = decimal.Parse(existingCartItem.Price);
+                decimal newPrice = decimal.Parse(unitPrice);
+                existingCartItem.Price = (existingPrice + newPrice).ToString("F2");
+
+                await _shoppingCardEntity.UpdateData(existingCartItem);
+                Debug.WriteLine($"Updated existing item in cart: ItemID: {existingCartItem.ItemID}, New Quantity: {existingCartItem.Quantity}, New Price: {existingCartItem.Price}, UserID: {existingCartItem.UserID}");
+            }
+            else
+            {
+                
+                var shoppingCartItem = new Models.ShoppingCard
+                {
+                    UserID = userId,
+                    ItemID = itemID,
+                    Quantity = quantity,
+                    Price = unitPrice 
+                };
+                await _shoppingCardEntity.AddData(shoppingCartItem);
+                Debug.WriteLine($"Inserted to cart: ItemID: {shoppingCartItem.ItemID}, Quantity: {shoppingCartItem.Quantity}, Total Price: {shoppingCartItem.Price}, UserID: {shoppingCartItem.UserID}");
+            }
+           _cacheService.InvalidateCache();
             await UpdateShoppingCartCount(username);
         }
-
         public async Task UpdateShoppingCartCount(string username)
         {
             var shoppingCartCount = await GetShoppingCartCount(username);
@@ -287,6 +336,81 @@ namespace store.ViewModels
             var shoppingCartCount = await _shoppingCardEntity.GetShoppingCartCount(userId);
             return shoppingCartCount;
         }
+
+        public async Task AddItemToInvoice(int invoiceNum, string itemNum, string quantity, string totalPrice)
+        {
+            Debug.WriteLine($"Received invoiceNum: {invoiceNum}");
+
+           
+            int? itemIDNullable = await _itemFileEntity.GetItemIdByItemNum(itemNum);
+            if (!itemIDNullable.HasValue)
+            {
+                Debug.WriteLine($"Item with ItemNum '{itemNum}' not found.");
+                return;
+            }
+
+            int itemID = itemIDNullable.Value;
+
+            
+            int? invoiceIDNullable = await _invoiceEntity.GetIdByInvoiceNum(invoiceNum);
+            if (!invoiceIDNullable.HasValue)
+            {
+                Debug.WriteLine($"Invoice with InvoiceNum '{invoiceNum}' not found.");
+                return;
+            }
+
+            int invoiceID = invoiceIDNullable.Value;
+
+           
+            var existingInvoiceDetail = await _invoiceDetailsEntity.GetInvoiceDetailsByItemIdAndInvoiceId(itemID, invoiceID);
+
+            if (existingInvoiceDetail != null)
+            {
+               
+                existingInvoiceDetail.Quantity = (int.Parse(existingInvoiceDetail.Quantity) + int.Parse(quantity)).ToString();
+                existingInvoiceDetail.TotalNet = (decimal.Parse(existingInvoiceDetail.TotalNet) + decimal.Parse(totalPrice)).ToString();
+
+                await _invoiceDetailsEntity.UpdateData(existingInvoiceDetail);
+                Debug.WriteLine($"Updated existing item in Invoice ID: {invoiceID}, Item ID: {itemID}, New Quantity: {existingInvoiceDetail.Quantity}, New TotalNet: {existingInvoiceDetail.TotalNet}");
+            }
+            else
+            {
+                
+                var price = await _itemFileEntity.GetPriceByItemId(itemID);
+
+                var invoiceDetail = new InvoiceDetails
+                {
+                    InvoiceID = invoiceID,
+                    ItemID = itemID,
+                    Quantity = quantity,
+                    Price = price,
+                    TotalNet = totalPrice,
+                };
+
+                await _invoiceDetailsEntity.AddData(invoiceDetail);
+                Debug.WriteLine($"Data successfully inserted for Invoice ID: {invoiceID}");
+            }
+
+           
+            var total = await _invoiceDetailsEntity.GetTotalNetSumByInvoiceId(invoiceID);
+            Debug.WriteLine($"The updated Total is {total}");
+
+            var existingInvoice = await _invoiceEntity.GetById(invoiceID);
+            if (existingInvoice != null)
+            {
+                existingInvoice.Total = total.ToString();
+                await _invoiceEntity.UpdateData(existingInvoice);
+                Debug.WriteLine($"Invoice updated: ID = {existingInvoice.ID}, Total = {existingInvoice.Total}");
+            }
+            else
+            {
+                Debug.WriteLine($"Invoice with ID {invoiceID} not found.");
+            }
+
+            _cacheService.InvalidateCache();
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

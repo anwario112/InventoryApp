@@ -7,16 +7,25 @@ namespace store.View;
 public partial class SectionPopup : Popup
 {
     public event EventHandler? SectionCreated;
+
     public SectionPopup(SectionInsertData viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
         viewModel.SectionCreated += ViewModel_SectionCreated;
-    }
 
+      
+        this.Opened += SectionPopup_Opened;
+    }
 
     private void ViewModel_SectionCreated(Section section)
     {
         Close();
+    }
+
+    private void SectionPopup_Opened(object? sender, EventArgs e)
+    {
+      
+        FolderNameEntry.Focus();
     }
 }

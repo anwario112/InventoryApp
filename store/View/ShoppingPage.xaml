@@ -1,19 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="store.View.ShoppingPage"
              xmlns:local="clr-namespace:store.JsonConverter"
              xmlns:viewmodels="clr-namespace:store.ViewModels"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
              Title="ShoppingPage"
              BackgroundColor="{StaticResource Gray1000}">
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:QuantityConverter x:Key="QuantityConverter" />
+            <local:ImageUrlToSourceConverter x:Key="ImageUrlToSourceConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
+
+
+
     <StackLayout>
-        
         <Grid BackgroundColor="{StaticResource teal}" Padding="10">
             <Grid RowDefinitions="Auto, Auto">
                 <Label 
@@ -37,9 +42,7 @@
                     Stroke="Transparent"
                     AbsoluteLayout.LayoutFlags="PositionProportional"
                     AbsoluteLayout.LayoutBounds="1, 0.5, AutoSize, AutoSize" 
-                    Margin="0,-10,20,0"> 
-                                
-
+                    Margin="0,-10,20,0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="10" />
                         </Border.StrokeShape>
@@ -88,115 +91,224 @@
             </Grid>
         </Grid>
 
+      
+        <StackLayout x:Name="InvoiceModeLayout" IsVisible="False">
+            <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Transparent"
+                     StrokeThickness="2"
+                     BackgroundColor="{StaticResource White}"
+                     HeightRequest="120"
+                     WidthRequest="350"
+                     Margin="10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="15" />
+                            </Border.StrokeShape>
 
-        <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Stroke="Transparent"
-                            StrokeThickness="2"
-                            BackgroundColor="{StaticResource White}"
-                            HeightRequest="120"
-                            WidthRequest="350"
-                            Margin="10">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="15" />
-                        </Border.StrokeShape>
+                            <Grid Padding="0">
+                                <BoxView WidthRequest="10" 
+                              BackgroundColor="{StaticResource teal}" 
+                              HorizontalOptions="Start" 
+                              VerticalOptions="Fill" />
 
-                        <Grid Padding="0">
-                            <BoxView WidthRequest="10" 
-                                     BackgroundColor="{StaticResource teal}" 
-                                     HorizontalOptions="Start" 
-                                     VerticalOptions="Fill" />
+                                <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}" 
+                                  HeightRequest="40" 
+                                  WidthRequest="40"                              
+                                  VerticalOptions="Center"                            
+                                  HorizontalOptions="Start" Margin="20,-10,0,30"  />
 
-                            <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
-                             HeightRequest="40" 
-                             WidthRequest="40"                              
-                             VerticalOptions="Center" 
-                             HorizontalOptions="Start" Margin="20,-10,0,30"  />
+                                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="50,0,0,30">
+
+                                    <Label Text="{Binding ItemName,Mode=TwoWay}"
+                                VerticalOptions="Center"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource Gray500}"  
+                                Margin="0,-5,0,0"/>
+
+                                    <Label Text="{Binding ItemNum,Mode=TwoWay}"
+                                VerticalOptions="Center"
+                                FontSize="14" 
+                                TextColor="{StaticResource Gray500}"  
+                                Margin="0,-5,0,0"/>
 
 
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="50,0,0,30">
-                             
-                                <Label Text="{Binding ItemName,Mode=TwoWay}"
-                                       VerticalOptions="Center"
-                                       FontSize="14"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray500}"  
-                                       Margin="0,-5,0,0"/>
+                                    <Label Text="{Binding Price, StringFormat='{}${0:F2}'}"
+                            VerticalOptions="Center"
+                            FontSize="14" 
+                            TextColor="{StaticResource Gray500}"  
+                            Margin="0,-5,0,0"/>
+                                </StackLayout>
 
-                                <Label Text="{Binding ItemNum,Mode=TwoWay}"
+                                <StackLayout Orientation="Horizontal" VerticalOptions="End" Spacing="10" Margin="40,0,0,-10">
+                                    <Button Text="-" 
+                                 BackgroundColor="Transparent" 
+                                 BorderColor="Transparent"
+                                 TextColor="{StaticResource teal}"
+                                 FontSize="40"                                       
+                                  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=DecreaseQuantityCommand}"
+                                  CommandParameter="{Binding .}"
+                                  />
+
+                                    <Label Margin="0,30,0,0" FontSize="18">
+                                        <Label.Text>
+                                            <MultiBinding Converter="{StaticResource QuantityConverter}">
+                                                <Binding Path="." />
+                                                <Binding Path="ItemQuantities" Source="{RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <Button Text="+" 
+                                     BackgroundColor="Transparent" 
+                                     BorderColor="Transparent"
+                                      Margin="0,8,0,0"
+                                     TextColor="{StaticResource teal}"
+                                     FontSize="25"                                  
+                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=IncreaseQuantityCommand}"
+                                     CommandParameter="{Binding .}"
+                                     />
+
+                                </StackLayout>
+                                <StackLayout Margin="160,70,0,0"  VerticalOptions="Start" HeightRequest="30">
+                                    <Border
+                                      Stroke="Transparent"
+                                      StrokeThickness="2"
+                                      BackgroundColor="{StaticResource teal}"
+                                      HeightRequest="30"
+                                     WidthRequest="100"
+                                      Margin="0,10,50,10">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="AddToInvoice" />
+                                        </Border.GestureRecognizers>
+
+                                        <Label Text="Add" Margin="35,4,0,0" TextColor="White"/>
+
+                                    </Border>
+                                    <Image Source="checked.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" HorizontalOptions="Start" Margin="5,0,0,0" />
+
+                                </StackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </StackLayout>
+
+       
+        <StackLayout x:Name="ShoppingCartModeLayout" IsVisible="True">
+            <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Transparent"
+                                StrokeThickness="2"
+                                BackgroundColor="{StaticResource White}"
+                                HeightRequest="120"
+                                WidthRequest="350"
+                                Margin="10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="15" />
+                            </Border.StrokeShape>
+
+                            <Grid Padding="0">
+                                <BoxView WidthRequest="10" 
+                                         BackgroundColor="{StaticResource teal}" 
+                                         HorizontalOptions="Start" 
+                                         VerticalOptions="Fill" />
+
+                                <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}" 
+                                       HeightRequest="40" 
+                                       WidthRequest="40"                              
+                                       VerticalOptions="Center"                            
+                                       HorizontalOptions="Start" 
+                                       Margin="20,-10,0,30" />  
+
+                                <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="50,0,0,30">
+
+                                    <Label Text="{Binding ItemName,Mode=TwoWay}"
+                                           VerticalOptions="Center"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Gray500}"  
+                                           Margin="0,-5,0,0"/>
+
+                                    <Label Text="{Binding ItemNum,Mode=TwoWay}"
+                                           VerticalOptions="Center"
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray500}"  
+                                           Margin="0,-5,0,0"/>
+
+
+                                    <Label Text="{Binding Price, StringFormat='{}${0:F2}'}"
                                        VerticalOptions="Center"
                                        FontSize="14" 
                                        TextColor="{StaticResource Gray500}"  
                                        Margin="0,-5,0,0"/>
-                                                                                                                         
+                                </StackLayout>
 
-                                <Label Text="{Binding Price, StringFormat='{}${0:F2}'}"
-                                   VerticalOptions="Center"
-                                   FontSize="14" 
-                                   TextColor="{StaticResource Gray500}"  
-                                   Margin="0,-5,0,0"/>
-                            </StackLayout>
+                                <StackLayout Orientation="Horizontal" VerticalOptions="End" Spacing="10" Margin="40,0,0,-10">
+                                    <Button Text="-" 
+                                            BackgroundColor="Transparent" 
+                                            BorderColor="Transparent"
+                                            TextColor="{StaticResource teal}"
+                                            FontSize="40"                                       
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=DecreaseQuantityCommand}"
+                                             CommandParameter="{Binding .}"
+                                             />
 
-                            <StackLayout Orientation="Horizontal" VerticalOptions="End" Spacing="10" Margin="40,0,0,-10">
-                                <Button Text="-" 
-                                        BackgroundColor="Transparent" 
-                                        BorderColor="Transparent"
-                                        TextColor="{StaticResource teal}"
-                                        FontSize="40"                                       
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=DecreaseQuantityCommand}"
-                                         CommandParameter="{Binding .}"
-                                         />
+                                    <Label Margin="0,30,0,0" FontSize="18">
+                                        <Label.Text>
+                                            <MultiBinding Converter="{StaticResource QuantityConverter}">
+                                                <Binding Path="." />
+                                                <Binding Path="ItemQuantities" Source="{RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
 
-                                <Label Margin="0,30,0,0" FontSize="18">
-                                    <Label.Text>
-                                        <MultiBinding Converter="{StaticResource QuantityConverter}">
-                                            <Binding Path="." />
-                                            <Binding Path="ItemQuantities" Source="{RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}" />
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
+                                    <Button Text="+" 
+                                    BackgroundColor="Transparent" 
+                                    BorderColor="Transparent"
+                                     Margin="0,8,0,0"
+                                    TextColor="{StaticResource teal}"
+                                    FontSize="25"                                  
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=IncreaseQuantityCommand}"
+                                    CommandParameter="{Binding .}"
+                                    />
 
-                                <Button Text="+" 
-                                BackgroundColor="Transparent" 
-                                BorderColor="Transparent"
-                                 Margin="0,8,0,0"
-                                TextColor="{StaticResource teal}"
-                                FontSize="25"                                  
-                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShoppingListFetch}}, Path=IncreaseQuantityCommand}"
-                                CommandParameter="{Binding .}"
-                                />
+                                </StackLayout>
+                                <StackLayout Margin="160,70,0,0"  VerticalOptions="Start" HeightRequest="30">
+                                    <Border
+                                         Stroke="Transparent"
+                                         StrokeThickness="2"
+                                         BackgroundColor="{StaticResource teal}"
+                                         HeightRequest="30"
+                                        WidthRequest="100"
+                                         Margin="0,10,50,10">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="ShoppingCardTap" />
+                                        </Border.GestureRecognizers>
 
-                            </StackLayout>
-                            <StackLayout Margin="160,70,0,0"  VerticalOptions="Start" HeightRequest="30">
-                                <Border
-                                     Stroke="Transparent"
-                                     StrokeThickness="2"
-                                     BackgroundColor="{StaticResource teal}"
-                                     HeightRequest="30"
-                                    WidthRequest="100"
-                                     Margin="0,10,50,10">       
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ShoppingCardTap" />
-                                    </Border.GestureRecognizers>
+                                        <Label Text="Add" Margin="35,4,0,0" TextColor="White"/>
 
+                                    </Border>
+                                    <Image Source="checked.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" HorizontalOptions="Start" Margin="5,0,0,0" />
 
-                                    <Label Text="Add" Margin="35,4,0,0" TextColor="White"/>
-                                  
-                                </Border>
-                                <Image Source="checked.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" HorizontalOptions="Start" Margin="5,0,0,0" />
+                                </StackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
 
-                            </StackLayout>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-             </CollectionView.ItemTemplate>
-        </CollectionView>
-
-       
         <Grid Padding="10" VerticalOptions="End">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

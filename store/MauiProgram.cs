@@ -7,7 +7,12 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.Marshalling.IIUnknownCacheStrategy;
 using store.Models;
-using Android.Content;
+using store.ViewModels;
+using store.Service;
+using ZXing.Net.Maui;
+using ZXing.Net.Maui.Controls;
+
+
 
 
 
@@ -19,26 +24,33 @@ namespace store
     {
         public static MauiApp CreateMauiApp()
         {
-            //create database
+           
             InitializeDatabase();
 
 
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<App>()              
                 .UseUraniumUI()
-                .UseUraniumUIMaterial()
-                .UseMauiCommunityToolkit()
+                .UseUraniumUIMaterial()               
+                .UseMauiCommunityToolkit()           
+                .UseBarcodeReader()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("OPTITimes-Roman.otf", "roman");
                 });
+         
+            builder.Services.AddSingleton<ItemCacheService>();
+            builder.Services.AddSingleton<ShoppingListFetch>();
+
+
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
 
             return builder.Build();
         }
@@ -62,10 +74,7 @@ namespace store
 
 
 
-
-
-
-
+                   
 
 
                     var ExportedCard = await dbContext.ExportedCard.ToListAsync();

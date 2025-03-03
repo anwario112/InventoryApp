@@ -1,28 +1,122 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="store.View.InvoiceDetails"
              Title="InvoiceDetails">
 
     <StackLayout Padding="15">
+
+        <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
+            <StackLayout Orientation="Horizontal" Spacing="5">
+                <Label Text="Created Invoice" FontSize="18" TextColor="{StaticResource Black}"/>
+            </StackLayout>
+            <Label x:Name="InvoiceNumLabel" FontSize="14" Margin="0,0,0,0" TextColor="{StaticResource Gray400}"/>
+        </StackLayout>
+
         <Label Text="Invoice Details" FontSize="18" TextColor="{StaticResource Gray400}" FontFamily="roman"/>
 
         <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="10" Padding="20">
-            <Border WidthRequest="50" HeightRequest="50" Stroke="Transparent" StrokeThickness="2" BackgroundColor="{StaticResource Gray200}">
+            <Border WidthRequest="50" HeightRequest="50" Stroke="Transparent" StrokeThickness="2" BackgroundColor="{StaticResource Gray100}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="30" />
                 </Border.StrokeShape>
                 <Label x:Name="InitialsLabel" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
             </Border>
 
-            
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="5">
-                <Label x:Name="FirstNameLabel" FontSize="20" TextColor="{StaticResource Black}"/>
-                <Label x:Name="LastNameLabel" FontSize="20" TextColor="{StaticResource Black}"/>
+            <StackLayout Orientation="Vertical" VerticalOptions="Center" Spacing="2">
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <Label x:Name="FirstNameLabel" FontSize="20" TextColor="{StaticResource Black}"/>
+                    <Label x:Name="LastNameLabel" FontSize="20" TextColor="{StaticResource Black}"/>
+                </StackLayout>
+                <Label Text="{Binding CustomerPhone}" FontSize="16" TextColor="{StaticResource Gray400}" />
             </StackLayout>
         </StackLayout>
 
-        <BoxView HeightRequest="2" BackgroundColor="{StaticResource Gray100}" HorizontalOptions="FillAndExpand" WidthRequest="350"/>
+        <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray100}" HorizontalOptions="FillAndExpand" WidthRequest="350"/>
 
+        <StackLayout Padding="20">
+            <Label Text="Invoice Date" FontSize="18" HorizontalOptions="Center" TextColor="{StaticResource Gray400}"/>
+            <Label Text="{Binding InvoiceDate}" FontSize="16" HorizontalOptions="Center" TextColor="{StaticResource Black}"/>
+        </StackLayout>
+
+        <Label Text="ITEM DETAILS" FontSize="16" TextColor="{StaticResource Gray400}" Padding="10"/>
+
+        <ListView ItemsSource="{Binding InvoiceDetails}" HasUnevenRows="True" CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="10" Margin="0,0,0,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            
+                            </Grid.ColumnDefinitions>
+
+                      
+                            <Image Source="Minus.png" HeightRequest="25" WidthRequest="25" Grid.Column="0" VerticalOptions="Center" Margin="0,5,10,0" />
+
+                            <Label Text="{Binding ItemName}"
+                                   FontSize="16"
+                                   TextColor="{StaticResource Black}"
+                                   Grid.Row="0" Grid.Column="1"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2"/>
+
+                            <StackLayout Orientation="Horizontal" Spacing="5" Grid.Row="1" Grid.Column="1">
+                                <Label Text="{Binding Quantity, StringFormat='{0} x '}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource Gray400}"/>
+                                <Label Text="{Binding Price, StringFormat='{0:C}'}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource Gray400}"/>
+                            </StackLayout>
+
+                            <Label Text="{Binding TotalNet, StringFormat='{0:C}'}"
+                                   FontSize="17"
+                                   TextColor="{StaticResource Black}"
+                                   Grid.Row="0" Grid.Column="2"
+                                   Grid.RowSpan="2"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackLayout Padding="20" Margin="0,0,210,40">
+            <Label Text="TOTAL SUMMARY" FontSize="16" TextColor="{StaticResource Gray500}" HorizontalOptions="Center"/>
+
+            <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="SubTotal" 
+                       FontSize="17" 
+                       TextColor="{StaticResource Gray400}" 
+                       Margin="0,10,0,0" 
+                       Grid.Column="0" 
+                       HorizontalOptions="Start" />
+
+                <Label x:Name="TotalLabel" 
+                       FontSize="17" 
+                       TextColor="{StaticResource Black}" 
+                       Margin="0,10,0,0" 
+                       Grid.Column="1" 
+                       HorizontalOptions="End" />
+            </Grid>
+
+            <Label Text="inclusive TVA" 
+                   FontSize="17" 
+                   TextColor="{StaticResource Gray400}" 
+                   Margin="0,10,0,0" 
+                   HorizontalOptions="Start"/>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

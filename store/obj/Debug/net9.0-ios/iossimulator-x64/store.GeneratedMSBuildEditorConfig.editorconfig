@@ -59,6 +59,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.AddUserPopup.xa
 build_metadata.AdditionalFiles.TargetPath = View\AddUserPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\AddUserPopup.xaml
 
+[C:/Users/USER/source/repos/store/store/View/CameraPopupPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.CameraPopupPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CameraPopupPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CameraPopupPage.xaml
+
 [C:/Users/USER/source/repos/store/store/View/CardList.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CardList.xaml

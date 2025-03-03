@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
@@ -10,43 +11,45 @@ using store.ViewModels;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
+using ZXing.Net.Maui;
+using ZXing.Net.Maui.Controls;
+using ZXing.QrCode.Internal;
+using CommunityToolkit.Maui.Core;
+
+
+
 
 namespace store.View
 {
     public partial class TransferData : ContentPage
     {
         private readonly DBContext db;
-       
         private readonly ItemCardEntity itemCardEntity;
         private readonly InsertDataApi _insertDataApi;
         private readonly ItemArchiveEntity _itemArchiveEntity;
         private CancellationTokenSource _cancellationTokenSource;
         private readonly ItemBarcodeEntity _itemBarcode;
+        private readonly ItemFileEntity itemFileEntity;
         private int sectionID;
 
         private ObservableCollection<ItemCard> _itemCards = new ObservableCollection<ItemCard>();
         private Dictionary<int, ItemCard> _itemCardsDictionary = new Dictionary<int, ItemCard>();
         private HashSet<int> _existingIds = new HashSet<int>();
 
-
-
-
-        public TransferData(int SectionID)
+        public TransferData(int SectionID, string apiKey = "12345-ABCDE-67890-FGHIJ", string secretKey = "S3cr3tK3y!@#2023")
         {
             InitializeComponent();
-            var httpHelper = new HttpHelper();
+            var httpHelper = new HttpHelper(apiKey, secretKey);
 
             db = new DBContext();
-          
             itemCardEntity = new ItemCardEntity();
-           
             _itemBarcode = new ItemBarcodeEntity();
             _itemArchiveEntity = new ItemArchiveEntity();
+            itemFileEntity = new ItemFileEntity();
 
             _insertDataApi = new InsertDataApi(httpHelper);
             BindingContext = this;
             sectionID = SectionID;
-
         }
 
         public ObservableCollection<ItemCard> ItemCards
@@ -59,22 +62,16 @@ namespace store.View
             }
         }
 
-
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             LoadItemCardsAsync();
             Barcode.Focus();
             SubscribeToMessages();
-
-
-
         }
-
 
         private void SubscribeToMessages()
         {
-
             MessagingCenter.Subscribe<ChangePopup, ItemCard>(this, "ItemUpdated", (sender, updatedItemCard) =>
             {
                 var existingItemCard = ItemCards.FirstOrDefault(ic => ic.ID == updatedItemCard.ID);
@@ -86,46 +83,30 @@ namespace store.View
             });
 
             MessagingCenter.Subscribe<PackingPopupFunction, int>(this, "ItemCardUpdated", async (sender, id) =>
-            {          
-
+            {
                 var existingItemCard = ItemCards.FirstOrDefault(ic => ic.ID == id);
                 if (existingItemCard != null)
                 {
                     ItemCards.Remove(existingItemCard);
                     Debug.WriteLine($"Removed existing ItemCard with ID {id}.");
                 }
-             
 
-                var updatedItem = await itemCardEntity.GetItemCardById(id); 
-
+                var updatedItem = await itemCardEntity.GetItemCardById(id);
                 if (updatedItem != null)
                 {
                     var newItemCard = new ItemCard
                     {
-
                         ID = updatedItem.ID,
-
                         ItemBarcode = updatedItem.ScanningNum,
-
                         ItemName = updatedItem.ItemName,
-
                         Quantity = updatedItem.Quantity,
-
                         Unit = updatedItem.Unit
-
                     };
 
-
-                 
-
                     ItemCards.Add(newItemCard);
-
                     Debug.WriteLine($"Added updated ItemCard with Barcode: {newItemCard.ItemBarcode}.");
-
                 }
-
             });
-
 
             MessagingCenter.Subscribe<ItemCard, int>(this, "ItemCardDeleted", (sender, id) =>
             {
@@ -135,9 +116,7 @@ namespace store.View
                     ItemCards.Remove(itemCardToRemove);
                     Debug.WriteLine($"ItemCard with ID {id} has been removed from the UI.");
                 }
-
             });
-
 
             WeakReferenceMessenger.Default.Register<QuantityUpdatedMessage>(this, (recipient, message) =>
             {
@@ -151,8 +130,6 @@ namespace store.View
                 }
             });
         }
-        
-
 
         private async void LoadItemCardsAsync()
         {
@@ -172,12 +149,32 @@ namespace store.View
 
             try
             {
+                await Task.Delay(1000, _cancellationTokenSource.Token);
                 (ItemBarcode itemBarcode, string itemName, string unitDesc) = await _itemBarcode.GetItemByBarcode(barcode);
-
                 if (itemBarcode == null)
                 {
-                    Debug.WriteLine("No item found for the entered barcode.");
-                    return;
+                    Debug.WriteLine("Barcode not found in ItemBarcodeEntity. Searching in ItemFileEntity...");
+                    (string itemFileBarcode, string itemFileName, string itemFileUnitDesc) = await itemFileEntity.GetItemByBarcodes(barcode);
+
+                    if (itemFileBarcode == null)
+                    {
+                      
+                        errorLabel.Text = "Barcode Not Found";
+                        errorMessage.IsVisible = true;
+
+                        await Task.Delay(2000);
+
+                        errorMessage.IsVisible = false;
+                        Barcode.Text = string.Empty;
+                        return;
+                    }
+                    else
+                    {
+                       
+                        itemBarcode = new ItemBarcode { Barcode = itemFileBarcode };
+                        itemName = itemFileName;
+                        unitDesc = itemFileUnitDesc;
+                    }
                 }
 
                 Barcode.Text = string.Empty;
@@ -210,12 +207,12 @@ namespace store.View
                             };
 
                             Debug.WriteLine($"Setting ItemCard: Barcode={updatedItem.ScanningNum}, Name={updatedItem.ItemName}, Quantity={quantity}, Unit={updatedItem.Unit}");
-
-                            ItemCards.Add(itemCard);
+                            ItemCards.Insert(0, itemCard);
                         }
                     };
 
                     this.ShowPopup(quantityPopup);
+                  
                 }
             }
             catch (TaskCanceledException)
@@ -227,10 +224,6 @@ namespace store.View
                 Debug.WriteLine($"Error occurred: {ex.Message}");
             }
         }
-
-
-
-
 
         private async Task LoadItemCards()
         {
@@ -272,28 +265,24 @@ namespace store.View
                 Debug.WriteLine($"Error loading item cards: {ex.Message}");
             }
         }
+
         private void ItemCard_ItemUpdated(object sender, EventArgs e)
         {
             LoadItemCardsAsync();
         }
 
-
-
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
             try
             {
-                // Fetch item cards by section ID
                 var itemCards = await itemCardEntity.GetItemCardsBySectionID(sectionID);
 
                 if (itemCards != null && itemCards.Any())
                 {
-                   
                     var itemArchives = new List<ItemArchive>();
 
                     foreach (var card in itemCards)
                     {
-                        
                         var itemArchive = new ItemArchive
                         {
                             ScanningNum = card.ScanningNum,
@@ -303,18 +292,14 @@ namespace store.View
                             SectionID = card.SectionID
                         };
 
-                      
                         itemArchives.Add(itemArchive);
                     }
 
-                    
                     await _itemArchiveEntity.AddDataRange(itemArchives);
                     Debug.WriteLine("Item cards archived successfully.");
 
                     await itemCardEntity.DeleteData(sectionID);
-
-                     LoadItemCardsAsync();
-                   
+                    LoadItemCardsAsync();
                 }
                 else
                 {
@@ -326,9 +311,38 @@ namespace store.View
                 Debug.WriteLine($"An error occurred: {ex.Message}");
             }
         }
+
         private async void SaveData(object sender, TappedEventArgs e)
         {
             await _insertDataApi.SaveExportData(sectionID);
+        }
+
+        private async void OnCameraImageTapped(object sender, EventArgs e)
+        {
+            var cameraView = new CameraBarcodeReaderView
+            {
+                IsDetecting = true,
+                Options = new BarcodeReaderOptions
+                {
+                    Formats = BarcodeFormats.All,
+                    AutoRotate = true,
+                    Multiple = false
+                },
+                CameraLocation = CameraLocation.Rear,
+                IsTorchOn = false
+            };
+
+            var popupPage = new CameraPopupPage(cameraView);
+
+            MessagingCenter.Subscribe<CameraPopupPage, string>(this, "BarcodeScanned", (sender, barcodeValue) =>
+            {
+                Barcode.Text = barcodeValue;
+                Debug.WriteLine($"Barcode scanned: {barcodeValue}");
+
+                MessagingCenter.Unsubscribe<CameraPopupPage, string>(this, "BarcodeScanned");
+            });
+
+            await Navigation.PushModalAsync(popupPage);
         }
     }
 }
