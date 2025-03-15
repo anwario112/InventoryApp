@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.CashVan"
+             Title="Van Sales">
+
+   
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#3949ab" Offset="0" />
+            <GradientStop Color="#1e88e5" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+       
+        <StackLayout Grid.Row="0" Spacing="5" Margin="0,20,0,30">
+            <Label Text="Van Sales" 
+                   FontSize="32" 
+                   FontAttributes="Bold" 
+                   TextColor="White" 
+                   HorizontalOptions="Center" />
+            <Label Text="Mobile Management" 
+                   FontSize="18" 
+                   TextColor="White" 
+                   Opacity="0.8"
+                   HorizontalOptions="Center" />
+        </StackLayout>
+
+    
+        <VerticalStackLayout Grid.Row="1" Spacing="20" VerticalOptions="Center">
+
+            
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   HasShadow="True" 
+                   HeightRequest="120"
+                   Padding="0">
+                <Grid ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                
+                    <Frame Grid.Column="0"
+                           BackgroundColor="#E8EAF6" 
+                           Padding="20" 
+                           CornerRadius="15"
+                           HasShadow="False"
+                           BorderColor="Transparent"
+                           WidthRequest="120"
+                           HeightRequest="120">
+                        <Image Source="customer.png" 
+                               HeightRequest="60" 
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+                   
+                    <StackLayout Grid.Column="1" 
+                                 VerticalOptions="Center" 
+                                 Padding="20,0">
+                        <Label Text="Customers" 
+                               FontSize="22" 
+                               FontAttributes="Bold" 
+                               TextColor="#333333" />
+                        <Label Text="Manage customer accounts" 
+                               FontSize="14" 
+                               TextColor="#666666" 
+                               Margin="0,5,0,0" />
+                    </StackLayout>
+                </Grid>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="CustomerTap" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+          
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   HasShadow="True" 
+                   HeightRequest="120"
+                   Padding="0">
+                <Grid ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                
+                    <Frame Grid.Column="0"
+                           BackgroundColor="#E1F5FE" 
+                           Padding="20" 
+                           CornerRadius="15"
+                           HasShadow="False"
+                           BorderColor="Transparent"
+                           WidthRequest="120"
+                           HeightRequest="120">
+                        <Image Source="shopping.png" 
+                               HeightRequest="60" 
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+                    
+                    <StackLayout Grid.Column="1" 
+                                 VerticalOptions="Center" 
+                                 Padding="20,0">
+                        <Label Text="Items" 
+                               FontSize="22" 
+                               FontAttributes="Bold" 
+                               TextColor="#333333" />
+                        <Label Text="Manage product inventory" 
+                               FontSize="14" 
+                               TextColor="#666666" 
+                               Margin="0,5,0,0" />
+                    </StackLayout>
+                </Grid>
+                <Frame.GestureRecognizers>
+                  
+                </Frame.GestureRecognizers>
+            </Frame>
+
+         
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   HasShadow="True" 
+                   HeightRequest="120"
+                   Padding="0">
+                <Grid ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                  
+                    <Frame Grid.Column="0"
+                           BackgroundColor="#E8F5E9" 
+                           Padding="20" 
+                           CornerRadius="15"
+                           HasShadow="False"
+                           BorderColor="Transparent"
+                           WidthRequest="120"
+                           HeightRequest="120">
+                        <Image Source="invoice.png" 
+                               HeightRequest="60" 
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+                
+                    <StackLayout Grid.Column="1" 
+                                 VerticalOptions="Center" 
+                                 Padding="20,0">
+                        <Label Text="Invoices" 
+                               FontSize="22" 
+                               FontAttributes="Bold" 
+                               TextColor="#333333" />
+                        <Label Text="Manage sales transactions" 
+                               FontSize="14" 
+                               TextColor="#666666" 
+                               Margin="0,5,0,0" />
+                    </StackLayout>
+                </Grid>
+                <Frame.GestureRecognizers>
+                   
+                </Frame.GestureRecognizers>
+            </Frame>
+
+
+
+
+
+            <Frame CornerRadius="15" 
+                   BackgroundColor="#FFFFFF" 
+                   HasShadow="True" 
+                   HeightRequest="120"
+                   Padding="0">
+                <Grid ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Frame Grid.Column="0"
+                           BackgroundColor="#E8F5E9" 
+                           Padding="20" 
+                           CornerRadius="15"
+                           HasShadow="False"
+                           BorderColor="Transparent"
+                           WidthRequest="120"
+                           HeightRequest="120">
+                        <Image Source="currency.png" 
+                               HeightRequest="60" 
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+
+                    <StackLayout Grid.Column="1" 
+                                 VerticalOptions="Center" 
+                                 Padding="20,0">
+                        <Label Text="Currency" 
+                               FontSize="22" 
+                               FontAttributes="Bold" 
+                               TextColor="#333333" />
+                        <Label Text="Manage sales transactions" 
+                               FontSize="14" 
+                               TextColor="#666666" 
+                               Margin="0,5,0,0" />
+                    </StackLayout>
+                </Grid>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="CurrencyTap" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </VerticalStackLayout>
+
+      
+        <Label Grid.Row="2" 
+               Text="Van Sales v1.0" 
+               TextColor="White" 
+               Opacity="0.7" 
+               FontSize="12" 
+               HorizontalOptions="Center" 
+               Margin="0,20,0,0" />
+    </Grid>
+</ContentPage>

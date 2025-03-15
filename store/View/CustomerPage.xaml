@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.CustomerPage"
+             Title="Customers">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f5f7fa" Offset="0" />
+            <GradientStop Color="#e4e9f2" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" BackgroundColor="#3949ab" Padding="20,30,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ImageButton Grid.Column="0" 
+                        Source="back_arrow.png" 
+                        HeightRequest="24" 
+                        WidthRequest="24"
+                        BackgroundColor="Transparent"
+                        Clicked="ImageButton_Clicked" />
+
+            <Label Grid.Column="1"
+                   Text="Customers" 
+                   FontSize="22" 
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <ImageButton Grid.Column="2" 
+                        Source="search_icon.png" 
+                        HeightRequest="24" 
+                        WidthRequest="24"
+                        BackgroundColor="Transparent"
+                        Clicked="ImageButton_Clicked_1" />
+        </Grid>
+
+        <Grid Grid.Row="1" Padding="15" BackgroundColor="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Frame Grid.Column="0" 
+                   Padding="15,0" 
+                   CornerRadius="10" 
+                   HasShadow="False" 
+                   BorderColor="#DDDDDD"
+                   HeightRequest="45">
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Column="0" 
+                           Source="search_small.png" 
+                           HeightRequest="18" 
+                           WidthRequest="18" 
+                           VerticalOptions="Center" />
+
+                    <Entry Grid.Column="1" 
+                           Placeholder="Search customers..." 
+                           VerticalOptions="Center"
+                           FontSize="16" 
+                           BackgroundColor="Transparent"
+                           TextChanged="Entry_TextChanged" />
+                </Grid>
+            </Frame>
+
+            <Button Grid.Column="1" 
+                    Text="Filter" 
+                    FontSize="14" 
+                    TextColor="#3949ab"
+                    BackgroundColor="Transparent"
+                    BorderColor="#3949ab"
+                    BorderWidth="1"
+                    CornerRadius="10"
+                    Margin="10,0,0,0"
+                    HeightRequest="45"
+                    Padding="15,0"
+                    Clicked="Button_Clicked" />
+        </Grid>
+
+        <RefreshView Grid.Row="2" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Customers}" 
+                SelectionMode="Single" 
+                SelectionChanged="CollectionView_SelectionChanged">
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
+                        <Image Source="customer.png" HeightRequest="20" WidthRequest="20"  />
+                        <Label Text="No customers found" 
+                             FontSize="18" 
+                             TextColor="#666666" 
+                             HorizontalOptions="Center" 
+                             Margin="0,20,0,0" />
+                        <Label Text="Add your first customer to get started" 
+                             FontSize="14" 
+                             TextColor="#999999" 
+                             HorizontalOptions="Center" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="15,7.5" 
+               Padding="0" 
+               CornerRadius="10" 
+               HasShadow="True"
+               BorderColor="Transparent">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Customer_Tapped" CommandParameter="{Binding Id}" />
+                            </Frame.GestureRecognizers>
+                            <Grid Padding="15" ColumnSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.Column="0" 
+                               Source="client.png" 
+                               HeightRequest="50" 
+                               WidthRequest="50" 
+                               Aspect="AspectFill"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" />
+
+                                <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                    <StackLayout Orientation="Horizontal" Spacing="5">
+                                        <Label Text="{Binding FirstName}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#333333" 
+                                       LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding LastName}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#333333" 
+                                       LineBreakMode="TailTruncation" />
+                                    </StackLayout>
+
+                                    <Label Text="{Binding Phone}" 
+                                   FontSize="14" 
+                                   TextColor="#666666" />
+                                    <Label Text="{Binding Address}" 
+                                   FontSize="12" 
+                                   TextColor="#999999" 
+                                   LineBreakMode="TailTruncation" />
+                                </StackLayout>
+
+                                <ImageButton Grid.Column="2" 
+                             Source="edit_icon.png" 
+                             HeightRequest="24" 
+                             WidthRequest="24"
+                             BackgroundColor="Transparent"
+                             VerticalOptions="Start"
+                             Margin="0,5,0,0"
+                             Clicked="ImageButton_Clicked_2"
+                             CommandParameter="{Binding Id}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Grid.Row="2"
+                Text="+" 
+                FontSize="30" 
+                TextColor="White"
+                FontAttributes="Bold"
+                BackgroundColor="#FF5722"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,20,20"
+                Clicked="AddCustomer" />
+    </Grid>
+</ContentPage>

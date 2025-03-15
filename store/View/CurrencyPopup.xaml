@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="store.View.CurrencyPopup">
+    <Frame CornerRadius="10" Padding="20" BackgroundColor="White"
+   HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+   WidthRequest="200">
+
+
+        <VerticalStackLayout x:Name="MainLayout" Spacing="15">
+            <Label x:Name="LabelText" IsVisible="false" HorizontalOptions="Center"/>
+            <Label Text="Currency" />
+        <Entry x:Name="CuurencyCode" Placeholder="Enter your currency" />
+            <Button x:Name="SaveButton" Text="Save" Clicked="SaveButton_Clicked" />
+
+
+
+        </VerticalStackLayout>
+    </Frame>
+</toolkit:Popup>
