@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
+using store.DTO;
 using store.Models;
 using store.ViewModels;
 using System.Xml.Linq;
@@ -13,7 +14,7 @@ namespace store.View
         private string _mode;
         private CustomerModelView _viewModel;
 
-        public CustomerPopup(string mode, Customer customer = null)
+        public CustomerPopup(string mode, CustomerDetails customerDetails = null)
         {
             InitializeComponent();
 
@@ -21,20 +22,38 @@ namespace store.View
             BindingContext = _viewModel;
 
             _mode = mode;
-            _customer = customer;
+           
 
-            if (mode == "editCust")
+            if (mode == "editCust" && customerDetails != null)
             {
-                CustomerFirstNameEntry.Text = _customer.FirstName;
-                CustomerLastNameEntry.Text = _customer.LastName;               
-                CustomerPhoneEntry.Text = _customer.Phone;
+                _viewModel.CustomerID = customerDetails.CustomerID;
+                _viewModel.FirstName = customerDetails.FirstName;
+                _viewModel.LastName = customerDetails.LastName;
+                _viewModel.Phone = customerDetails.Phone;
+                _viewModel.CompanyName = customerDetails.Company;
+                _viewModel.Address = customerDetails.Address;
+                _viewModel.Country = customerDetails.CountryName;
+                _viewModel.City = customerDetails.CityName;
+                _viewModel.VatNum = customerDetails.TvaNum;
+                _viewModel.Email = customerDetails.Email;
+
+
+
+
                 SaveButton.Text = "Update";
             }
             else
             {
-                CustomerFirstNameEntry.Text = string.Empty;
-                CustomerLastNameEntry.Text = string.Empty;
-                CustomerPhoneEntry.Text = string.Empty;
+                _viewModel.FirstName = string.Empty;
+                _viewModel.LastName = string.Empty;
+                _viewModel.Phone = string.Empty;
+                _viewModel.CompanyName = string.Empty;
+                _viewModel.Address = string.Empty;
+                _viewModel.Country = string.Empty;
+                _viewModel.City = string.Empty;
+                _viewModel.VatNum = string.Empty;
+                _viewModel.Email = string.Empty;
+
                 SaveButton.Text = "Save";
             }
 
@@ -45,28 +64,28 @@ namespace store.View
             
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-           
-            currencyoption.IsVisible = !currencyoption.IsVisible;
-        }
-
-        private void CurrencyPick(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.FirstOrDefault() is string selectedCurrency)
-            {
-                _viewModel.SelectedCurrency = selectedCurrency;
-                currencyoption.IsVisible = false;
-            }
-        }
+   
+      
 
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-            var isSaved=await _viewModel.SaveData();
+            bool isSuccess;
 
-            if (isSaved)
+            if (_mode == "editCust")
             {
-                LabelSave.Text = "Customer Is Saved";
+                
+                isSuccess = await _viewModel.UpdateData();
+
+            }
+            else
+            {
+                
+                isSuccess = await _viewModel.SaveData();
+            }
+
+            if (isSuccess)
+            {
+                LabelSave.Text = _mode == "editCust" ? "Customer Updated Successfully" : "Customer Saved Successfully";
                 LabelSave.TextColor = Colors.Green;
                 LabelSave.IsVisible = true;
 
@@ -77,13 +96,12 @@ namespace store.View
             }
             else
             {
-                LabelSave.Text = "Customer Is not saved";
+                LabelSave.Text = _mode == "editCust" ? "Failed to Update Customer" : "Failed to Save Customer";
                 LabelSave.TextColor = Colors.Red;
                 LabelSave.IsVisible = true;
 
                 await Task.Delay(1000);
                 LabelSave.IsVisible = false;
-
             }
         }
     }

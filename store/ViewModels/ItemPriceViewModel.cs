@@ -106,7 +106,7 @@ namespace store.ViewModels
                 Debug.WriteLine($"Connection Details: ServerName={connection.ServerName}, DatabaseName={connection.DatabaseName}, Username={connection.Username}, Password={connection.Password}, Year={connection.Year}");
 
                 var httpHelper = new HttpHelper("12345-ABCDE-67890-FGHIJ", "S3cr3tK3y!@#2023");
-                string url = $"    https://733a-213-204-95-158.ngrok-free.app/api/itemPrice?itemBarcode={barcode}&currencyID={currencyID}";
+                string url = $" https://8a17-213-204-95-83.ngrok-free.app/api/itemPrice?itemBarcode={barcode}&currencyID={currencyID}";
 
                 Debug.WriteLine($"Fetching item price for barcode: {barcode}");
 

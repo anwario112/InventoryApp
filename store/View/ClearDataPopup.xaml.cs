@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using store.ViewModels;
+using System.Diagnostics;
 
 namespace store.View
 {
@@ -11,9 +12,23 @@ namespace store.View
         public ClearDataPopup(SettingsClearData viewModel, string context, int sectionID = 0)
         {
             InitializeComponent();
+
+            if (viewModel == null)
+            {
+                Debug.WriteLine("Error: viewModel is null.");
+                return;
+            }
+
             _viewModel = viewModel;
             this.BindingContext = _viewModel;
             _sectionID = sectionID;
+
+            if (ContentStack == null)
+            {
+                Debug.WriteLine("Error: ContentStack is null.");
+                return;
+            }
+
             CreateForm(context);
             this.Opened += ClearDataPopup_Opened;
         }

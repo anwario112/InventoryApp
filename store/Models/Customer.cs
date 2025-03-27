@@ -13,13 +13,16 @@ namespace store.Models
         public int? CurrencyID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string? Company { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
         public string? Floor { get; set; }
         public int? BranchID { get; set; }
-        public int? TvaNum { get; set; }
+        public string? TvaNum { get; set; }
         public int? CountryID { get; set; }
+        public int? CityID { get; set; }
+        public string? ImagePath { get; set; }
 
     }
 }

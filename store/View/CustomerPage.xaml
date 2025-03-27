@@ -25,12 +25,6 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ImageButton Grid.Column="0" 
-                        Source="back_arrow.png" 
-                        HeightRequest="24" 
-                        WidthRequest="24"
-                        BackgroundColor="Transparent"
-                        Clicked="ImageButton_Clicked" />
 
             <Label Grid.Column="1"
                    Text="Customers" 
@@ -38,14 +32,9 @@
                    FontAttributes="Bold"
                    TextColor="White"
                    HorizontalOptions="Center"
-                   VerticalOptions="Center" />
+                   VerticalOptions="Center" Margin="30,0,0,0" />
 
-            <ImageButton Grid.Column="2" 
-                        Source="search_icon.png" 
-                        HeightRequest="24" 
-                        WidthRequest="24"
-                        BackgroundColor="Transparent"
-                        Clicked="ImageButton_Clicked_1" />
+
         </Grid>
 
         <Grid Grid.Row="1" Padding="15" BackgroundColor="White">
@@ -67,7 +56,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Grid.Column="0" 
-                           Source="search_small.png" 
+                           Source="search.png" 
                            HeightRequest="18" 
                            WidthRequest="18" 
                            VerticalOptions="Center" />
@@ -77,6 +66,7 @@
                            VerticalOptions="Center"
                            FontSize="16" 
                            BackgroundColor="Transparent"
+                           Text="{Binding SearchText, Mode=TwoWay}"
                            TextChanged="Entry_TextChanged" />
                 </Grid>
             </Frame>
@@ -130,13 +120,25 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0" 
-                               Source="client.png" 
-                               HeightRequest="50" 
-                               WidthRequest="50" 
-                               Aspect="AspectFill"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center" />
+                                <Grid Grid.Column="0">
+                                    <Image Source="{Binding ImagePath, TargetNullValue='client.png'}" 
+                                           HeightRequest="50" 
+                                           WidthRequest="50" 
+                                           Aspect="AspectFill"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center" />        
+
+
+                                    <Button Text="📷" 
+                                    FontSize="20" 
+                                    BackgroundColor="Transparent" 
+                                    BorderColor="Transparent" 
+                                    Clicked="OnCameraButtonClicked" 
+                                    CommandParameter="{Binding .}" 
+                                    VerticalOptions="End"
+                                    HorizontalOptions="End"
+                                    Margin="0,0,0,0" /> 
+                                </Grid>
 
                                 <StackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
                                     <StackLayout Orientation="Horizontal" Spacing="5">
@@ -151,6 +153,9 @@
                                        TextColor="#333333" 
                                        LineBreakMode="TailTruncation" />
                                     </StackLayout>
+                                    <Label Text="{Binding Email}" 
+                                                    FontSize="14" 
+                                                    TextColor="#666666" />
 
                                     <Label Text="{Binding Phone}" 
                                    FontSize="14" 
@@ -161,15 +166,7 @@
                                    LineBreakMode="TailTruncation" />
                                 </StackLayout>
 
-                                <ImageButton Grid.Column="2" 
-                             Source="edit_icon.png" 
-                             HeightRequest="24" 
-                             WidthRequest="24"
-                             BackgroundColor="Transparent"
-                             VerticalOptions="Start"
-                             Margin="0,5,0,0"
-                             Clicked="ImageButton_Clicked_2"
-                             CommandParameter="{Binding Id}" />
+                               
                             </Grid>
                         </Frame>
                     </DataTemplate>

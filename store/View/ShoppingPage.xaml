@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <local:QuantityConverter x:Key="QuantityConverter" />
             <local:ImageUrlToSourceConverter x:Key="ImageUrlToSourceConverter"/>
+            <local:IntToBoolConverter x:Key="IntToBoolConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -91,7 +92,7 @@
             </Grid>
         </Grid>
 
-      
+
         <StackLayout x:Name="InvoiceModeLayout" IsVisible="False">
             <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
                 <CollectionView.ItemTemplate>
@@ -200,7 +201,7 @@
 
         </StackLayout>
 
-       
+
         <StackLayout x:Name="ShoppingCartModeLayout" IsVisible="True">
             <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
                 <CollectionView.ItemTemplate>
@@ -226,7 +227,7 @@
                                        WidthRequest="40"                              
                                        VerticalOptions="Center"                            
                                        HorizontalOptions="Start" 
-                                       Margin="20,-10,0,30" />  
+                                       Margin="20,-10,0,30" />
 
                                 <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="50,0,0,30">
 
@@ -308,38 +309,39 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </StackLayout>
-
-        <Grid Padding="10" VerticalOptions="End">
+        <Grid Padding="10" VerticalOptions="End" BackgroundColor="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button 
-                Grid.Column="0"
-                Text="Previous"
-                HeightRequest="40"
-                Background="{StaticResource teal}"
-                Command="{Binding PreviousPageCommand}"
-                IsEnabled="{Binding CurrentPage, Converter={StaticResource GreaterThanOneConverter}}"
-                HorizontalOptions="Start" />
+            <Button x:Name="PreviousButton"
+            Grid.Column="0" 
+            Text="Previous" 
+            BackgroundColor="{StaticResource teal}"
+            TextColor="White"
+            Command="{Binding PreviousPageCommand}"
+            HorizontalOptions="Start"
+            MinimumWidthRequest="100"
+            Margin="10,0" />
 
-            <Label 
-                Grid.Column="1"
-                Text="{Binding CurrentPage, StringFormat='Page {0}'}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                TextColor="Black" />
+            <Label Grid.Column="1" 
+           Text="{Binding CurrentPage, StringFormat='Page {0} of {1}'}"
+           TextColor="Black" 
+           VerticalOptions="Center"
+           HorizontalOptions="Center" />
 
-            <Button 
-                Grid.Column="2"
-                Text="Next"
-                HeightRequest="40"
-                Background="{StaticResource teal}"
-                Command="{Binding NextPageCommand}"
-                IsEnabled="{Binding CurrentPage, Converter={StaticResource LessThanTotalPagesConverter}}"
-                HorizontalOptions="End" />
+            <Button x:Name="NextButton"
+            Grid.Column="2" 
+            Text="Next" 
+            BackgroundColor="{StaticResource teal}"
+            TextColor="White"
+            Command="{Binding NextPageCommand}"
+            HorizontalOptions="End"
+            MinimumWidthRequest="100"
+            Margin="10,0" />
         </Grid>
+
     </StackLayout>
 </ContentPage>

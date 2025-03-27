@@ -2,59 +2,114 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="store.View.ItemPricePage"
+               xmlns:local="clr-namespace:store.JsonConverter"
              Title="Product Lookup"
-             BackgroundColor="#F5F5F5">
-   
+             BackgroundColor="#f8f9fa">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:IsNotNullConverter x:Key="IsNotNullConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-            
-            <Entry x:Name="BarcodeEntry"
-                   Placeholder="Enter Barcode"
-                   BackgroundColor="White"
-                   TextColor="Black"
-                   FontSize="16"
-                   HorizontalOptions="FillAndExpand"
-                   Text="{Binding Barcode}" />
+    <Grid RowDefinitions="Auto, *">
+      
+        <Frame Grid.Row="0" BackgroundColor="#0d6efd" Padding="20,15" Margin="0,0,0,10">
+            <Label Text="Product Lookup" TextColor="White" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+        </Frame>
 
-           
-            <Label Text="{Binding DisplayedBarcode}"
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Start"
-                   Margin="0,10,0,0" />
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="15" Padding="20,10">
+             
+                <Frame BackgroundColor="White" Padding="0" BorderColor="#dee2e6" HasShadow="True" CornerRadius="10">
+                    <Grid ColumnDefinitions="*, Auto" Padding="5">
+                        <Entry x:Name="BarcodeEntry"
+                               Grid.Column="0"
+                               Placeholder="Enter Barcode"
+                               Text="{Binding Barcode}"
+                               FontSize="16"
+                               BackgroundColor="Transparent"
+                               TextColor="#212529"
+                               Margin="15,0,0,0"
+                               VerticalOptions="Center" />
 
-            <Label Text="{Binding Product.ItemName, StringFormat='Item: {0}'}"
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Start" />
+                        <Button Grid.Column="1"
+                                Text="Scan"
+                                BackgroundColor="#0d6efd"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="40"
+                                WidthRequest="80"
+                                Margin="5" />
+                    </Grid>
+                </Frame>
 
-           
-            <Label Text="{Binding Product.SaleNetLL, StringFormat='Price (LL): {0}'}"
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Start" />
+             
+                <Frame IsVisible="{Binding Product, Converter={StaticResource IsNotNullConverter}}"
+                       BackgroundColor="White"
+                       Padding="20"
+                       BorderColor="#dee2e6"
+                       HasShadow="True"
+                       CornerRadius="10"
+                       Margin="0,10">
 
-          
-            <Label Text="{Binding Product.SaleNetUSD, StringFormat='Price (USD): {0}'}"
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Start" />
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Product Details" 
+                               FontSize="20" 
+                               FontAttributes="Bold" 
+                               TextColor="#212529" 
+                               Margin="0,0,0,10" />
 
-           
-            <Label Text="{Binding Product.UnitDesc, StringFormat='Unit: {0}'}"
-                   FontSize="16"
-                   TextColor="Black"
-                   HorizontalOptions="Start" />
+                        <BoxView HeightRequest="1" 
+                                 BackgroundColor="#e9ecef" 
+                                 HorizontalOptions="Fill" />
 
-           
-            <Label Text="{Binding Product.Rate, StringFormat='1 USD = {0}'}"
-                   FontSize="16"
-                   TextColor="CadetBlue"
-                   HorizontalOptions="Start"
-                   Margin="0,10,0,0" />
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" 
+                              ColumnDefinitions="Auto,*" 
+                              RowSpacing="15" 
+                              ColumnSpacing="15">
 
-        </VerticalStackLayout>
-    </ScrollView>
+                            <Label Grid.Row="0" Grid.Column="0" Text="Barcode:" FontAttributes="Bold" TextColor="#6c757d" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding DisplayedBarcode}" TextColor="#212529" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Item:" FontAttributes="Bold" TextColor="#6c757d" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Product.ItemName}" TextColor="#212529" />
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="Price (LL):" FontAttributes="Bold" TextColor="#6c757d" />
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Product.SaleNetLL, StringFormat='{0:N0}'}" TextColor="#212529" />
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="Price (USD):" FontAttributes="Bold" TextColor="#6c757d" />
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Product.SaleNetUSD, StringFormat='${0:N2}'}" TextColor="#212529" />
+
+                            <Label Grid.Row="4" Grid.Column="0" Text="Unit:" FontAttributes="Bold" TextColor="#6c757d" />
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Product.UnitDesc}" TextColor="#212529" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+              
+                <Frame IsVisible="{Binding Product, Converter={StaticResource IsNotNullConverter}}"
+                       BackgroundColor="#e9f7fe"
+                       Padding="15"
+                       BorderColor="#c1e0f7"
+                       HasShadow="False"
+                       CornerRadius="8">
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Exchange Rate:" 
+                               FontAttributes="Bold" 
+                               TextColor="#0d6efd" 
+                               VerticalOptions="Center" />
+
+                        <Label Text="{Binding Product.Rate, StringFormat='1 USD = {0:N0} LL'}" 
+                               TextColor="#0d6efd" 
+                               Margin="5,0,0,0" 
+                               VerticalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+
+               
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using store.Data;
 using store.Models;
 using store.Service;
@@ -25,10 +27,10 @@ namespace store.ViewModels
         private readonly InvoiceDetailsEntity _invoiceDetailsEntity;
         private readonly InvoiceEntity _invoiceEntity;
         private readonly ItemCacheService _cacheService;
-        
 
 
-      
+
+        public int TotalPages { get; private set; }
 
 
 
@@ -53,7 +55,7 @@ namespace store.ViewModels
 
         public ObservableCollection<ItemFile> DisplayedItems
         {
-            get => _displayedItems;
+            get => _displayedItems ?? (_displayedItems = new ObservableCollection<ItemFile>());
             set
             {
                 if (_displayedItems != value)
@@ -92,7 +94,7 @@ namespace store.ViewModels
             }
         }
 
-        public int TotalPages => (_totalItems + _pageSize - 1) / _pageSize;
+      
 
         private int _shoppingCartCount;
         public int ShoppingCartCount
@@ -123,10 +125,9 @@ namespace store.ViewModels
             _invoiceDetailsEntity = new InvoiceDetailsEntity();
             _invoiceEntity = new InvoiceEntity();
             _cacheService = new ItemCacheService();
-
-
+     
+            _cacheService = ItemCacheService.Instance;
         }
-
         public Dictionary<string, int> ItemQuantities
         {
             get => _itemQuantities;
@@ -140,79 +141,195 @@ namespace store.ViewModels
             }
         }
 
-        public async Task FetchAllItems()
+        public async Task FetchAllItems(bool forceRefresh = false)
         {
             try
             {
-                var cachedItems = await Task.Run(() => _cacheService.GetCachedItems());
-                if (cachedItems != null)
+                if (!forceRefresh)
                 {
-                    Debug.WriteLine("Data fetched from cache.");
-                    AllItems = cachedItems;
-                    _totalItems = cachedItems.Count;
-                    OnPropertyChanged(nameof(TotalPages));
-                    UpdateDisplayedItems();
-                    return;
+                    var cachedItems = await Task.Run(() => _cacheService.GetCachedItems());
+                    if (cachedItems != null && cachedItems.Count > 0)
+                    {
+                        Debug.WriteLine("Using cached data...");
+                        AllItems = cachedItems;
+                        _totalItems = cachedItems.Count;
+                        OnPropertyChanged(nameof(TotalPages));
+                        UpdateDisplayedItems();
+                        return;
+                    }
                 }
 
-                Debug.WriteLine("Fetching data from the database...");
-
+                Debug.WriteLine("Fetching data from database...");
                 var (items, totalItems) = await _itemFileEntity.GetAllItems(1, int.MaxValue).ConfigureAwait(false);
-
-                _cacheService.UpdateCache(new ObservableCollection<ItemFile>(items));
-
-                AllItems = _cacheService.GetCachedItems();
-                _totalItems = totalItems;
-                OnPropertyChanged(nameof(TotalPages));
-                UpdateDisplayedItems();
-
-                Debug.WriteLine("Data fetched from the database and cached.");
+                if (items != null)
+                {
+                    _cacheService.UpdateCache(new ObservableCollection<ItemFile>(items));
+                    AllItems = new ObservableCollection<ItemFile>(items);
+                    _totalItems = totalItems;
+                    OnPropertyChanged(nameof(TotalPages));
+                    UpdateDisplayedItems();
+                }
+                else
+                {
+                    Debug.WriteLine("Fetched items were null.");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error fetching items: {ex.Message}");
+                Debug.WriteLine($"FetchAllItems ERROR: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
         private void UpdateDisplayedItems()
         {
+            if (AllItems == null || !AllItems.Any())
+            {
+                Debug.WriteLine("AllItems is null or empty.");
+                return;
+            }
+
             var startIndex = (_currentPage - 1) * _pageSize;
             var paginatedItems = AllItems.Skip(startIndex).Take(_pageSize).ToList();
+
+            if (paginatedItems == null) return;
+
             DisplayedItems = new ObservableCollection<ItemFile>(paginatedItems);
+
+         
+            TotalPages = (_totalItems + _pageSize - 1) / _pageSize;
+            OnPropertyChanged(nameof(TotalPages));
+
+        
+            (_previousPageCommand as Command)?.ChangeCanExecute();
+            (_nextPageCommand as Command)?.ChangeCanExecute();
+
+            Debug.WriteLine($"Updated Displayed Items: Page {CurrentPage} of {TotalPages}, Total Items: {_totalItems}");
         }
+
+
+
 
         private void FilterItems()
         {
-            if (string.IsNullOrWhiteSpace(SearchTerm))
+            try
             {
+                Debug.WriteLine($"filtering with term: {SearchTerm}");
+
+                if (string.IsNullOrWhiteSpace(SearchTerm))
+                {
+                    UpdateDisplayedItems();
+                }
+                else
+                {
+                    var matchingItems = new List<ItemFile>();
+
+                   
+                    foreach (var item in AllItems)
+                    {
+                        try
+                        {
+                            if (item.ItemName != null && item.ItemName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                            {
+                                matchingItems.Add(item);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Error filtering individual item: {ex.Message}");
+                         
+                        }
+                    }
+
+                    DisplayedItems = new ObservableCollection<ItemFile>(matchingItems);
+                    Debug.WriteLine($"Found {matchingItems.Count} matching items");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in FilterItems: {ex.Message}\n{ex.StackTrace}");
+                // Fallback to showing all items
                 UpdateDisplayedItems();
             }
-            else
+        }
+        public void FilterItemsAndRefresh()
+        {
+            FilterItems();
+            OnPropertyChanged(nameof(DisplayedItems));
+        }
+        private void NotifyDisplayedItemsChanged()
+        {
+          
+            OnPropertyChanged(nameof(ItemQuantities));
+        }
+
+        public void NotifyItemQuantityChanged(ItemFile item)
+        {
+           
+            if (item != null)
             {
-                var matchingItems = AllItems
-                    .Where(item => item.ItemName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                DisplayedItems = new ObservableCollection<ItemFile>(matchingItems);
+              
+                OnPropertyChanged(nameof(ItemQuantities));
+
+               
+                var displayedItem = DisplayedItems.FirstOrDefault(i => i.ItemNum == item.ItemNum);
+                if (displayedItem != null)
+                {
+                    int index = DisplayedItems.IndexOf(displayedItem);
+                    if (index >= 0)
+                    {
+                     
+                        DisplayedItems[index] = displayedItem;
+                    }
+                }
+            }
+        }
+        private ICommand _previousPageCommand;
+        public ICommand PreviousPageCommand
+        {
+            get
+            {
+                if (_previousPageCommand == null)
+                {
+                    _previousPageCommand = new Command(
+                        execute: () => {
+                            Debug.WriteLine($"Previous Page: Current Page = {CurrentPage}, Total Pages = {TotalPages}");
+                            if (CurrentPage > 1)
+                            {
+                                CurrentPage--;
+                                (_previousPageCommand as Command)?.ChangeCanExecute();
+                                (_nextPageCommand as Command)?.ChangeCanExecute();
+                            }
+                        },
+                        canExecute: () => CurrentPage > 1
+                    );
+                }
+                return _previousPageCommand;
             }
         }
 
-        public ICommand NextPageCommand => new Command(() =>
+        private ICommand _nextPageCommand;
+        public ICommand NextPageCommand
         {
-            if (CurrentPage < TotalPages)
+            get
             {
-                CurrentPage++;
-                UpdateDisplayedItems();
+                if (_nextPageCommand == null)
+                {
+                    _nextPageCommand = new Command(
+                        execute: () => {
+                            Debug.WriteLine($"Next Page: Current Page = {CurrentPage}, Total Pages = {TotalPages}");
+                            if (CurrentPage < TotalPages)
+                            {
+                                CurrentPage++;
+                                (_previousPageCommand as Command)?.ChangeCanExecute();
+                                (_nextPageCommand as Command)?.ChangeCanExecute();
+                            }
+                        },
+                        canExecute: () => CurrentPage < TotalPages
+                    );
+                }
+                return _nextPageCommand;
             }
-        });
-
-        public ICommand PreviousPageCommand => new Command(() =>
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage--;
-                UpdateDisplayedItems();
-            }
-        });
+        }
 
 
         public ICommand MinusCommand => new Command(() =>
@@ -242,8 +359,9 @@ namespace store.ViewModels
                     _itemQuantities[key] = 1;
                 }
                 Debug.WriteLine($"Increased quantity for {item.ItemName}. New quantity: {_itemQuantities[key]}");
-                OnPropertyChanged(nameof(ItemQuantities));
-                NotifyDisplayedItemsChanged();
+
+               
+                NotifyItemQuantityChanged(item);
             }
         });
 
@@ -256,18 +374,17 @@ namespace store.ViewModels
                 {
                     _itemQuantities[key]--;
                     Debug.WriteLine($"Decreased quantity for {item.ItemName}. New quantity: {_itemQuantities[key]}");
-                    OnPropertyChanged(nameof(ItemQuantities));
-                    NotifyDisplayedItemsChanged();
+
+                    NotifyItemQuantityChanged(item);
                 }
             }
         });
+        //private void NotifyDisplayedItemsChanged()
+        //{
 
-        private void NotifyDisplayedItemsChanged()
-        {
-           
-            var updatedItems = new ObservableCollection<ItemFile>(DisplayedItems);
-            DisplayedItems = updatedItems;
-        }
+        //    var updatedItems = new ObservableCollection<ItemFile>(DisplayedItems);
+        //    DisplayedItems = updatedItems;
+        //}
         public int GetQuantityForItem(ItemFile item)
         {
             if (item != null && _itemQuantities.TryGetValue(item.ItemNum, out int quantity))
@@ -284,7 +401,7 @@ namespace store.ViewModels
         {
             int userId = await _userEntity.FindUser(username) ?? 0;
             int? itemIDNullable = await _itemFileEntity.GetItemIdByItemNum(itemNum);
-
+         
             if (!itemIDNullable.HasValue)
             {
                 Debug.WriteLine($"Item with ItemNum '{itemNum}' not found.");
@@ -292,16 +409,15 @@ namespace store.ViewModels
             }
 
             int itemID = itemIDNullable.Value;
-
+            Debug.WriteLine($"Checking for existing cart item - UserID: {userId}, ItemID: {itemID}");
             var existingCartItem = await _shoppingCardEntity.GetShoppingCartItemByUser(userId, itemID);
+            Debug.WriteLine($"Existing cart item found: {existingCartItem != null}");
 
             if (existingCartItem != null)
             {
-                
                 int newQuantity = int.Parse(existingCartItem.Quantity) + int.Parse(quantity);
                 existingCartItem.Quantity = newQuantity.ToString();
 
-              
                 decimal existingPrice = decimal.Parse(existingCartItem.Price);
                 decimal newPrice = decimal.Parse(unitPrice);
                 existingCartItem.Price = (existingPrice + newPrice).ToString("F2");
@@ -311,18 +427,17 @@ namespace store.ViewModels
             }
             else
             {
-                
                 var shoppingCartItem = new Models.ShoppingCard
                 {
                     UserID = userId,
                     ItemID = itemID,
                     Quantity = quantity,
-                    Price = unitPrice 
+                    Price = unitPrice
                 };
                 await _shoppingCardEntity.AddData(shoppingCartItem);
                 Debug.WriteLine($"Inserted to cart: ItemID: {shoppingCartItem.ItemID}, Quantity: {shoppingCartItem.Quantity}, Total Price: {shoppingCartItem.Price}, UserID: {shoppingCartItem.UserID}");
             }
-           _cacheService.InvalidateCache();
+
             await UpdateShoppingCartCount(username);
         }
         public async Task UpdateShoppingCartCount(string username)
@@ -340,8 +455,9 @@ namespace store.ViewModels
         public async Task AddItemToInvoice(int invoiceNum, string itemNum, string quantity, string totalPrice)
         {
             Debug.WriteLine($"Received invoiceNum: {invoiceNum}");
+          
 
-           
+
             int? itemIDNullable = await _itemFileEntity.GetItemIdByItemNum(itemNum);
             if (!itemIDNullable.HasValue)
             {
@@ -372,6 +488,7 @@ namespace store.ViewModels
 
                 await _invoiceDetailsEntity.UpdateData(existingInvoiceDetail);
                 Debug.WriteLine($"Updated existing item in Invoice ID: {invoiceID}, Item ID: {itemID}, New Quantity: {existingInvoiceDetail.Quantity}, New TotalNet: {existingInvoiceDetail.TotalNet}");
+                Toast.Make("Item quantity updated in invoice", ToastDuration.Short).Show();
             }
             else
             {
@@ -389,6 +506,7 @@ namespace store.ViewModels
 
                 await _invoiceDetailsEntity.AddData(invoiceDetail);
                 Debug.WriteLine($"Data successfully inserted for Invoice ID: {invoiceID}");
+                Toast.Make("Item added to invoice", ToastDuration.Short).Show();
             }
 
            
@@ -407,7 +525,7 @@ namespace store.ViewModels
                 Debug.WriteLine($"Invoice with ID {invoiceID} not found.");
             }
 
-            _cacheService.InvalidateCache();
+           // _cacheService.InvalidateCache();
         }
 
 

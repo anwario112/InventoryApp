@@ -51,29 +51,20 @@ namespace store
 
        
 
-        private async void importData(object sender, TappedEventArgs e)
+        private async void ShoopingPage(object sender, TappedEventArgs e)
         {
 
-            LoadingIndicator.IsVisible = true;
-            LoadingIndicator.IsRunning = true;
-
-            await _insertDataApi.InsertApiData();
-
-
-            LoadingIndicator.IsRunning = false;
-            LoadingIndicator.IsVisible = false;
-
-            LoadingCompleteLabel.IsVisible = true;
-       
-
-            await Task.Delay(2000);
-
-            LoadingCompleteLabel.IsVisible = false;
+            Navigation.PushAsync(new View.CashVan(authService.Username));
         }
 
         private async void ExportData(object sender, TappedEventArgs e)
         {
             Navigation.PushAsync(new View.ExportPage());
+        }
+
+        private async void itemPrice(object sender, TappedEventArgs e)
+        {
+            Navigation.PushAsync(new View.ItemPricePage());
         }
 
         private async void LogoutTap(object sender, EventArgs e)
@@ -82,10 +73,7 @@ namespace store
             Application.Current.MainPage = new NavigationPage(new LoginPage(authService));
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-        {
-            Navigation.PushAsync(new View.ShoppingPage("Shopping Page", authService.Username));
-        }
+       
 
         private void InvoiceTapped(object sender, TappedEventArgs e)
         {

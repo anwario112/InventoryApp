@@ -24,7 +24,8 @@ public partial class EditQuantityPopup : Popup
         var quantity = QuantityField.Text;
         await itemCardEntity.UpdateQuantity(ID, quantity);
         Debug.WriteLine($"Sending QuantityUpdated message for ID: {ID}, Quantity: {quantity}");
-        WeakReferenceMessenger.Default.Send(new QuantityUpdatedMessage(ID, int.Parse(quantity)));
+        MessagingCenter.Send(this, "QuantityUpdated", ID);
+
 
         Close();
     }

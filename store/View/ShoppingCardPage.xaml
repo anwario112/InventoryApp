@@ -2,58 +2,151 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ur="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:local="clr-namespace:store.JsonConverter"
+             xmlns:viewModels="clr-namespace:store.ViewModels"
              x:Class="store.View.ShoppingCardPage"
-             Title="{Binding Title}"
+            Title="{Binding Title, FallbackValue='Shopping Cart'}"
              BackgroundColor="{StaticResource Gray1000}">
+
+   
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ImageUrlToSourceConverter x:Key="ImageUrlToSourceConverter"/>
+            <local:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+          
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
         <StackLayout>
 
+         
             <Label x:Name="invoiceSavedLabel"  
                    FontSize="16"
                    HorizontalOptions="Center"
                    VerticalOptions="Start"
                    IsVisible="False" />
 
+         
             <StackLayout x:Name="ShoppingCartUI" IsVisible="True">
+
+             
                 <Border Stroke="Transparent"
                         StrokeThickness="2"
                         BackgroundColor="{StaticResource White}"
-                        HeightRequest="350"
+                        HeightRequest="50"
                         WidthRequest="350"
-                        Margin="10">
+                        Margin="10,10,10,5">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="15" />
+                        <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
-                    <StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding FirstName}"/>
-                            <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding LastName}"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Country}"/>
-                            <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding City}"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding Phone}"/>
-                         
-                        </StackLayout>
-                        <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CompanyName}"/>
-                        <ur:TextField Title="Address" WidthRequest="280" Text="{Binding Address}"/>
-                    </StackLayout>
+                    <Grid>
+                        <SearchBar Placeholder="Search customers..." 
+                           Text="{Binding SearchBar, Mode=TwoWay}"
+                           BackgroundColor="Transparent"
+                           CancelButtonColor="{StaticResource Gray500}"
+                           PlaceholderColor="{StaticResource Gray500}"
+                           TextColor="{StaticResource Gray500}" />  
+                    </Grid>
                 </Border>
 
+                <CollectionView x:Name="CustomerSearchResults" 
+                ItemsSource="{Binding FilteredCustomers}"
+                IsVisible="{Binding IsCustomerSearchActive}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
+                SelectionChanged="CustomerSearchResults_SelectionChanged"
+                HeightRequest="200"
+                Margin="10,0,10,10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Frame BackgroundColor="{StaticResource White}" 
+                       CornerRadius="10"
+                       HasShadow="False"
+                       Padding="10">
+                                   
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:shoppingCards}}, Path=SelectCustomerCommand}"
+                            CommandParameter="{Binding .}" />
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding FirstName}" 
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray500}" />
+                                            <Label Text="{Binding LastName}" 
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray500}" 
+                                   Margin="5,0,0,0"/>
+                                        </StackLayout>
+                                        <Label Text="{Binding Phone}" 
+                               TextColor="{StaticResource Gray500}" />
+                                      
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout Padding="10">
+                            <Label Text="No customers found" 
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Gray500}" />
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+
+           
+                <Border x:Name="SelectedCustomerDisplay"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="80"
+                WidthRequest="350"
+                Margin="10,0,10,10"
+                IsVisible="{Binding IsCustomerSelected}">   
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                        <StackLayout Spacing="3">
+                            <Label Text="Selected Customer:" 
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray500}" />
+                            <Label Text="{Binding CustomerDisplayText}" 
+                   TextColor="{StaticResource Gray500}" />
+                            <Label Text="{Binding SelectedCustomer.Phone}" 
+                   TextColor="{StaticResource Gray500}" />
+                        </StackLayout>
+                        <Image Grid.Column="1" 
+               Source="exit.png" 
+               HeightRequest="20" 
+               WidthRequest="20"
+               VerticalOptions="Start"
+               HorizontalOptions="End">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ClearSelectedCustomerCommand}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Grid>
+                </Border>
+
+                
                 <CollectionView ItemsSource="{Binding ShoppingCartItems}" 
-                ItemSizingStrategy="MeasureAllItems" 
-                Margin="0,0,0,10">
+                                ItemSizingStrategy="MeasureAllItems" 
+                                Margin="0,0,0,10">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Stroke="Transparent"
-                    StrokeThickness="2"
-                    BackgroundColor="{StaticResource White}"
-                    HeightRequest="100"
-                    WidthRequest="350"
-                    Margin="10">
+                                    StrokeThickness="2"
+                                    BackgroundColor="{StaticResource White}"
+                                    HeightRequest="100"
+                                    WidthRequest="350"
+                                    Margin="10">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="15" />
                                 </Border.StrokeShape>
@@ -63,33 +156,33 @@
                                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}" />
                                         </Image.GestureRecognizers>
                                     </Image>
-                                    <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
-                           HeightRequest="60" 
-                           WidthRequest="60"                              
-                           VerticalOptions="Center" 
-                           HorizontalOptions="Start" Margin="10,-10,0,0"  />
+                                    <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}" 
+                                           HeightRequest="60" 
+                                           WidthRequest="60"                              
+                                           VerticalOptions="Center" 
+                                           HorizontalOptions="Start" Margin="10,-10,0,0"  />
                                     <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Center" Spacing="5" Padding="16,0" Margin="70,0,0,0">
                                         <Label Text="{Binding ItemName}" 
-                               VerticalOptions="Center"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Gray500}"  
-                               Margin="0,-5,0,0"/>
+                                               VerticalOptions="Center"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource Gray500}"  
+                                               Margin="0,-5,0,0"/>
                                         <Label Text="{Binding ItemNum}" 
-                               VerticalOptions="Center"
-                               FontSize="14" 
-                               TextColor="{StaticResource Gray500}"  
-                               Margin="0,-5,0,0"/>
-                                        <Label Text="{Binding Quantity, Converter={StaticResource QuantityConverter}, StringFormat='Qty: {0}'}" 
-                               VerticalOptions="Center"
-                               FontSize="14" 
-                               TextColor="{StaticResource Gray500}"  
-                               Margin="0,-5,0,0"/>
+                                               VerticalOptions="Center"
+                                               FontSize="14" 
+                                               TextColor="{StaticResource Gray500}"  
+                                               Margin="0,-5,0,0"/>
+                                        <Label Text="{Binding Quantity, StringFormat='Qty: {0}'}" 
+                                               VerticalOptions="Center"
+                                               FontSize="14" 
+                                               TextColor="{StaticResource Gray500}"  
+                                               Margin="0,-5,0,0"/>
                                         <Label Text="{Binding Price, StringFormat='Price: ${0:F2}'}"  
-                               VerticalOptions="Center"
-                               FontSize="14" 
-                               TextColor="{StaticResource Gray500}"  
-                               Margin="0,-5,0,0"/>
+                                               VerticalOptions="Center"
+                                               FontSize="14" 
+                                               TextColor="{StaticResource Gray500}"  
+                                               Margin="0,-5,0,0"/>
                                     </StackLayout>
                                 </Grid>
                             </Border>
@@ -97,6 +190,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+           
                 <Border Stroke="Transparent"
                         StrokeThickness="2"
                         BackgroundColor="{StaticResource White}"
@@ -116,6 +210,7 @@
                     </StackLayout>
                 </Border>
 
+             
                 <Border Stroke="Transparent"
                         StrokeThickness="2"
                         BackgroundColor="{StaticResource teal}"
@@ -134,121 +229,134 @@
                 </Border>
             </StackLayout>
 
-
+           
             <StackLayout x:Name="InvoiceUI" IsVisible="False">
-                
-                <Border Stroke="Transparent"
-                 StrokeThickness="2"
-                 BackgroundColor="{StaticResource White}"
-                 HeightRequest="350"
-                 WidthRequest="350"
-                 Margin="10">
+               
+
+            
+                <Border
+                  Stroke="Transparent"
+                  StrokeThickness="2"
+                  BackgroundColor="{StaticResource White}"
+                  HeightRequest="80"
+                  WidthRequest="350"
+                  Margin="10,0,10,10"
+                 >     
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="15" />
+                        <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
-                    <StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="FirstName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerFirstName}"/>
-                            <ur:TextField Title="LastName" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerLastName}"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="Country" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerCountry}"/>
-                            <ur:TextField Title="City" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerCity}"/>
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <ur:TextField Title="Phone" WidthRequest="150" HorizontalOptions="Start" Padding="10" Text="{Binding CustomerPhone}"/>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                        <StackLayout Spacing="3">
+                            <Label Text="Selected Customer:" 
+                                 FontAttributes="Bold"
+                                 TextColor="{StaticResource Gray500}" />
+                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                <Label Text="{Binding CustomerFirstName}" 
+                       TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding CustomerLastName}" 
+                       TextColor="{StaticResource Gray500}" />
+                            </StackLayout>
+
                           
+                            <Label Text="{Binding CustomerPhone}" 
+                   TextColor="{StaticResource Gray500}" />
                         </StackLayout>
-                        <ur:TextField Title="CompanyName" WidthRequest="280" Text="{Binding CustomerCompany}"/>
-                        <ur:TextField Title="Address" WidthRequest="280" Text="{Binding CustomerAddress}"/>
-                    </StackLayout>
+                        <Image Grid.Column="1" 
+                                     Source="exit.png" 
+                                     HeightRequest="20" 
+                                     WidthRequest="20"
+                                     VerticalOptions="Start"
+                                     HorizontalOptions="End">       
+                            <Image.GestureRecognizers>
+                               
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Grid>
                 </Border>
 
-                <StackLayout>
-                    <CollectionView ItemsSource="{Binding InvoiceItems}" 
-                ItemSizingStrategy="MeasureAllItems" 
-                Margin="0,0,0,10">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Stroke="Transparent"
-                                StrokeThickness="2"
-                                BackgroundColor="{StaticResource White}"
-                                HeightRequest="100"
-                                WidthRequest="350"
-                                Margin="10">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="15" />
-                                    </Border.StrokeShape>
 
-                                    <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *">
-                                    
-                                        <Image Source="{Binding ImageUrl, StringFormat='{0}.jpg'}" 
-                           HeightRequest="60" 
-                           WidthRequest="60"                              
-                           VerticalOptions="Center" 
-                           HorizontalOptions="Start" 
-                           Margin="10,0,10,0" />
 
-                                        <StackLayout Orientation="Vertical" Grid.Column="1" VerticalOptions="Center">
-                                            <Label Text="{Binding ItemName}" 
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Gray500}"  
-                               Margin="0,5,0,0"/>
 
-                                            <StackLayout Orientation="Horizontal" Spacing="5">
-                                                <Label Text="{Binding Price, StringFormat='${0:F2}'}" 
-                                   FontSize="14" 
-                                   TextColor="{StaticResource Gray500}"/>
-                                                <Label Text="{Binding Quantity, StringFormat='x {0}'}" 
-                                   FontSize="14" 
-                                   TextColor="{StaticResource Gray500}"/>
-                                            </StackLayout>
+                <CollectionView ItemsSource="{Binding InvoiceItems}" 
+                                ItemSizingStrategy="MeasureAllItems" 
+                                Margin="0,0,0,10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="Transparent"
+                                    StrokeThickness="2"
+                                    BackgroundColor="{StaticResource White}"
+                                    HeightRequest="100"
+                                    WidthRequest="350"
+                                    Margin="10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="15" />
+                                </Border.StrokeShape>
+
+                                <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *">
+
+                                    <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrlToSourceConverter}}" 
+                                           HeightRequest="60" 
+                                           WidthRequest="60"                              
+                                           VerticalOptions="Center" 
+                                           HorizontalOptions="Start" 
+                                           Margin="10,0,10,0" />
+
+                                    <StackLayout Orientation="Vertical" Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="{Binding ItemName}" 
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource Gray500}"  
+                                               Margin="0,5,0,0"/>
+
+                                        <StackLayout Orientation="Horizontal" Spacing="5">
+                                            <Label Text="{Binding Price, StringFormat='${0:F2}'}" 
+                                                   FontSize="14" 
+                                                   TextColor="{StaticResource Gray500}"/>
+                                            <Label Text="{Binding Quantity, StringFormat='x {0}'}" 
+                                                   FontSize="14" 
+                                                   TextColor="{StaticResource Gray500}"/>
                                         </StackLayout>
+                                    </StackLayout>
 
-                                        <Grid Grid.Column="2" VerticalOptions="Center">
-                                            <Label Text="{Binding TotalNet, StringFormat='${0:F2}'}"  
-                                       FontSize="16" 
-                                       TextColor="{StaticResource Black}"  
-                                       HorizontalOptions="End"  
-                                       Margin="0,40,40,0"/>
+                                    <Grid Grid.Column="2" VerticalOptions="Center">
+                                        <Label Text="{Binding TotalNet, StringFormat='${0:F2}'}"  
+                                               FontSize="16" 
+                                               TextColor="{StaticResource Black}"  
+                                               HorizontalOptions="End"  
+                                               Margin="0,40,40,0"/>
 
-                                            <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *, Auto">
-                                                <Image Source="exit.png" HeightRequest="23" WidthRequest="23"
-                                                        HorizontalOptions="End"
-                                                        Margin="196,-30,10,30">    
-                                                    <Image.GestureRecognizers>
-                                                        <TapGestureRecognizer Tapped="OnExitTapped" />
-                                                    </Image.GestureRecognizers>
-                                                </Image>
-                                            </Grid>
-                                           
-
+                                        <Grid Padding="16,0,16,0" ColumnDefinitions="Auto, *, Auto">
+                                            <Image Source="exit.png" HeightRequest="23" WidthRequest="23"
+                                                    HorizontalOptions="End"
+                                                    Margin="196,-30,10,30">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnExitTapped" />
+                                                </Image.GestureRecognizers>
+                                            </Image>
                                         </Grid>
                                     </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
-                        <Image Source="additem.png" HeightRequest="25" WidthRequest="25" 
-                   VerticalOptions="Center" 
-                               >
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnAddItemTapped" />
-                            </Image.GestureRecognizers>
-
-                        </Image>
-                        <Label Text="Add Item" 
-                   VerticalOptions="Center" 
-                   FontSize="17" 
-                   TextColor="{StaticResource Gray500}" 
-                   Margin="5,0,0,0"/>
-                    </StackLayout>
+              
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
+                    <Image Source="additem.png" HeightRequest="25" WidthRequest="25" 
+                           VerticalOptions="Center">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAddItemTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Add Item" 
+                           VerticalOptions="Center" 
+                           FontSize="17" 
+                           TextColor="{StaticResource Gray500}" 
+                           Margin="5,0,0,0"/>
                 </StackLayout>
 
+             
                 <Border Stroke="Transparent"
                         StrokeThickness="2"
                         BackgroundColor="{StaticResource White}"
@@ -261,21 +369,20 @@
                     <StackLayout Padding="20">
                         <Label Text="Order summary" FontFamily="roman" FontAttributes="Bold"/>
                         <Label Text="Total Price :" FontFamily="roman" TextColor="{StaticResource Gray500}" Padding="5" HorizontalOptions="Start"/>
-                        <Label 
-                            Text="{Binding TotalString, StringFormat='${0:F2}'}"
+                        <Label Text="{Binding TotalString, StringFormat='${0:F2}'}"
                                FontSize="16" 
                                TextColor="{StaticResource Gray500}" 
                                Margin="0,-25,30,0"  HorizontalOptions="End"/>
                     </StackLayout>
                 </Border>
 
-
+             
                 <Border Stroke="Transparent"
-                StrokeThickness="2"
-                BackgroundColor="{StaticResource teal}"
-                HeightRequest="50"
-                WidthRequest="350"
-                Margin="10" x:Name="invoiceStatus">
+                        StrokeThickness="2"
+                        BackgroundColor="{StaticResource teal}"
+                        HeightRequest="50"
+                        WidthRequest="350"
+                        Margin="10" x:Name="invoiceStatus">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
@@ -284,10 +391,10 @@
                     </Border.GestureRecognizers>
                     <StackLayout HorizontalOptions="Center" Margin="0,10,0,0">
                         <Label Text="Send" 
-                       FontFamily="roman" 
-                       TextColor="White" 
-                       FontSize="16" 
-                       IsEnabled="{Binding IsSendButtonEnabled}" />
+                               FontFamily="roman" 
+                               TextColor="White" 
+                               FontSize="16" 
+                               IsEnabled="{Binding IsSendButtonEnabled}" />
                     </StackLayout>
                 </Border>
             </StackLayout>

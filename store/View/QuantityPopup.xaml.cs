@@ -5,14 +5,15 @@ namespace store.View
 {
     public partial class QuantityPopup : Popup
     {
-        public Action<int, string, string, string, int> OnQuantitySet;
+        public Action<int, string, string, string, int,string> OnQuantitySet;
         public int ItemID { get; private set; }
         public string ItemName { get; set; }
         public string Barcode { get; set; }
         public string UnitDesc { get; set; }
         public int SectionID { get; set; }
+        public string Price { get; set; }
 
-        public QuantityPopup(string itemName, string barcode, string unitDesc, int sectionID, int itemID)
+        public QuantityPopup(string itemName, string barcode, string unitDesc, int sectionID, int itemID,string price)
         {
 
             InitializeComponent();
@@ -22,6 +23,8 @@ namespace store.View
             UnitDesc = unitDesc;
             SectionID = sectionID;
             ItemID = itemID;
+            Price = price;
+
             Debug.WriteLine($"in quantityPopup:ItemName:{ItemName},barcode:{Barcode},unitdesc:{UnitDesc}");
 
            
@@ -36,7 +39,7 @@ namespace store.View
         {
             if (int.TryParse(QuantityField.Text, out int quantity))
             {
-                OnQuantitySet?.Invoke(quantity,ItemName,Barcode,UnitDesc,SectionID);
+                OnQuantitySet?.Invoke(quantity,ItemName,Barcode,UnitDesc,SectionID,Price);
                 this.Close();
             }
             else

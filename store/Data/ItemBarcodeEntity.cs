@@ -1,4 +1,5 @@
 ﻿
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using store.Models;
 using System;
@@ -35,27 +36,36 @@ namespace store.Data
             throw new NotImplementedException();
         }
 
-        public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc)> GetItemByBarcode(string barcode)
+        public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc, string Price)> GetItemByBarcode(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
             {
                 throw new ArgumentException("Barcode cannot be null or empty.", nameof(barcode));
             }
 
-            var result = await (from barcodeItem in dbContext.ItemBarcode
-                                join itemFile in dbContext.ItemFile
-                                on barcodeItem.ItemID equals itemFile.ItemID
-                                where barcodeItem.Barcode == barcode
-                                select new
-                                {
-                                    ItemBarcode = barcodeItem,
-                                    ItemName = itemFile.ItemName,
-                                    UnitDesc = barcodeItem.UnitDesc 
-                                }).FirstOrDefaultAsync();
+            var result = await (
+                from barcodeItem in dbContext.ItemBarcode
+                join itemFile in dbContext.ItemFile
+                on barcodeItem.ItemID equals itemFile.ItemID
+                where barcodeItem.Barcode == barcode
+                select new
+                {
+                    ItemBarcode = barcodeItem,
+                    ItemName = itemFile.ItemName,
+                    UnitDesc = barcodeItem.UnitDesc,
+                    Price = barcodeItem.price
+                }
+            ).FirstOrDefaultAsync();
 
-            return result != null ? (result.ItemBarcode, result.ItemName, result.UnitDesc) : (null, null, null);
+            if (result == null)
+            {
+                return (null, null, null, null);
+            }
+
+            string priceAsString = result.Price?.ToString() ?? "0.00"; 
+
+            return (result.ItemBarcode, result.ItemName, result.UnitDesc, priceAsString);
         }
-
 
         public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc)> GetItemByBarcodes(string barcode)
         {
@@ -77,7 +87,8 @@ namespace store.Data
                                 {
                                     ItemBarcode = barcodeItem,
                                     ItemName = itemFile.ItemName,
-                                    UnitDesc = barcodeItem.UnitDesc
+                                    UnitDesc = barcodeItem.UnitDesc,
+                                    Price= barcodeItem.price
                                 }).FirstOrDefaultAsync();
 
             if (result != null)
@@ -152,7 +163,11 @@ namespace store.Data
             return result; 
         }
 
-        
+        public async Task UpsertItemBarcodeData(List<ItemBarcode> itemBarcodes)
+        {
+            await dbContext.BulkInsertOrUpdateAsync(itemBarcodes);
+        }
+
 
         public Task UpdateData(ItemBarcode table)
         {

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using store.View;
+using System.Windows.Input;
 
 namespace store.ViewModels
 {
@@ -20,7 +21,7 @@ namespace store.ViewModels
     {
         private static int _invoiceCounter = 0;
 
-
+     
         private readonly UserEntity _userEntity;
         private readonly ShoppingCardEntity _shoppingCardEntity;
         private readonly InvoiceEntity _invoiceEntity;
@@ -29,7 +30,67 @@ namespace store.ViewModels
         private readonly CustomerEntity _customerEntity;
         private readonly CountryEntity _countryEntity;
         private readonly CityEntity _cityEntity;
-        
+
+
+
+
+        private ObservableCollection<Customer> _filteredCustomers;
+        private Customer _selectedCustomer;
+        private string _searchBar;
+        private bool _isCustomerSearchActive;
+        private bool _isCustomerSelected;
+
+        public ObservableCollection<Customer> FilteredCustomers
+        {
+            get => _filteredCustomers;
+            set
+            {
+                _filteredCustomers = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Customer SelectedCustomer
+        {
+            get => _selectedCustomer;
+            set
+            {
+                _selectedCustomer = value;
+                OnPropertyChanged();
+                IsCustomerSelected = value != null && !string.IsNullOrEmpty(value.FirstName);
+
+           
+                OnPropertyChanged(nameof(CustomerDisplayText));
+            }
+        }
+
+        public string CustomerDisplayText =>
+         SelectedCustomer != null
+             ? $"{SelectedCustomer.FirstName} {SelectedCustomer.LastName}".Trim()
+             : "No customer selected";
+
+
+
+        public bool IsCustomerSearchActive
+        {
+            get => _isCustomerSearchActive;
+            set
+            {
+                _isCustomerSearchActive = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsCustomerSelected
+        {
+            get => _isCustomerSelected;
+            set
+            {
+                _isCustomerSelected = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private ObservableCollection<dynamic> _shoppingCartItems;
 
@@ -77,6 +138,7 @@ namespace store.ViewModels
 
         }
 
+    
 
         private decimal _totalPrice;
 
@@ -93,140 +155,52 @@ namespace store.ViewModels
             }
         }
 
-
-        private string _firstName;
-        public string FirstName
+        private string _title = "Shopping Cart";
+        public string Title
         {
-            get => _firstName;
+            get => _title;
             set
             {
-                if (_firstName != value)
+                _title = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
+
+
+        public string SearchBar
+        {
+            get => _searchBar;
+            set
+            {
+                if (_searchBar != value)
                 {
-                    _firstName = value;
+                    _searchBar = value;
                     OnPropertyChanged();
+
+             
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        _ = SearchCustomers();
+                    }
+                    else
+                    {
+                        FilteredCustomers.Clear();
+                    }
                 }
             }
         }
 
 
-        private string _lastName;
-        public string LastName
-        {
-            get => _lastName;
-            set
-            {
-                if (_lastName != value)
-                {
-                    _lastName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
-        private string _country;
-        public string Country
-        {
-            get => _country;
-            set
-            {
-                if (_country != value)
-                {
-                    _country = value;
-                    OnPropertyChanged();
-
-                }
-
-            }
-
-        }
-
-
-        private string _city;
-        public string City
-        {
-            get => _city;
-            set
-            {
-                if (_city != value)
-                {
-                    _city = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
-        private string _phone;
-        public string Phone
-        {
-            get => _phone;
-            set
-            {
-                if (_phone != value)
-                {
-                    _phone = value;
-                    OnPropertyChanged();
-
-                }
-
-            }
-
-        }
-
-
-        private string _street;
-        public string Street
-        {
-            get => _street;
-            set
-            {
-                if (_street != value)
-                {
-                    _street = value;
-                    OnPropertyChanged();
-
-                }
-
-            }
-
-        }
-
-
-        private string _companyName;
-        public string CompanyName
-        {
-            get => _companyName;
-            set
-            {
-                if (_companyName != value)
-                {
-                    _companyName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
-        private string _address;
-        public string Address
-        {
-            get => _address;
-            set
-            {
-                if (_address != value)
-                {
-                    _address = value;
-                    OnPropertyChanged();
-                }
-
-            }
-
-        }
 
 
 
-
+        public ICommand SearchCustomerCommand { get; }
+        public ICommand ClearSelectedCustomerCommand { get; }
+        public ICommand SelectCustomerCommand { get; }
         public shoppingCards()
         {
             _shoppingCardEntity = new ShoppingCardEntity();
@@ -238,15 +212,96 @@ namespace store.ViewModels
             _customerEntity = new CustomerEntity();
             _countryEntity = new CountryEntity();
             _cityEntity = new CityEntity();
-           
+
             InvoiceItems = new ObservableCollection<Models.InvoiceDetails>();
+            FilteredCustomers = new ObservableCollection<Customer>();
+            SearchCustomerCommand = new Command(async () => await SearchCustomers());
+            ClearSelectedCustomerCommand = new Command(ClearSelectedCustomer);
+            SelectCustomerCommand = new Command<Customer>(SelectCustomer);
+            SelectedCustomer = null;
+            IsCustomerSearchActive = false;
+            IsCustomerSelected = false;
+        }
+        private DateTime _lastSearchTime;
+        private CancellationTokenSource _searchToken;
+
+        public async Task SearchCustomers()
+        {
+            try
+            {
+               
+                _searchToken?.Cancel();
+                _searchToken = new CancellationTokenSource();
+
+             
+                await Task.Delay(300, _searchToken.Token);
+
+                if (string.IsNullOrEmpty(SearchBar))
+                {
+                    FilteredCustomers.Clear();
+                    IsCustomerSearchActive = false;
+                    return;
+                }
+
+            
+                var filtered = await _customerEntity.SearchCustomersAsync(SearchBar);
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    FilteredCustomers.Clear();
+                    foreach (var customer in filtered)
+                    {
+                        FilteredCustomers.Add(customer);
+                    }
+                    IsCustomerSearchActive = filtered.Any();
+                });
+            }
+            catch (OperationCanceledException)
+            {
+              
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Search error: {ex.Message}");
+                Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+            }
+        }
+        private void ClearSelectedCustomer()
+        {
+            SelectedCustomer = null;
+            SearchBar = string.Empty;
+            IsCustomerSearchActive = false;
+            IsCustomerSelected = false;
+        }
+      
+        private void SelectCustomer(Customer customer)
+        {
+            try
+            {
+                if (customer != null)
+                {
+                    SelectedCustomer = customer;
+                    Debug.WriteLine($"Selected Customer: {customer.FirstName} {customer.LastName}");
+
+                 
+                    FilteredCustomers.Clear();
+                    IsCustomerSearchActive = false;
+                    SearchBar = string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error selecting customer: {ex.Message}");
+            }
         }
 
         public async Task LoadShoppingCartItems(string username)
         {
             int userId = await _userEntity.FindUser(username) ?? 0;
-            var items = await _shoppingCardEntity.GetShoppingCartItems(userId);
-            ShoppingCartItems = new ObservableCollection<dynamic>(items);
+            var shoppingCartItems = await _shoppingCardEntity.GetShoppingCartItems(userId);
+
+            
+            ShoppingCartItems = new ObservableCollection<dynamic>(shoppingCartItems);
             TotalPrice = await GetTotalPrice(username);
 
         }
@@ -293,83 +348,24 @@ namespace store.ViewModels
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address))
-                {
-                    return false;
-                }
+              
 
               
-                var existingCountry = await _countryEntity.GetCountryByCountryName(Country);
-                int countryId;
+             
+               
 
-                if (existingCountry != null)
-                {
-                    countryId = existingCountry.ID;
-                    Debug.WriteLine($"Country already exists: {existingCountry.CountryName}, ID: {countryId}");
-                }
-                else
-                {
-                    
-                    var countryData = new Country
-                    {
-                        CountryCode = Math.Abs(Guid.NewGuid().GetHashCode()), 
-                        CountryName = Country
-                    };
-
-                    await _countryEntity.AddData(countryData);
-                    countryId = countryData.ID; 
-                    Debug.WriteLine($"New country added: {countryData.CountryName}, ID: {countryId}");
-                }
-
-                var existingCity = await _cityEntity.GetCityIdByCityName(City);
-                int cityId;
-
-                if (existingCity != null)
-                {
-                    cityId = existingCity.Value;
-                }
-                else
-                {
-                    var cityData = new City
-                    {
-                        CityNum = Math.Abs(Guid.NewGuid().GetHashCode()),
-                        CityName = City,
-                        CountyID = countryId
-                    };
-
-                    await _cityEntity.AddData(cityData);
-                    cityId = cityData.ID;
-                    Debug.WriteLine($"New city added: {cityData.CityName}, ID: {cityId},countryID:{cityData.CountyID}");
-                }
-
-              
-                var customer = new Customer
-                {
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    CustomerNum = Math.Abs(Guid.NewGuid().GetHashCode()),
-                    Phone = Phone,
-                    Company = CompanyName,
-                    Address = Address,
-                    CountryID = countryId 
-                };
-
-                Debug.WriteLine($"Customer info: FirstName: {customer.FirstName}, LastName: {customer.LastName}, Phone: {customer.Phone}, Company: {customer.Company}, Address: {customer.Address}, CountryID: {customer.CountryID}");
-
-                await _customerEntity.AddData(customer);
-                Debug.WriteLine("Customer is saved");
-
-                var customerID = await _customerEntity.GetCustomerIDByPhone(Phone);
+                
                 int userID = await _userEntity.FindUser(username) ?? 0;
                 var cards = await _shoppingCardEntity.GetShoppingCartItems(userID);
                 var totalPrice = await _shoppingCardEntity.CalculateTotalPrice(userID);
+                var CustID = await _customerEntity.GetCustomerIDByPhone(SelectedCustomer.Phone);
 
                 var invoice = new Invoice
                 {
                     InvoiceNum = Math.Abs(Guid.NewGuid().GetHashCode()),
                     UserID = userID,
                     Total = totalPrice.ToString(),
-                    CustomerID = customerID,
+                    CustomerID = CustID,
                     Status = "Not Sent"
                 };
 

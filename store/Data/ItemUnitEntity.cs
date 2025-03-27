@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,11 @@ namespace store.Data
 
             // Save changes to the database
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpsertItemUnitData(List<ItemUnit> itemUnits)
+        {
+            await _dbContext.BulkInsertOrUpdateAsync(itemUnits);
         }
 
 

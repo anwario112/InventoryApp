@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Views;
 using store.Data;
 using store.ViewModels;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,20 +13,20 @@ public partial class ChangePopup : Popup
 {
     private ChangeToItemNum _viewModel;
     public event EventHandler ItemUpdated;
-    private ItemCard _itemCard;
+    private store.Models.ItemCard _itemCard;
 
     public string Barcode { get; set; }
     public int ID { get; set; }
-    public ChangePopup(ItemCard itemCard)
+    public ChangePopup(store.Models.ItemCard itemCard, TransferDataViewModel transferDataViewModel)
     {
         InitializeComponent();
 
-        _viewModel = new ChangeToItemNum();
-        BindingContext = new ChangeToItemNum();
+        _viewModel = new ChangeToItemNum(transferDataViewModel);
+        BindingContext = new ChangeToItemNum(transferDataViewModel);
         BindingContext = _viewModel;
 
         _itemCard = itemCard;
-        _viewModel.FetchItemNumByBarcode(itemCard.ItemBarcode);
+        _viewModel.FetchItemNumByBarcode(itemCard.ScanningNum);
     }
     private async void ItemNumField_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -50,7 +51,7 @@ public partial class ChangePopup : Popup
 
         await _viewModel.UpdateItemCardAsync(itemNum, selectedUnit, _itemCard.ID);
 
-        _itemCard.ItemBarcode = itemNum;
+        _itemCard.ScanningNum = itemNum;
         _itemCard.Unit = selectedUnit;
 
         MessagingCenter.Send(this, "ItemUpdated", _itemCard);

@@ -25,6 +25,9 @@ namespace store.ViewModels
         private ObservableCollection<InvoiceWithCustomer> _filteredInvoices; 
         private readonly InvoiceEntity _invoiceEntity;
         private readonly UserEntity _userEntity;
+
+    
+
         public ICommand ItemTappedCommand { get; }
 
         public Color UnsentTextColor
@@ -76,6 +79,8 @@ namespace store.ViewModels
                 OnPropertyChanged();
             }
         }
+
+
 
         public Command SelectUnsentCommand { get; }
         public Command SelectSentCommand { get; }

@@ -23,6 +23,11 @@ namespace store.Models
 
         [Column("Unit")]
         public string? Unit { get; set; }
+
+        public string Price {  get; set; }
+
+        [Column("LastUpdate")]
+        public DateTime LastUpdate { get; set; } = DateTime.Now;
         public int SectionID { get; set; }
 
         [ForeignKey("SectionID")]

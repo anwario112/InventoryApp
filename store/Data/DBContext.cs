@@ -28,8 +28,9 @@ namespace store.Data
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Country>Country { get; set; }
         public DbSet<City>City { get; set; }
+        public DbSet<Currency>Currency { get; set; }
       
-
+        public DbSet<ClearData>ClearData { get; set; }
 
 
 
@@ -214,11 +215,9 @@ namespace store.Data
         }
 
 
-       
 
 
-
-
+      
 
 
 

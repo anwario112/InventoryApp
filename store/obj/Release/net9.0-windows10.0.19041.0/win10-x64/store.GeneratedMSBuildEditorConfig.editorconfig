@@ -75,11 +75,23 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.CardList.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CardList.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CardList.xaml
 
+[C:/Users/USER/source/repos/store/store/View/CashVan.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.CashVan.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CashVan.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CashVan.xaml
+
 [C:/Users/USER/source/repos/store/store/View/ChangePopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ChangePopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ChangePopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ChangePopup.xaml
+
+[C:/Users/USER/source/repos/store/store/View/ClearDataPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.ClearDataPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\ClearDataPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\ClearDataPopup.xaml
 
 [C:/Users/USER/source/repos/store/store/View/ConnectionBox.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -92,6 +104,24 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CreateFolder.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CreateFolder.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CreateFolder.xaml
+
+[C:/Users/USER/source/repos/store/store/View/CurrencyPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.CurrencyPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CurrencyPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CurrencyPopup.xaml
+
+[C:/Users/USER/source/repos/store/store/View/CustomerPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.CustomerPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CustomerPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CustomerPage.xaml
+
+[C:/Users/USER/source/repos/store/store/View/CustomerPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.CustomerPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CustomerPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CustomerPopup.xaml
 
 [C:/Users/USER/source/repos/store/store/View/EditQuantityPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -128,6 +158,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemCardArchive.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ItemCardArchive.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ItemCardArchive.xaml
+
+[C:/Users/USER/source/repos/store/store/View/ItemPricePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemPricePage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\ItemPricePage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\ItemPricePage.xaml
 
 [C:/Users/USER/source/repos/store/store/View/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

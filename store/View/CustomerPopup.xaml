@@ -32,32 +32,17 @@
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
-         
+            <Label Text="Email" />
+            <Entry x:Name="Email"  Text="{Binding Email}" Placeholder="Enter Email" />
+
+
+            <Label Text="VatNum" />
+            <Entry x:Name="VatNum"  Text="{Binding VatNum}" Placeholder="Enter VatNum" />
+
             <Label Text="Phone" />
             <Entry x:Name="CustomerPhoneEntry"  Text="{Binding Phone}" Placeholder="Enter phone" />
 
          
-            <Frame x:Name="CurrencyBox" CornerRadius="5" BorderColor="Gray" Padding="0" HeightRequest="40">
-                <Grid ColumnDefinitions="*,Auto">
-                    <Entry x:Name="CurrencyEntry" Placeholder="Select Currency" IsReadOnly="True"     Text="{Binding SelectedCurrency, Mode=TwoWay}"/>
-                    <Button Grid.Column="1" Text="▼" WidthRequest="30" HeightRequest="30" Clicked="Button_Clicked" />
-                </Grid>
-            </Frame>
-            <CollectionView x:Name="currencyoption" 
-                ItemsSource="{Binding CurrencyList}" 
-                IsVisible="False" 
-                SelectionMode="Single" 
-                SelectionChanged="CurrencyPick">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding}" 
-                   Padding="10" 
-                   FontSize="16" 
-                   VerticalOptions="Center" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
        
             <Label Text="Company" />
             <Entry x:Name="CustomerCompanyEntry" Text="{Binding CompanyName}" Placeholder="Enter company" />

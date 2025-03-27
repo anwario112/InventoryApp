@@ -121,27 +121,27 @@ namespace store.View
 
 
 
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Change button clicked");
-            string barcode = ItemBarcode;
-            int id = ID;
+        //private async void Button_Clicked(object sender, EventArgs e)
+        //{
+        //    Debug.WriteLine("Change button clicked");
+        //    string barcode = ItemBarcode;
+        //    int id = ID;
 
-            var currentPage = Application.Current.MainPage;
-            var changePopup = new ChangePopup(this);
+        //    var currentPage = Application.Current.MainPage;
+        //    var changePopup = new ChangePopup(this);
            
-            await currentPage.ShowPopupAsync(changePopup);
-        }
+        //    await currentPage.ShowPopupAsync(changePopup);
+        //}
 
-        private void OnExitImageTapped(object sender, EventArgs e)
-        {
+        //private void OnExitImageTapped(object sender, EventArgs e)
+        //{
 
-            int id = ID;
-            _itemCardEntity.DeleteCard(id);
-            MessagingCenter.Send(this, "ItemCardDeleted", id);
+        //    int id = ID;
+        //    _itemCardEntity.DeleteCard(id);
+        //    MessagingCenter.Send(this, "ItemCardDeleted", id);
 
 
-        }
+        //}
 
 
 
@@ -167,6 +167,21 @@ namespace store.View
             var EditQuantity = new EditQuantityPopup(id);
 
             await currentPage.ShowPopupAsync(EditQuantity);
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+        {
+
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button_Clicked_2(object sender, EventArgs e)
+        {
+
         }
     }
 }

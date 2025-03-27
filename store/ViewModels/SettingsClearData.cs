@@ -1,24 +1,19 @@
 ﻿using store.Data;
 using store.Models;
-using store.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace store.ViewModels
 {
-    public class SettingsClearData: INotifyPropertyChanged
+    public class SettingsClearData : INotifyPropertyChanged
     {
-
         private readonly ClearDataEntity clearDataEntity;
         private readonly ItemCardEntity itemCardEntity;
         private readonly ItemArchiveEntity _itemArchiveEntity;
-        private readonly TransferData _transferData;
 
         private string _password;
         public string Password
@@ -26,13 +21,9 @@ namespace store.ViewModels
             get => _password;
             set
             {
-
                 _password = value;
-
                 OnPropertyChanged(nameof(Password));
-
             }
-
         }
 
         public SettingsClearData()
@@ -42,17 +33,26 @@ namespace store.ViewModels
             _itemArchiveEntity = new ItemArchiveEntity();
         }
 
-
         public async Task SavePassword()
         {
             try
             {
-             
+                if (clearDataEntity == null)
+                {
+                    Debug.WriteLine("Error: clearDataEntity is null.");
+                    return;
+                }
+
                 var existingData = await clearDataEntity.GetAllData();
 
-                if (existingData == null || existingData.Count == 0)
+                if (existingData == null)
                 {
-                    
+                    Debug.WriteLine("Error: GetAllData returned null.");
+                    return;
+                }
+
+                if (existingData.Count == 0)
+                {
                     var clearData = new ClearData
                     {
                         Password = Password
@@ -62,9 +62,14 @@ namespace store.ViewModels
                 }
                 else
                 {
-                  
-                    var clearData = existingData.First(); 
-                    clearData.Password = Password; 
+                    var clearData = existingData.FirstOrDefault();
+                    if (clearData == null)
+                    {
+                        Debug.WriteLine("Error: No existing data found.");
+                        return;
+                    }
+
+                    clearData.Password = Password;
                     await clearDataEntity.UpdateData(clearData);
                     Debug.WriteLine($"Password updated: {Password}");
                 }
@@ -72,7 +77,6 @@ namespace store.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error saving password: {ex.Message}");
-              
             }
         }
 
@@ -80,16 +84,14 @@ namespace store.ViewModels
         {
             try
             {
-               
-                var existingData = await clearDataEntity.GetAllData(); 
+                var existingData = await clearDataEntity.GetAllData();
 
                 if (existingData != null && existingData.Count > 0)
                 {
-                    var storedPassword = existingData.First().Password; 
+                    var storedPassword = existingData.First().Password;
 
                     if (Password == storedPassword)
                     {
-                        
                         var itemCards = await itemCardEntity.GetItemCardsBySectionID(sectionID);
 
                         if (itemCards != null && itemCards.Any())
@@ -113,11 +115,9 @@ namespace store.ViewModels
                             await _itemArchiveEntity.AddDataRange(itemArchives);
                             Debug.WriteLine("Item cards archived successfully.");
 
-                            await itemCardEntity.DeleteCardsBySectionID(sectionID);
+                            await itemCardEntity.DeleteData(sectionID);
                             Debug.WriteLine($"Item cards deleted successfully for section ID: {sectionID}");
                             MessagingCenter.Send(this, "DataCleared", sectionID);
-
-
                         }
                         else
                         {
@@ -127,23 +127,18 @@ namespace store.ViewModels
                     else
                     {
                         Debug.WriteLine("Password does not match.");
-                     
                     }
                 }
                 else
                 {
                     Debug.WriteLine("No password found in the database.");
-                   
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error checking password and deleting cards: {ex.Message}");
-             
             }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

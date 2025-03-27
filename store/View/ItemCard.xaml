@@ -31,7 +31,7 @@
                    VerticalOptions="End" 
                    Margin="0,0,10,80">
                 <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnExitImageTapped" />
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                 </Image.GestureRecognizers>
             </Image>
 
@@ -108,7 +108,7 @@
                         HorizontalOptions="FillAndExpand" 
                         Padding="10" 
                         FontSize="13"
-                        Clicked="EditClicked"  />
+                        Clicked="Button_Clicked_2"  />
             </StackLayout>
         </Grid>
     </Border>

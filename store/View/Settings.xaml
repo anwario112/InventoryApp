@@ -4,105 +4,272 @@
              x:Class="store.View.Settings"
              BackgroundColor="{StaticResource Gray1000}"
              Title="Settings">
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*" RowSpacing="10">
-        <Border Grid.Row="0" Grid.ColumnSpan="2"
+    <Grid>
+        <ActivityIndicator x:Name="LoadingIndicator"
+                IsVisible="False"
+                IsRunning="True"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                Margin="0,20,0,0" />
+
+        <Label x:Name="LoadingCompleteLabel"
+        Text="Loading Complete!"
+        TextColor="Green"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        IsVisible="False"
+        Grid.Row="0"
+        Grid.ColumnSpan="2" />
+
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+
+
+            <Border Grid.Row="0" Grid.ColumnSpan="2"
                 Stroke="Transparent"
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
                 HeightRequest="60"  WidthRequest="320"
-                Margin="10,30,10,200">
-         
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="15" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
-                <Image Source="connection.png" 
+                Margin="10,30,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="connection.png" 
                        HorizontalOptions="Center" 
                        VerticalOptions="Center" 
                        HeightRequest="25" 
                        WidthRequest="50" />
-                <Label Text="Database Connection " 
+                    <Label Text="Database Connection " 
                        VerticalOptions="Center"
                        FontSize="20"
                        FontAttributes="Bold"
                        TextColor="{StaticResource Gray500}"  
                        Margin="0,-5,0,0"/>
-                <Image Source="next.png" 
+                    <Image Source="next.png" 
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        HeightRequest="30"
                        Margin="-5,0,0,0"/>
-            </StackLayout>
-        </Border>
+                </StackLayout>
+            </Border>
 
 
-        <Border Grid.Row="0" Grid.ColumnSpan="2"
-         Stroke="Transparent"
-         StrokeThickness="2"
-         BackgroundColor="{StaticResource White}"
-         HeightRequest="60"  WidthRequest="320"
-         Margin="10,30,10,60">
-
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="15" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="AddUserTap" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
-                <Image Source="user.png" 
-                HorizontalOptions="Center" 
-                VerticalOptions="Center" 
-                HeightRequest="25" 
-                WidthRequest="50" />
-                <Label Text="Add User " 
-                VerticalOptions="Center"
-                FontSize="20"
-                FontAttributes="Bold"
-                TextColor="{StaticResource Gray500}"  
-                Margin="0,-5,0,0"/>
-                <Image Source="next.png" 
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                HeightRequest="30"
-                Margin="105,0,0,0"/>
-            </StackLayout>
-        </Border>
-
+            <Border Grid.Row="1" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddUserTap" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="user.png" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       HeightRequest="25" 
+                       WidthRequest="50" />
+                    <Label Text="Add User " 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="30"
+                       Margin="105,0,0,0"/>
+                </StackLayout>
+            </Border>
 
 
-        <Border Grid.Row="5" Grid.ColumnSpan="2"
-          Stroke="Transparent"
-          StrokeThickness="2"
-          BackgroundColor="{StaticResource White}"
-          HeightRequest="60"  WidthRequest="320"
-          Margin="10,-250,10,10">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="15" />
-            </Border.StrokeShape>
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="archiveTap" />
-            </Border.GestureRecognizers>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
-                <Image Source="archive.png" 
-                 HorizontalOptions="Center" 
-                 VerticalOptions="Center" 
-                 HeightRequest="35" 
-                 WidthRequest="50" />
-                <Label Text="archive" 
-                 VerticalOptions="Center"
-                 FontSize="20"
-                 FontAttributes="Bold"
-                 TextColor="{StaticResource Gray500}"  Margin="0,-5,0,0"/>
-                <Image Source="next.png" 
-                 HorizontalOptions="Center"
-                 VerticalOptions="Center"
-                 HeightRequest="30"
-                 Margin="130,0,0,0"/>
-            </StackLayout>
-        </Border>
+            <Border Grid.Row="2" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Label Text="Quantity Popup" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="20,-5,0,0"/>
+                    <Switch x:Name="quantityPopupSwitch"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        IsToggled="{Binding QuantityPopupPreference, Mode=TwoWay}"
+                        Margin="50,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+
+            <Border Grid.Row="3" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Label Text="Merge Quantity" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="20,-5,0,0"/>
+                    <Switch x:Name="mergeQuantitySwitch"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center"
+                    IsToggled="{Binding MergeQuantityPreference, Mode=TwoWay}"
+                    Margin="50,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+
+            <Border Grid.Row="4" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="archiveTap" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="archive.png" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       HeightRequest="35" 
+                       WidthRequest="50" />
+                    <Label Text="Archive" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="30"
+                       Margin="130,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+
+            <Border Grid.Row="5" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="clearDataTap" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="delete.png" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       HeightRequest="35" 
+                       WidthRequest="50" />
+                    <Label Text="Clear Data Password" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="30"
+                       Margin="10,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+
+            <Border Grid.Row="6" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ImportData" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="port.png" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       HeightRequest="35" 
+                       WidthRequest="50" />
+                    <Label Text="Import Data" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="30"
+                       Margin="95,0,0,0"/>
+                </StackLayout>
+            </Border>
+
+
+            <Border Grid.Row="7" Grid.ColumnSpan="2"
+                Stroke="Transparent"
+                StrokeThickness="2"
+                BackgroundColor="{StaticResource White}"
+                HeightRequest="60"  WidthRequest="320"
+                Margin="10,10,10,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ExportCards" />
+                </Border.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                    <Image Source="export.png" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       HeightRequest="35" 
+                       WidthRequest="50" />
+                    <Label Text="Export cards" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray500}"  
+                       Margin="0,-5,0,0"/>
+                    <Image Source="next.png" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       HeightRequest="30"
+                       Margin="90,0,0,0"/>
+                </StackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

@@ -7,32 +7,20 @@
       "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\insertdataapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\data\\itemfileentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\data\\itemfileentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\viewmodels\\shoppinglistfetch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\shoppinglistfetch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\transferdata.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\transferdata.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\shoppingcardpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\shoppingcardpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\data\\itembarcodeentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\data\\itembarcodeentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\shoppingpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\shoppingpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\models\\itemunit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\models\\itemunit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\models\\itemfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\models\\itemfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\transferdata.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\transferdata.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\api\\httphelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\api\\httphelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\shoppingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\shoppingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,51 +29,12 @@
       "VerticalTabListWidth": 100,
       "DocumentGroups": [
         {
-          "DockedWidth": 82,
-          "SelectedChildIndex": 4,
+          "DockedWidth": 62,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ItemUnit.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\ItemUnit.cs",
-              "RelativeDocumentMoniker": "store\\Models\\ItemUnit.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\ItemUnit.cs",
-              "RelativeToolTip": "store\\Models\\ItemUnit.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T19:29:07.294Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ItemFile.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\ItemFile.cs",
-              "RelativeDocumentMoniker": "store\\Models\\ItemFile.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Models\\ItemFile.cs",
-              "RelativeToolTip": "store\\Models\\ItemFile.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAuwCgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T19:29:01.404Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ItemFileEntity.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\ItemFileEntity.cs",
-              "RelativeDocumentMoniker": "store\\Data\\ItemFileEntity.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\ItemFileEntity.cs",
-              "RelativeToolTip": "store\\Data\\ItemFileEntity.cs",
-              "ViewState": "AgIAAJsAAAAAAAAAAAAAAJIAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T14:05:30.399Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -95,60 +44,100 @@
               "RelativeDocumentMoniker": "store\\ViewModels\\InsertDataApi.cs",
               "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\InsertDataApi.cs",
               "RelativeToolTip": "store\\ViewModels\\InsertDataApi.cs",
-              "ViewState": "AgIAAMsAAAAAAAAAAAAAAOAAAABhAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAA1wEYAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T12:19:56.666Z",
+              "WhenOpened": "2025-03-27T10:29:07.544Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ItemBarcodeEntity.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\ItemBarcodeEntity.cs",
-              "RelativeDocumentMoniker": "store\\Data\\ItemBarcodeEntity.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Data\\ItemBarcodeEntity.cs",
-              "RelativeToolTip": "store\\Data\\ItemBarcodeEntity.cs",
-              "ViewState": "AgIAAIwAAAAAAAAAAAAIwJQAAAA5AAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ShoppingListFetch.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\ShoppingListFetch.cs",
+              "RelativeDocumentMoniker": "store\\ViewModels\\ShoppingListFetch.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\ShoppingListFetch.cs",
+              "RelativeToolTip": "store\\ViewModels\\ShoppingListFetch.cs",
+              "ViewState": "AgIAANQBAAAAAAAAAAAswPwBAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T12:51:00.726Z",
+              "WhenOpened": "2025-03-27T10:18:19.179Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "TransferData.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\TransferData.xaml.cs",
-              "RelativeDocumentMoniker": "store\\View\\TransferData.xaml.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\TransferData.xaml.cs",
-              "RelativeToolTip": "store\\View\\TransferData.xaml.cs",
-              "ViewState": "AgIAAJcAAAAAAAAAAAAAAKAAAAAWAAAAAAAAAA==",
+              "Title": "ShoppingCardPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingCardPage.xaml.cs",
+              "RelativeDocumentMoniker": "store\\View\\ShoppingCardPage.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingCardPage.xaml.cs",
+              "RelativeToolTip": "store\\View\\ShoppingCardPage.xaml.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAkwKUAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T12:43:30.447Z",
+              "WhenOpened": "2025-03-27T10:04:34.444Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "TransferData.xaml",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\TransferData.xaml",
-              "RelativeDocumentMoniker": "store\\View\\TransferData.xaml",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\TransferData.xaml",
-              "RelativeToolTip": "store\\View\\TransferData.xaml",
-              "ViewState": "AgIAAKEAAAAAAAAAAAAAAK0AAABUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-01T09:37:48.975Z"
+              "DocumentIndex": 3,
+              "Title": "ShoppingPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml.cs",
+              "RelativeDocumentMoniker": "store\\View\\ShoppingPage.xaml.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml.cs",
+              "RelativeToolTip": "store\\View\\ShoppingPage.xaml.cs",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAmwMMAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T10:00:27.939Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "HttpHelper.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\Api\\HttpHelper.cs",
-              "RelativeDocumentMoniker": "store\\Api\\HttpHelper.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\Api\\HttpHelper.cs",
-              "RelativeToolTip": "store\\Api\\HttpHelper.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAAAAgAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T12:55:33.181Z"
+              "DocumentIndex": 4,
+              "Title": "ShoppingPage.xaml",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml",
+              "RelativeDocumentMoniker": "store\\View\\ShoppingPage.xaml",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\ShoppingPage.xaml",
+              "RelativeToolTip": "store\\View\\ShoppingPage.xaml",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAAPYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-27T10:00:21.913Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 225,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{936b24b7-e640-3186-98a7-24307bb298e0}"
             }
           ]
         }

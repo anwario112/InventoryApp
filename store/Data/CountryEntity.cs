@@ -51,6 +51,7 @@ namespace store.Data
 
         public Task UpdateData(Country table)
         {
+
             throw new NotImplementedException();
         }
 
@@ -63,6 +64,11 @@ namespace store.Data
         {
             return await dbContext.Country
                 .FirstOrDefaultAsync(c => c.CountryName.ToLower() == countryName.ToLower());
+        }
+        public async Task<bool> DoesCountryExistAsync(int countryId)
+        {
+           
+            return await dbContext.Country.AnyAsync(c => c.ID == countryId);
         }
     }
 }

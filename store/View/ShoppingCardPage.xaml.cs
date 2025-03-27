@@ -61,6 +61,19 @@ namespace store.View
 
         }
 
+        private void CustomerSearchResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedCustomer = e.CurrentSelection.FirstOrDefault() as Customer;
+            if (selectedCustomer != null)
+            {
+                Debug.WriteLine($"Selected Customer: {selectedCustomer.FirstName} {selectedCustomer.LastName}");
+
+               
+                var viewModel = BindingContext as shoppingCards;
+                viewModel.SelectedCustomer = selectedCustomer;
+            }
+        }
+
         private async void LoadShoppingCartItems(string username)
         {
             await _fetchCardList.LoadShoppingCartItems(username);
@@ -78,6 +91,21 @@ namespace store.View
             }
            
 
+        }
+        private void OnCustomerSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = e.NewTextValue?.Trim();
+
+          
+        }
+
+        private void OnCustomerSelected(object sender, SelectionChangedEventArgs e)
+        {
+           
+        }
+        private void OnClearSelectedCustomer(object sender, TappedEventArgs e)
+        {
+            
         }
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
@@ -158,6 +186,21 @@ namespace store.View
         private async void SendData(object sender, TappedEventArgs e)
         {
             await _invoiceDetailsViewModel.SendData();
+        }
+
+        private async void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchBar = sender as SearchBar;
+            var viewModel = BindingContext as shoppingCards;
+
+            if (searchBar != null && viewModel != null)
+            {
+                viewModel.SearchBar = searchBar.Text;
+                viewModel.SearchCustomers().Wait(); 
+
+              
+                CustomerSearchResults.ItemsSource = viewModel.FilteredCustomers;
+            }
         }
     }
 }

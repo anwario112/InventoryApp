@@ -106,27 +106,24 @@ namespace store.ViewModels
 
             if (selectedItems.Any())
             {
-                
                 var updateTasks = selectedItems.Select(item =>
                 {
                     var updatedItemCard = new Models.ItemCard
                     {
-                        ScanningNum = item.Barcode, 
-                        Unit = item.UnitDesc 
-                                             
+                        ScanningNum = item.Barcode,
+                        Unit = item.UnitDesc,
+                        Price = item.Price.ToString("F2"),
+                      
                     };
 
-                    
                     return _itemCardEntity.UpdateDataCard(updatedItemCard, _id);
                 });
 
-           
                 await Task.WhenAll(updateTasks);
 
                 Debug.WriteLine($"Updated {selectedItems.Count} ItemCards for ID {_id}.");
-                MessagingCenter.Send(this, "ItemCardUpdated", _id);
+                MessagingCenter.Send(this, "ItemsUpdated");
                 _popup.Close();
-
             }
             else
             {

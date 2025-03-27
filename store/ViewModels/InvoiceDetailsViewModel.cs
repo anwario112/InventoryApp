@@ -90,27 +90,7 @@ namespace store.ViewModels
             }
         }
 
-        private string _customerCountry;
-        public string CustomerCountry
-        {
-            get => _customerCountry;
-            set
-            {
-                _customerCountry = value;
-                OnPropertyChanged();
-            }
-        }
 
-        private string _customerCity;
-        public string CustomerCity
-        {
-            get => _customerCity;
-            set
-            {
-                _customerCity = value;
-                OnPropertyChanged();
-            }
-        }
         private DateTime? _dateCreated;
         public DateTime? DateCreated
         {
@@ -122,50 +102,17 @@ namespace store.ViewModels
             }
         }
 
-
-
-        private string _customerAddress;
-        public string CustomerAddress
-        {
-            get => _customerAddress;
-            set
-            {
-                _customerAddress = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        private string _customerCompany;
-        public string CustomerCompany
-        {
-            get => _customerCompany;
-            set
-            {
-                _customerCompany = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string _totalString;
-
         public string TotalString
-
         {
-
             get => _totalString;
-
             set
-
             {
-
                 _totalString = value;
-
                 OnPropertyChanged();
-
             }
-
         }
+
 
         private string _invoiceStatus;
         public string InvoiceStatus
@@ -225,10 +172,7 @@ namespace store.ViewModels
                     CustomerFirstName = customerInfo.FirstName;
                     CustomerLastName = customerInfo.LastName;
                     CustomerPhone = customerInfo.Phone;
-                    CustomerCountry = customerInfo.Country;
-                    CustomerCity = customerInfo.City;
-                    CustomerAddress = customerInfo.Address;
-                    CustomerCompany = customerInfo.Company;
+                   
                 }
                 else
                 {

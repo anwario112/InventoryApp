@@ -75,7 +75,9 @@ namespace store.Data
                     ItemName = itemCard.ItemName,
                     Quantity = itemCard.Quantity,
                     Unit = itemCard.Unit,
-                    SectionID = itemCard.SectionID
+                    SectionID = itemCard.SectionID,
+                    Price=itemCard.Price,
+                    LastUpdate=itemCard.LastUpdate
                 })
                 .ToListAsync();
         }
@@ -178,9 +180,52 @@ namespace store.Data
             }
         }
 
-        public Task UpdateData(ItemCard table)
+        public async Task UpdateData(ItemCard itemCard)
         {
-            throw new NotImplementedException();
+            if (itemCard == null)
+            {
+                throw new ArgumentNullException(nameof(itemCard), "ItemCard cannot be null.");
+            }
+
+            try
+            {
+              
+                var existingItemCard = await _dbContext.ItemCards.FindAsync(itemCard.ID);
+
+                if (existingItemCard == null)
+                {
+                    throw new InvalidOperationException($"ItemCard with ID {itemCard.ID} not found.");
+                }
+
+              
+                existingItemCard.ItemName = itemCard.ItemName;
+                existingItemCard.ScanningNum = itemCard.ScanningNum;
+                existingItemCard.Unit = itemCard.Unit;
+                existingItemCard.Quantity = itemCard.Quantity;
+                existingItemCard.Price = itemCard.Price;
+                existingItemCard.LastUpdate = DateTime.Now;
+
+             
+                await _dbContext.SaveChangesAsync();
+
+                Debug.WriteLine($"ItemCard updated successfully: ItemName={itemCard.ItemName}, Barcode={itemCard.ScanningNum}, Quantity={itemCard.Quantity}");
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {    Debug.WriteLine($"Concurrency conflict occurred: {ex.Message}");
+                throw;
+            }
+            catch (DbUpdateException ex)
+            {
+              
+                Debug.WriteLine($"Database update error: {ex.InnerException?.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+               
+                Debug.WriteLine($"An error occurred while updating ItemCard: {ex.Message}");
+                throw;
+            }
         }
 
         Task<ItemBarcode> IDataHelper<ItemCard>.GetItemByBarcode(string barcode)
@@ -188,7 +233,7 @@ namespace store.Data
             throw new NotImplementedException();
         }
 
-        public async Task DeleteCard(int ID)
+        public async Task DeleteCard(int ID,int sectionID)
         {
             Debug.WriteLine($"the card that will be deleted:{ID}");
             var itemCard = await _dbContext.ItemCards.FindAsync(ID);
@@ -237,6 +282,34 @@ namespace store.Data
             catch (Exception ex)
             {
                 Debug.WriteLine($"An error occurred while retrieving ItemCards: {ex.Message}");
+                throw; 
+            }
+        }
+
+        public async Task<ItemCard> GetItemCardByBarcodeAndSection(string barcode, int sectionID)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                throw new ArgumentException("Barcode cannot be null or empty.", nameof(barcode));
+            }
+
+            try
+            {
+                
+                var itemCard = await _dbContext.ItemCards
+                    .FirstOrDefaultAsync(ic => ic.ScanningNum == barcode && ic.SectionID == sectionID);
+
+                if (itemCard == null)
+                {
+                    Debug.WriteLine($"No ItemCard found with barcode '{barcode}' and sectionID '{sectionID}'.");
+                    return null; 
+                }
+
+                return itemCard;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error fetching ItemCard by barcode and section: {ex.Message}");
                 throw; 
             }
         }

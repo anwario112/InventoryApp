@@ -19,8 +19,7 @@ namespace store.ViewModels
     public class InsertDataApi
     {
 
-        private readonly DBContext db;
-
+      
         private readonly HttpHelper _httpHelper;
 
 
@@ -69,7 +68,7 @@ namespace store.ViewModels
 
         public async Task InsertApiData()
         {
-            string url = " https://7962-185-114-88-228.ngrok-free.app/api/items";
+            string url = " https://e7e2-213-204-95-210.ngrok-free.app/api/items";
 
             try
             {
@@ -147,104 +146,59 @@ namespace store.ViewModels
                     return;
                 }
 
-               
-
-                
-                await _itemUnit.ClearData();
-
-                
+                // Process ItemFile data
                 var distinctItemFileData = queryResults
-                    .DistinctBy(q => q.ItemNum)
-                    .Select(q =>
+                    .GroupBy(q => q.ItemNum) 
+                    .Select(g => g.First())  
+                    .Select(q => new ItemFile
                     {
-                        if (!int.TryParse(q.ItemID, out int itemId))
-                        {
-                            itemId = 0;
-                        }
-
-                        if (!double.TryParse(q.Price, out double priceDouble))
-                        {
-                            priceDouble = 0;
-                        }
-                        decimal price = (decimal)priceDouble;
-
-                        return new ItemFile
-                        {
-                            ItemID = itemId,
-                            ItemNum = q.ItemNum,
-                            ItemName = q.ItemName,
-                            Price = price.ToString(),
-                            ImageUrl = q.ImageUrl
-                        };
+                        ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
+                        ItemNum = q.ItemNum,
+                        ItemName = q.ItemName,
+                        Price = q.Price,
+                        ImageUrl = q.ImageUrl
                     })
                     .ToList();
+                await _itemFile.UpsertItemFileData(distinctItemFileData);
 
-             
-           
-
-              
-                await _itemFile.AddDataRange(distinctItemFileData);
-                Debug.WriteLine("Data inserted into ItemFile table successfully.");
-
-               
+                // Process ItemBarcode data
                 var itemBarcodeData = queryResults
-                    .Select(q =>
+                    .Select(q => new ItemBarcode
                     {
-                        if (!int.TryParse(q.ItemID, out int itemId))
-                        {
-                            itemId = 0;
-                        }
-
-                        if (!double.TryParse(q.BarcodePrice, out double barcodePriceDouble))
-                        {
-                            barcodePriceDouble = 0;
-                        }
-                        decimal barcodePrice = (decimal)barcodePriceDouble;
-
-                        return new ItemBarcode
-                        {
-                            ItemID = itemId,
-                            Barcode = q.Barcode,
-                            price = barcodePrice,
-                            UnitDesc = q.UnitDesc
-                        };
+                        ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
+                        Barcode = q.Barcode,
+                        price = decimal.TryParse(q.BarcodePrice, out decimal price) ? price : 0,
+                        UnitDesc = q.UnitDesc
                     })
                     .ToList();
 
-              
-                await _itemBarcode.AddDataRange(itemBarcodeData);
-                Debug.WriteLine("Data inserted into ItemBarcode table successfully.");
+                await _itemBarcode.UpsertItemBarcodeData(itemBarcodeData);
 
-
+                // Process ItemUnit data
                 var unitData = queryResults
-                .GroupBy(q => new { q.ItemID, q.ItemNumUnit }) 
-                .Select(g => g.First()) 
-                .Select(q =>
-                {
-                    int itemId = int.TryParse(q.ItemID, out int parsedId) ? parsedId : 0;
-                    string unitDesc = string.IsNullOrEmpty(q.ItemNumUnit) ? "N/A" : q.ItemNumUnit;
-                    return new ItemUnit
+                    .GroupBy(q => new { q.ItemID, q.ItemNumUnit })
+                    .Select(g => g.First())
+                    .Select(q => new ItemUnit
                     {
-                        ItemID = itemId,
-                        UnitDesc = unitDesc
-                    };
-                })
-                .ToList();
+                        ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
+                        UnitDesc = q.ItemNumUnit ?? "N/A"
+                    })
+                    .ToList();
 
+                await _itemUnit.UpsertItemUnitData(unitData);
 
-
-                await _itemUnit.AddDataRange(unitData);
-                Debug.WriteLine("Data inserted into UnitFile table successfully.");
+                Debug.WriteLine("Data insertion/update completed successfully.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error inserting data: {ex.Message}");
+                Debug.WriteLine($"Error inserting/updating data: {ex.Message}");
                 if (ex.InnerException != null)
                 {
                     Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
             }
         }
+
 
 
         public async Task<ItemBarcode> GetItemByBarcode(string barcode)
@@ -257,7 +211,7 @@ namespace store.ViewModels
             Debug.WriteLine($"Scanned barcode: {barcode}");
 
 
-            var (itemBarcode, itemName, unitDesc) = await _itemBarcode.GetItemByBarcode(barcode);
+            var (itemBarcode, itemName, unitDesc,price) = await _itemBarcode.GetItemByBarcode(barcode);
 
             if (itemBarcode == null)
             {
@@ -310,29 +264,75 @@ namespace store.ViewModels
             Debug.WriteLine($"{SearchData}");
         }
 
-        public async Task SaveItemCard(string itemName, string barcode, string unitDesc, int quantity, int sectionID)
+        public async Task SaveItemCard(string itemName, string barcode, string unitDesc, int quantity, int sectionID, string price)
         {
-            Debug.WriteLine($"itemName pssed to savedIetmcard:itemName{itemName},unit:{unitDesc}");
-            var itemData = new ItemCard
-            {
-                ItemName = itemName,
-                ScanningNum = barcode,
-                Unit = unitDesc,
-                Quantity = quantity,
-                SectionID = sectionID
-            };
-
-            Debug.WriteLine($"after itemCard is set:ItemName:{itemData.ItemName},unit:{itemData.Unit}");
+            Debug.WriteLine($"itemName passed to SaveItemCard: {itemName}, unit: {unitDesc}");
 
             try
             {
-                await _itemCardEntity.AddData(itemData);
-                Debug.WriteLine($"Item Card is saved successfully:ItemName:{itemData.ItemName},Scanned barcode:{itemData.ScanningNum},Unit:{itemData.Unit},Quantity:{itemData.Quantity},{itemData.SectionID}");
+
+                bool isMergeQuantityChecked = Preferences.Get("MergeQuantityPreference", false);
+
+                if (isMergeQuantityChecked)
+                {
+
+                    var existingItem = await _itemCardEntity.GetItemCardByBarcodeAndSection(barcode, sectionID);
+
+                    if (existingItem != null)
+                    {
+
+                        existingItem.ItemName = itemName;
+                        existingItem.Unit = unitDesc;
+                        existingItem.Quantity = quantity;
+                        existingItem.Price = price;
+                        existingItem.LastUpdate= DateTime.Now;
+
+                        Debug.WriteLine($"Updating existing ItemCard: ItemName={existingItem.ItemName}, Barcode={existingItem.ScanningNum}, Unit={existingItem.Unit}, Quantity={existingItem.Quantity}, SectionID={existingItem.SectionID}");
+
+                        await _itemCardEntity.UpdateData(existingItem);
+                    }
+                    else
+                    {
+
+                        var itemData = new ItemCard
+                        {
+                            ItemName = itemName,
+                            ScanningNum = barcode,
+                            Unit = unitDesc,
+                            Quantity = quantity,
+                            SectionID = sectionID,
+                            Price = price,
+                            LastUpdate=DateTime.Now
+
+                        };
+
+                        Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price}");
+
+                        await _itemCardEntity.AddData(itemData);
+                    }
+                }
+                else
+                {
+
+                    var itemData = new ItemCard
+                    {
+                        ItemName = itemName,
+                        ScanningNum = barcode,
+                        Unit = unitDesc,
+                        Quantity = quantity,
+                        SectionID = sectionID,
+                        Price = price
+
+                    };
+
+                    Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price}");
+
+                    await _itemCardEntity.AddData(itemData);
+                }
             }
             catch (DbUpdateException dbEx)
             {
                 Debug.WriteLine($"Database update error: {dbEx.InnerException?.Message}");
-
             }
             catch (Exception ex)
             {
@@ -340,7 +340,7 @@ namespace store.ViewModels
             }
         }
 
-        public async Task SaveExportData(int sectionID)
+        public async Task<bool> SaveExportData(int sectionID)
         {
             try
             {
@@ -351,12 +351,10 @@ namespace store.ViewModels
 
                 if (rakNameExists)
                 {
-
                     var existingSectionID = await _exportedSectionEntity.GetSectionIdByName(sectionName);
 
                     if (sectionNameExists && existingSectionID.HasValue && itemCards != null && itemCards.Any())
                     {
-
                         foreach (var itemCard in itemCards)
                         {
                             var existingCard = await _exportedCardEntity.GetItemByScanningNum(itemCard.ScanningNum);
@@ -390,7 +388,6 @@ namespace store.ViewModels
                     }
                     else if (!sectionNameExists)
                     {
-
                         var rakID = await _exportedRakEntity.GetIdByRakName(rakName);
                         Debug.WriteLine($"The RakID that will be inserted in ExportedSection: RakID={rakID}");
 
@@ -427,7 +424,6 @@ namespace store.ViewModels
                 }
                 else
                 {
-
                     var exportRak = new ExportedRak
                     {
                         ExportedRakName = rakName,
@@ -468,10 +464,15 @@ namespace store.ViewModels
                         }
                     }
                 }
+
+               
+                return true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in SaveExportData for SectionID {sectionID}: {ex.Message}");
+              
+                return false;
             }
         }
 

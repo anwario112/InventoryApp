@@ -66,6 +66,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="11.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="EFCore.BulkExtensions" Version="9.0.1" />
 		<PackageReference Include="FFImageLoading.Maui" Version="1.2.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />

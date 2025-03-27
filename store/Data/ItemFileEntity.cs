@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using store.Models;
 using System;
@@ -87,18 +88,30 @@ namespace store.Data
 
 
 
-        public async Task<(List<ItemFile> Items, int TotalItems)> GetAllItems(int page, int pageSize)
+        public async Task<(List<ItemFile> Items, int TotalItems)> GetAllItems(int page = 1, int pageSize = 10, string searchTerm = null)
         {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
             var query = _dbContext.ItemFile.AsNoTracking();
 
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                string searchLower = searchTerm.ToLower();
+                query = query.Where(item => item.ItemName.ToLower().Contains(searchLower));
+            }
+
             var totalItems = await query.CountAsync();
+
             var items = await query
+                .OrderByDescending(item => item.ItemID)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             return (items, totalItems);
         }
+
 
         public async Task<int?> GetItemIdByItemNum(string itemNum)
         {
@@ -132,7 +145,7 @@ namespace store.Data
             return item?.Price;
         }
 
-        public async Task<(string ItemBarcode, string ItemName, string UnitDesc)> GetItemByBarcodes(string barcode)
+        public async Task<(string ItemBarcode, string ItemName, string UnitDesc,string Price)> GetItemByBarcodes(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
             {
@@ -155,24 +168,56 @@ namespace store.Data
                     {
                         ItemBarcode = itemfile.ItemNum,
                         ItemName = itemfile.ItemName,
-                        UnitDesc = itemUnit != null ? itemUnit.UnitDesc : null 
+                        UnitDesc = itemUnit != null ? itemUnit.UnitDesc : null ,
+                        Price= itemfile.Price
                     }
                 ).FirstOrDefaultAsync();
 
                 if (result == null)
                 {
                     Debug.WriteLine($"No item found for barcode: {barcode}");
-                    return (null, null, null);
+                    return (null, null, null,null);
                 }
 
                 Debug.WriteLine($"Item found: Barcode={result.ItemBarcode}, Name={result.ItemName}, UnitDesc={result.UnitDesc ?? "N/A"}");
-                return (result.ItemBarcode, result.ItemName, result.UnitDesc);
+                return (result.ItemBarcode, result.ItemName, result.UnitDesc,result.Price);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"An error occurred while retrieving item details for barcode: {barcode}. Error: {ex.Message}");
                 throw;
             }
+        }
+
+
+
+        public async Task<string> GetPriceByItemNum(string itemNum)
+        {
+            if (string.IsNullOrWhiteSpace(itemNum))
+            {
+                throw new ArgumentException("ItemNum cannot be null or empty.", nameof(itemNum));
+            }
+
+            var item = await _dbContext.ItemFile
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.ItemNum == itemNum);
+
+            if (item == null)
+            {
+                Debug.WriteLine($"No item found for ItemNum: {itemNum}");
+                return null;
+            }
+
+            Debug.WriteLine($"Price for ItemNum {itemNum}: {item.Price}");
+            return item.Price;
+        }
+
+
+
+
+        public async Task UpsertItemFileData(List<ItemFile> itemFiles)
+        {
+            await _dbContext.BulkInsertOrUpdateAsync(itemFiles);
         }
     }
 }

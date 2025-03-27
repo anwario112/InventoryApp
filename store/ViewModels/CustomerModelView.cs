@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using store.Data;
+using store.DTO;
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,17 @@ namespace store.ViewModels
         private readonly CityEntity city;
         private readonly CustomerEntity customerEntity;
         private readonly CurrencyEntity currencyEntity;
+        private readonly CountryEntity countryEntity;
+
+        public int CustomerID { get; set; }
+        public int CityID { get; private set; }
+        public int CountryID { get; private set; }
+        public int CurrencyID { get; private set; }
+
+        private CustomerDetails _customerDetails;
+
+
+
 
         private bool _isRefreshing;
         public bool IsRefreshing
@@ -30,30 +42,7 @@ namespace store.ViewModels
             }
         }
 
-        private List<string> _currencyList;
-        public List<string> CurrencyList
-        {
-            get => _currencyList;
-            set
-            {
-                _currencyList = value;
-                OnPropertyChanged(nameof(CurrencyList));
-            }
-        }
-
-        private string _selectedCurrency;
-        public string SelectedCurrency
-        {
-            get => _selectedCurrency;
-            set
-            {
-                if (_selectedCurrency != value)
-                {
-                    _selectedCurrency = value;
-                    OnPropertyChanged(nameof(SelectedCurrency));
-                }
-            }
-        }
+     
 
         private string _firstName;
         public string FirstName
@@ -79,6 +68,20 @@ namespace store.ViewModels
                 {
                     _lastName = value;
                     OnPropertyChanged(nameof(LastName));
+                }
+            }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
                 }
             }
         }
@@ -112,6 +115,20 @@ namespace store.ViewModels
             }
         }
 
+        private string _imagepath;
+        public string ImagePath
+        {
+            get => _imagepath;
+            set
+            {
+                if (_imagepath != value)
+                {
+                    _imagepath = value;
+                    OnPropertyChanged(nameof(ImagePath));
+                }
+            }
+        }
+
 
         private string _phone;
         public string Phone
@@ -137,6 +154,20 @@ namespace store.ViewModels
                 {
                     _companyName = value;
                     OnPropertyChanged(nameof(CompanyName));
+                }
+            }
+        }
+
+        private string _vatNum;
+        public string VatNum
+        {
+            get => _vatNum;
+            set
+            {
+                if (_vatNum != value)
+                {
+                    _vatNum = value;
+                    OnPropertyChanged(nameof(VatNum));
                 }
             }
         }
@@ -167,6 +198,21 @@ namespace store.ViewModels
             }
         }
 
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    OnPropertyChanged(nameof(SearchText));
+                    FilterCustomers(); 
+                }
+            }
+        }
+        private List<Customer> _allCustomers;
         public ICommand RefreshCommand { get; }
 
         public CustomerModelView()
@@ -175,16 +221,31 @@ namespace store.ViewModels
             country = new CountryEntity();
             city = new CityEntity();
             customerEntity = new CustomerEntity();
+            countryEntity = new CountryEntity();
 
             RefreshCommand = new RelayCommand(async () => await RefreshCustomers());
-
-            LoadCurrencies();
-            LoadCustomers();
+            SearchText = string.Empty;
+            _allCustomers = new List<Customer>();
+            Task.Run(async () => await Initialize());
+          
+    
+        }
+        private async Task Initialize()
+        {
+            await LoadCustomers();
         }
 
-        private async void LoadCustomers()
+
+        private async Task LoadCustomers()
         {
-            Customers = await customerEntity.GetAllCustomersAsync();
+            Debug.WriteLine("Loading customers...");
+            var customersList = await customerEntity.GetAllCustomersAsync();
+            Debug.WriteLine($"Number of customers retrieved: {customersList?.Count}");
+
+            _allCustomers = customersList;
+            Debug.WriteLine($"Number of customers in _allCustomers: {_allCustomers?.Count}");
+
+            Customers = _allCustomers;
             Debug.WriteLine($"Number of customers loaded: {Customers?.Count}");
         }
 
@@ -193,8 +254,10 @@ namespace store.ViewModels
             IsRefreshing = true;
             try
             {
-                Customers = await customerEntity.GetAllCustomersAsync();
+                var customersList = await customerEntity.GetAllCustomersAsync();
+                Customers = customersList;
                 Debug.WriteLine($"Customers refreshed: {Customers?.Count}");
+                OnPropertyChanged(nameof(Customers));
             }
             finally
             {
@@ -202,16 +265,10 @@ namespace store.ViewModels
             }
         }
 
-        private async void LoadCurrencies()
-        {
-            var currencies = await currencyEntity.GetAllData();
-            CurrencyList = currencies.Select(c => c.CurrencyCode).ToList();
-        }
-
 
         public async Task<bool> SaveData()
         {
-            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address) || string.IsNullOrWhiteSpace(SelectedCurrency))
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address))
             {
                 return false;
             }
@@ -260,20 +317,20 @@ namespace store.ViewModels
                     Debug.WriteLine($"New city added: {cityData.CityName}, ID: {cityId}, countryID: {cityData.CountyID}");
                 }
 
-                var selectedCurrencyCode = SelectedCurrency;
-                var currencyId = await currencyEntity.GetCurrencyIdByCode(selectedCurrencyCode);
+              
 
                 var customer = new Customer
                 {
                     FirstName = FirstName,
-                    LastName = LastName,
-                    CurrencyID = currencyId,
+                    LastName = LastName,                
                     CustomerNum = Math.Abs(Guid.NewGuid().GetHashCode()),
                     Phone = Phone,
+                    TvaNum=VatNum,
                     Company = CompanyName,
                     Address = Address,
                     CountryID = countryId,
-                    CityID = cityId
+                    CityID = cityId,
+                    Email=Email
                 };
 
                 Debug.WriteLine($"Customer info: FirstName: {customer.FirstName}, LastName: {customer.LastName}, Phone: {customer.Phone},currency:{customer.CurrencyID}, Company: {customer.Company}, Address: {customer.Address}, CountryID: {customer.CountryID}");
@@ -291,6 +348,157 @@ namespace store.ViewModels
                 return false;
             }
         }
+
+
+        public async Task<bool> UpdateData()
+        {
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) ||
+                string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address) )
+              
+            {
+                Debug.WriteLine("Validation failed: Required fields are missing.");
+                return false;
+            }
+
+            try
+            {
+                Debug.WriteLine($"Updating customer with ID: {CustomerID}");
+                Debug.WriteLine($"New FirstName: {FirstName}, LastName: {LastName}, Phone: {Phone}");
+
+                var existingCountry = await country.GetCountryByCountryName(Country);
+                int countryId;
+
+                if (existingCountry != null)
+                {
+                    countryId = existingCountry.ID;
+                    Debug.WriteLine($"Country exists: {existingCountry.CountryName}, ID: {countryId}");
+                }
+                else
+                {
+                    var countryData = new Country
+                    {
+                        CountryCode = Math.Abs(Guid.NewGuid().GetHashCode()),
+                        CountryName = Country
+                    };
+
+                    await country.AddData(countryData);
+                    countryId = countryData.ID;
+                    Debug.WriteLine($"New country added: {countryData.CountryName}, ID: {countryId}");
+                }
+
+                var existingCity = await city.GetCityIdByCityName(City);
+                int cityId;
+
+                if (existingCity != null)
+                {
+                    cityId = existingCity.Value;
+                    Debug.WriteLine($"City exists: {City}, ID: {cityId}");
+                }
+                else
+                {
+                    var cityData = new City
+                    {
+                        CityNum = Math.Abs(Guid.NewGuid().GetHashCode()),
+                        CityName = City,
+                        CountyID = countryId
+                    };
+
+                    await city.AddData(cityData);
+                    cityId = cityData.ID;
+                    Debug.WriteLine($"New city added: {cityData.CityName}, ID: {cityId}, countryID: {cityData.CountyID}");
+                }
+
+            
+
+                var customer = new Customer
+                {
+                    ID = CustomerID,
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    TvaNum=VatNum,
+                    Phone = Phone,
+                    Company = CompanyName,
+                    Address = Address,
+                    CountryID = countryId,
+                    CityID = cityId,
+                    Email=Email,
+                   
+                };
+
+                Debug.WriteLine($"Updating customer: ID: {customer.ID}, FirstName: {customer.FirstName}, LastName: {customer.LastName}");
+
+                await customerEntity.UpdateData(customer);
+                Debug.WriteLine("Customer updated successfully");
+
+                await RefreshCustomers();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating customer: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task FilterCustomers()
+        {
+            try
+            {
+                if (_allCustomers == null)
+                {
+                    Debug.WriteLine("_allCustomers is null. Initializing it.");
+                    _allCustomers = new List<Customer>();
+                }
+
+                if (string.IsNullOrWhiteSpace(SearchText))
+                {
+                 
+                    Customers = _allCustomers;
+                }
+                else
+                {
+                 
+                    var filteredCustomers = _allCustomers
+                        .Where(c => c.FirstName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                                    c.LastName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                                    c.Phone.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                                    c.Address.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+
+                    Customers = filteredCustomers;
+                }
+
+                OnPropertyChanged(nameof(Customers));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error filtering customers: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> UpdateCustomerImage(int customerId, string imagePath)
+        {
+            try
+            {
+             
+                bool result = await customerEntity.UpdateCustomerImagePath(customerId, imagePath);
+
+                if (result)
+                {
+                    // If successful, refresh the customers list
+                    await RefreshCustomers();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in ViewModel while updating customer image: {ex.Message}");
+                return false;
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

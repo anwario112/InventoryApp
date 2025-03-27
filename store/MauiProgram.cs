@@ -18,6 +18,7 @@ using ZXing.Net.Maui.Controls;
 
 
 
+
 namespace store
 {
     public static class MauiProgram
@@ -74,7 +75,14 @@ namespace store
 
 
 
-                   
+                 
+
+
+
+
+
+
+
 
 
                     var ExportedCard = await dbContext.ExportedCard.ToListAsync();

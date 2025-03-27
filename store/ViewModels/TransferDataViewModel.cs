@@ -90,7 +90,7 @@ namespace store.ViewModels
         public ICommand SaveDataCommand { get; }
         public ICommand OnCameraImageTappedCommand { get; }
         public ICommand OnExitImageTappedCommand { get; }
-   
+
 
         public TransferDataViewModel(int SectionID, string apiKey = "12345-ABCDE-67890-FGHIJ", string secretKey = "S3cr3tK3y!@#2023")
         {
@@ -101,14 +101,14 @@ namespace store.ViewModels
             _itemBarcode = new ItemBarcodeEntity();
             _itemArchiveEntity = new ItemArchiveEntity();
             itemFileEntity = new ItemFileEntity();
-           
+
             _insertDataApi = new InsertDataApi(httpHelper);
             sectionID = SectionID;
             viewModel = new SettingsClearData();
 
             ItemCards = new ObservableCollection<Models.ItemCard>();
 
-          
+
 
 
 
@@ -116,14 +116,20 @@ namespace store.ViewModels
             ClearDataCommand = new Command(async () => await TapGestureRecognizer_Tapped());
             SaveDataCommand = new Command(async () => await SaveData());
             OnCameraImageTappedCommand = new Command(async () => await OnCameraImageTapped());
-           
+
 
 
             OnExitImageTappedCommand = new Command<int>(async (id) => await OnExitImageTapped(id));
+
+            MessagingCenter.Subscribe<ChangeToItemNum, int>(this, "ItemCardUpdated", async (sender, id) =>
+            {
+                Debug.WriteLine($"Received ItemCardUpdated message for ID: {id}");
+                await LoadItems(); 
+            });
             MessagingCenter.Subscribe<PackingPopupFunction>(this, "ItemsUpdated", async (sender) =>
             {
-              
-                await LoadItems(); 
+
+                await LoadItems();
             });
 
             MessagingCenter.Subscribe<EditQuantityPopup, int>(this, "QuantityUpdated", async (sender, id) =>
@@ -133,28 +139,28 @@ namespace store.ViewModels
             });
             MessagingCenter.Subscribe<SettingsClearData, int>(this, "DataCleared", async (sender, sectionId) =>
             {
-                if (sectionId == this.sectionID) 
+                if (sectionId == this.sectionID)
                 {
                     Debug.WriteLine("DataCleared message received. Reloading items...");
-                    await LoadItems(); 
+                    await LoadItems();
                 }
             });
             LoadItems();
         }
 
-        private async Task OnExitImageTapped(int id)
+        public async Task OnExitImageTapped(int id)
         {
             try
             {
                 Debug.WriteLine($"Attempting to delete ItemCard with ID: {id} for SectionID: {sectionID}");
 
-               
+
                 await itemCardEntity.DeleteCard(id, sectionID);
 
-               
+
                 Debug.WriteLine($"Successfully deleted ItemCard with ID: {id}");
 
-                
+
                 await LoadItems();
             }
             catch (Exception ex)
@@ -168,20 +174,15 @@ namespace store.ViewModels
         {
             Debug.WriteLine("Loading items...");
 
-        
             var items = await _insertDataApi.GetAllItems(sectionID);
             Debug.WriteLine($"Fetched {items.Count} items from the database.");
 
-          
-            var sortedItems = items.OrderByDescending(x => x.LastUpdated).ToList();
+            var sortedItems = items.OrderByDescending(x => x.LastUpdate).ToList();
             Debug.WriteLine($"Sorted {sortedItems.Count} items by LastUpdated in descending order.");
-
-         
-            ItemCards = new ObservableCollection<Models.ItemCard>(sortedItems);
+           ItemCards = new ObservableCollection<Models.ItemCard>(sortedItems);
 
             Debug.WriteLine($"Loaded {ItemCards.Count} items into the collection.");
         }
-
         public async Task Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
             string barcode = e.NewTextValue;
@@ -195,7 +196,7 @@ namespace store.ViewModels
 
             try
             {
-                await Task.Delay(1000, _cancellationTokenSource.Token);
+                await Task.Delay(300, _cancellationTokenSource.Token);
 
                 (ItemBarcode itemBarcode, string itemName, string unitDesc, string price) = await _itemBarcode.GetItemByBarcode(barcode);
                 if (itemBarcode == null)
@@ -221,10 +222,11 @@ namespace store.ViewModels
                     }
                 }
 
-                bool isMergeQuantityChecked = Preferences.Get("IsMergeQuantityChecked", false);
-                bool isQuantityPopupChecked = Preferences.Get("IsQuantityPopupChecked", false);
+                bool isMergeQuantityChecked = Preferences.Get("MergeQuantityPreference", false);
+                bool isQuantityPopupChecked = Preferences.Get("QuantityPopupPreference", false);
 
                 var existingItemCard = ItemCards.FirstOrDefault(ic => ic.ScanningNum == itemBarcode.Barcode);
+                Debug.WriteLine($"existingItemCard: {existingItemCard != null}");
 
                 if (isMergeQuantityChecked && existingItemCard != null)
                 {
@@ -235,37 +237,68 @@ namespace store.ViewModels
                         Debug.WriteLine($"The data that will be updated: ItemName: {itemName}, UnitDesc: {unitDesc}, Barcode: {itemBarcode.Barcode}, Price: {price}");
                         quantityPopup.OnQuantitySet = async (newQuantity, itemName, barcode, unitDesc, sectionId, price) =>
                         {
-                            int totalQuantity = existingItemCard.Quantity + newQuantity;
-                            await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, totalQuantity, sectionId, price);
+                            if (existingItemCard != null)
+                            {
+                                int totalQuantity = existingItemCard.Quantity + newQuantity;
+                                await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, totalQuantity, sectionId, price);
 
-                            existingItemCard.Quantity = totalQuantity;
-                            existingItemCard.Price = price;
+                                existingItemCard.Quantity = totalQuantity;
+                                existingItemCard.Price = price;
 
-                         
-                            OnPropertyChanged(nameof(ItemCards));
+                                OnPropertyChanged(nameof(ItemCards));
 
-                            Debug.WriteLine($"Updated ItemCard: Barcode={barcode}, Name={itemName}, Quantity={totalQuantity}, Unit={unitDesc}, Price={price}");
+                                Debug.WriteLine($"Updated ItemCard: Barcode={barcode}, Name={itemName}, Quantity={totalQuantity}, Unit={unitDesc}, Price={price}");
 
-                            await LoadItems();
+                                await LoadItems();
+                            }
+                            else
+                            {
+                                Debug.WriteLine("existingItemCard is null.");
+                            }
                         };
                         await Application.Current.MainPage.ShowPopupAsync(quantityPopup);
                     }
                     else
                     {
-                        int totalQuantity = existingItemCard.Quantity + 1;
-                        await _insertDataApi.SaveItemCard(existingItemCard.ItemName, existingItemCard.ScanningNum,
-                            existingItemCard.Unit, totalQuantity, sectionID, existingItemCard.Price.ToString());
+                      
+                            Debug.WriteLine($" before existingCard");
+                            if (existingItemCard != null)
+                            {
+                                try
+                                {
+                                    Debug.WriteLine($" before existingCard after");
+                                    int totalQuantity = existingItemCard.Quantity + 1;
+                                    Debug.WriteLine($" before existingCard after1");
 
-                     
-                        existingItemCard.Quantity = totalQuantity;
+                                    // Handle potential null price
+                                    string priceString = existingItemCard.Price?.ToString() ?? "0";
 
-                     
-                        OnPropertyChanged(nameof(ItemCards));
+                                    await _insertDataApi.SaveItemCard(existingItemCard.ItemName, existingItemCard.ScanningNum,
+                                        existingItemCard.Unit, totalQuantity, sectionID, priceString);
+                                    Debug.WriteLine($" before existingCard after2");
 
-                        Debug.WriteLine($"Updated ItemCard: Barcode={existingItemCard.ScanningNum}, Name={existingItemCard.ItemName}, Quantity={totalQuantity}, Unit={existingItemCard.Unit}, Price={existingItemCard.Price}");
+                                    existingItemCard.Quantity = totalQuantity;
+                                    Debug.WriteLine($" before existingCard after3");
 
-                  
-                        await LoadItems();
+                                    OnPropertyChanged(nameof(ItemCards));
+                                    Debug.WriteLine($" before existingCard after4");
+                                    Debug.WriteLine($"Updated ItemCard: Barcode={existingItemCard.ScanningNum}, Name={existingItemCard.ItemName}, Quantity={totalQuantity}, Unit={existingItemCard.Unit}, Price={existingItemCard.Price}");
+
+                                    await LoadItems();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.WriteLine($"Error updating item quantity: {ex.Message}");
+                                    ErrorMessageText = "Error updating item quantity";
+                                    IsErrorMessageVisible = true;
+                                    _ = HideErrorMessageAfterDelay(1500);
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine("existingItemCard is null.");
+                            }
+                       
                     }
                 }
                 else
@@ -321,7 +354,7 @@ namespace store.ViewModels
                             ItemCards.Insert(0, itemCard);
                         }
 
-                        
+
                         await LoadItems();
                     }
                 }
@@ -353,7 +386,7 @@ namespace store.ViewModels
                 clearDataPopup.Closed += async (sender, args) =>
                 {
                     Debug.WriteLine("ClearDataPopup closed. Reloading items...");
-                    await LoadItems(); 
+                    await LoadItems();
                 };
 
                 await Application.Current.MainPage.ShowPopupAsync(clearDataPopup);
@@ -389,39 +422,112 @@ namespace store.ViewModels
                 await toast.Show();
             }
         }
-
-            public async Task OnChangeButtonClicked(Models.ItemCard itemCard)
+        public async Task RefreshAfterCardUpdate()
+        {
+           
+            await LoadItems();
+        }
+        public async Task OnChangeButtonClicked(Models.ItemCard itemCard)
+        {
+            try
             {
-                try
-                {
-       
-                    Debug.WriteLine("Change button clicked");
 
-       
+                Debug.WriteLine("Change button clicked");
+
+
+                string barcode = itemCard.ScanningNum;
+                int id = itemCard.ID;
+
+                Debug.WriteLine($"Barcode: {barcode}, ID: {id}");
+
+
+                var currentPage = Application.Current.MainPage;
+
+
+                var changePopup = new ChangePopup(itemCard, this);
+
+
+
+                await currentPage.ShowPopupAsync(changePopup);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in Change button click: {ex.Message}");
+            }
+        }
+
+        public async Task EditClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var button = sender as Button;
+                if (button?.BindingContext is Models.ItemCard itemCard)
+                {
+                    int id = itemCard.ID;
+
+                    var currentPage = Application.Current.MainPage;
+                    var editQuantityPopup = new EditQuantityPopup(id);
+
+
+                    MessagingCenter.Subscribe<EditQuantityPopup, int>(this, "QuantityUpdated", async (sender, updatedId) =>
+                    {
+                        Debug.WriteLine($"QuantityUpdated message received for ID: {updatedId}");
+                        await LoadItems();
+                    });
+
+
+                    await currentPage.ShowPopupAsync(editQuantityPopup);
+                }
+                else
+                {
+                    Debug.WriteLine("BindingContext is not an ItemCard object.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in EditClicked: {ex.Message}");
+            }
+        }
+
+        public async Task PackingButton_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine("Packing button clicked");
+
+                var button = sender as Button;
+                if (button?.BindingContext is Models.ItemCard itemCard)
+                {
                     string barcode = itemCard.ScanningNum;
                     int id = itemCard.ID;
 
-                    Debug.WriteLine($"Barcode: {barcode}, ID: {id}");
-
-        
                     var currentPage = Application.Current.MainPage;
+                    var packingPopup = new PackingPopup(barcode, id);
 
-        
-                    var changePopup = new ChangePopup(itemCard, this);
+                    MessagingCenter.Subscribe<PackingPopup>(this, "ItemsUpdated", async (sender) =>
+                    {
+                        Debug.WriteLine("ItemsUpdated message received. Reloading items...");
+                        await LoadItems();
+                    });
 
-             
 
-                            await currentPage.ShowPopupAsync(changePopup);
+                    await currentPage.ShowPopupAsync(packingPopup);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine($"Error in Change button click: {ex.Message}");
+                    Debug.WriteLine("BindingContext is not an ItemCard object.");
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in PackingButton_Clicked: {ex.Message}");
+            }
+        }
 
 
 
-     
+
+
 
         public async Task OnCameraImageTapped()
         {
@@ -442,7 +548,7 @@ namespace store.ViewModels
 
             MessagingCenter.Subscribe<CameraPopupPage, string>(this, "BarcodeScanned", (sender, barcodeValue) =>
             {
-               
+
                 Debug.WriteLine($"Barcode scanned: {barcodeValue}");
 
                 MessagingCenter.Unsubscribe<CameraPopupPage, string>(this, "BarcodeScanned");
@@ -450,13 +556,14 @@ namespace store.ViewModels
 
             // await Navigation.PushModalAsync(popupPage);
         }
-     
+
 
         public void Dispose()
         {
-            
+
             MessagingCenter.Unsubscribe<PackingPopupFunction>(this, "ItemsUpdated");
             MessagingCenter.Unsubscribe<EditQuantityPopup, int>(this, "QuantityUpdated");
+            MessagingCenter.Unsubscribe<ChangeToItemNum, int>(this, "ItemCardUpdated");
         }
         public event PropertyChangedEventHandler PropertyChanged;
 

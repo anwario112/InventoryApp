@@ -87,7 +87,7 @@ namespace store.Data
 
                                            })
                                             .ToListAsync();
-
+          
 
             return shoppingCartItems;
 
