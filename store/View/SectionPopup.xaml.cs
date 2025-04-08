@@ -14,7 +14,6 @@ public partial class SectionPopup : Popup
         BindingContext = viewModel;
         viewModel.SectionCreated += ViewModel_SectionCreated;
 
-      
         this.Opened += SectionPopup_Opened;
     }
 
@@ -23,9 +22,26 @@ public partial class SectionPopup : Popup
         Close();
     }
 
-    private void SectionPopup_Opened(object? sender, EventArgs e)
+    private async void SectionPopup_Opened(object? sender, EventArgs e)
     {
       
         FolderNameEntry.Focus();
+
+        
+        await Task.Delay(100);
+
+        try
+        {
+           
+            if (FolderNameEntry.Handler != null)
+            {
+                await FolderNameEntry.ShowSoftInputAsync(System.Threading.CancellationToken.None);
+            }
+        }
+        catch (Exception ex)
+        {
+          
+            System.Diagnostics.Debug.WriteLine($"Error showing keyboard: {ex.Message}");
+        }
     }
 }

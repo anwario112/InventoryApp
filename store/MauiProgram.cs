@@ -19,6 +19,7 @@ using ZXing.Net.Maui.Controls;
 
 
 
+
 namespace store
 {
     public static class MauiProgram
@@ -75,11 +76,11 @@ namespace store
 
 
 
-                 
 
 
 
 
+                   
 
 
 

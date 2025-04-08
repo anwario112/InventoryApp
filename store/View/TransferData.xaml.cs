@@ -46,9 +46,15 @@ namespace store.View
             sectionID = SectionID;
             transferDataViewModel = new TransferDataViewModel(sectionID, apiKey, secretKey);
             BindingContext = transferDataViewModel;
+            Barcode.Focus();
+            Dispatcher.Dispatch(() =>
+            {
+                Barcode.Focus();
+            });
+
         }
 
-    
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();

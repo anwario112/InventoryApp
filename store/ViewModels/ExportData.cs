@@ -16,23 +16,35 @@ namespace store.ViewModels
         
         private readonly ExportedRakEntity _exportedRakEntity;
         private readonly ExportedSectionEntity _exportedSectionEntity;
+        private readonly ExportedRakInventoryEntity _exportedRakInventoryEntity;
+        private readonly ExportedSectionInventoryEntity exportedSectionInventoryEntity;
         
 
 
         public ObservableCollection<KeyValuePair<string, List<string>>> RaksWithSections { get; set; }
+        public ObservableCollection<KeyValuePair<string, List<string>>> InventoryNoDataItems { get; set; }
 
         public ExportData()
         {
             RaksWithSections = new ObservableCollection<KeyValuePair<string, List<string>>>();
-           
+            InventoryNoDataItems = new ObservableCollection<KeyValuePair<string, List<string>>>();
+
             _exportedRakEntity = new ExportedRakEntity();
             _exportedSectionEntity = new ExportedSectionEntity();
+            _exportedRakInventoryEntity = new ExportedRakInventoryEntity();
+            exportedSectionInventoryEntity = new ExportedSectionInventoryEntity();
             LoadExports();
+            LoadExportsInventory();
             ExportAllInOne = new Command<string>(ExportSections);
-            ExporttxtCommand = new Command<string>(sectiondebug);
+            ExporttxtCommand = new Command<string>(sectionTxt);
             ExportOneByOne = new Command<string>(ExportTxt);
-           
-          
+            ExportAllInOneInventory = new Command<string>(ExportSectionsInventory);
+            ExportOneByOneInventory = new Command<string>(ExportTxtInventory);
+            ExporttxtCommandInventory = new Command<string>(sectiondeTxtInventory);
+
+
+
+
 
         }
 
@@ -58,6 +70,11 @@ namespace store.ViewModels
         public ICommand ExportAllInOne { get; }
         public ICommand DeleteExport { get; }
         public ICommand selectTxt { get; }
+
+        public ICommand ExportOneByOneInventory { get; }
+        public ICommand ExportAllInOneInventory { get; }
+        public ICommand ExporttxtCommandInventory { get; }
+
 
 
 
@@ -221,7 +238,7 @@ namespace store.ViewModels
             }
         }
 
-        private async void sectiondebug( string sectionName)
+        private async void sectionTxt( string sectionName)
         {
             var RakName = await _exportedSectionEntity.GetRakNameBySectionName(sectionName);
             var CardList = await _exportedSectionEntity.GetCardsBySectionName(sectionName);
@@ -274,7 +291,6 @@ namespace store.ViewModels
                 Debug.WriteLine("RakFolder already exists.");
             }
 
-            // Check if SectionFolder exists
             if (!Directory.Exists(sectionFolderPath))
             {
                 Debug.WriteLine("SectionFolder does not exist. Creating...");
@@ -316,11 +332,266 @@ namespace store.ViewModels
 
         }
 
+        private async Task LoadExportsInventory()
+        {
+            var RakFromDb = await _exportedRakInventoryEntity.GetRaksWithSections();
+            foreach (var rakWithSections in RakFromDb)
+            {
+                Debug.WriteLine($"Adding Rak: {rakWithSections.Key} with Sections: {string.Join(", ", rakWithSections.Value)}");
+                InventoryNoDataItems.Add(rakWithSections);
+            }
+        }
 
-       
 
 
-      
+        private async void ExportSectionsInventory(string rakName)
+        {
+            try
+            {
+                Console.WriteLine($"Starting ExportSections with rakName: {rakName}");
+
+                var sections = await _exportedRakInventoryEntity.GetSectionsByRakName(rakName);
+                Console.WriteLine($"Retrieved sections: {string.Join(", ", sections)}");
+
+                var cards = await exportedSectionInventoryEntity.GetAllCardsFromAllSections(sections);
+
+
+
+                bool hasPermission = await CheckAndRequestStoragePermission();
+                if (!hasPermission)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Permission Denied", "Storage permission is required to create folders and files.", "OK");
+                    return;
+                }
+
+
+                string documentsPath = string.Empty;
+
+#if ANDROID
+                documentsPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "Documents");
+#else
+                documentsPath = Path.Combine(FileSystem.AppDataDirectory, "Documents");
+#endif
+
+
+                string rakFolderPath = Path.Combine(documentsPath, rakName);
+                Directory.CreateDirectory(rakFolderPath);
+
+
+                string AllInOnePath = Path.Combine(rakFolderPath, "AllInOne");
+                Directory.CreateDirectory(AllInOnePath);
+
+
+                if (!Directory.Exists(rakFolderPath))
+                {
+                    Debug.WriteLine("RakFolder does not exist. Creating...");
+                    Directory.CreateDirectory(rakFolderPath);
+                }
+                else
+                {
+                    Debug.WriteLine("RakFolder already exists.");
+                }
+
+
+
+                if (!Directory.Exists(AllInOnePath))
+                {
+                    Debug.WriteLine("SectionFolder does not exist. Creating...");
+                    Directory.CreateDirectory(AllInOnePath);
+                }
+                else
+                {
+                    Debug.WriteLine("SectionFolder already exists.");
+                }
+
+                string filePath = Path.Combine(AllInOnePath, "ItemCards.txt");
+                Debug.WriteLine($"File Path: {filePath}");
+
+
+
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var itemCard in cards)
+                    {
+                        await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.Quantity}");
+                        Debug.WriteLine($"Written to file: {itemCard.ScanningNum}, Quantity: {itemCard.Quantity}");
+                    }
+                }
+
+                await Application.Current.MainPage.DisplayAlert("Success", "Folders and file created successfully!", "OK");
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
+
+        private async void ExportTxtInventory(string rakName)
+        {
+            var sections = await _exportedRakInventoryEntity.GetSectionsByRakName(rakName);
+
+
+
+
+            bool hasPermission = await CheckAndRequestStoragePermission();
+            if (!hasPermission)
+            {
+                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Storage permission is required to create folders and files.", "OK");
+                return;
+            }
+
+
+            string documentsPath = string.Empty;
+
+#if ANDROID
+            documentsPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "Documents");
+#else
+            documentsPath = Path.Combine(FileSystem.AppDataDirectory, "Documents");
+#endif
+
+
+            string rakFolderPath = Path.Combine(documentsPath, rakName);
+            Directory.CreateDirectory(rakFolderPath);
+
+            if (!Directory.Exists(rakFolderPath))
+            {
+                Debug.WriteLine("RakFolder does not exist. Creating...");
+                Directory.CreateDirectory(rakFolderPath);
+            }
+            else
+            {
+                Debug.WriteLine("RakFolder already exists.");
+            }
+
+
+            foreach (var section in sections)
+            {
+                var cards = await exportedSectionInventoryEntity.GetAllCardsFromAllSections(sections);
+                Debug.WriteLine($"card for section:{cards.Count}");
+
+
+                string sectionFolderPath = Path.Combine(rakFolderPath, section);
+                Directory.CreateDirectory(sectionFolderPath);
+
+                if (!Directory.Exists(sectionFolderPath))
+                {
+                    Debug.WriteLine("SectionFolder does not exist. Creating...");
+                    Directory.CreateDirectory(sectionFolderPath);
+                }
+                else
+                {
+                    Debug.WriteLine("SectionFolder already exists.");
+                }
+
+                string filePath = Path.Combine(sectionFolderPath, "ItemCards.txt");
+                Debug.WriteLine($"File Path: {filePath}");
+
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var itemCard in cards)
+                    {
+                        await writer.WriteLineAsync($"{itemCard.ScanningNum}, {itemCard.Quantity}");
+                        Debug.WriteLine($"Written to file: {itemCard.ScanningNum}, Quantity: {itemCard.Quantity}");
+                    }
+                }
+
+            }
+            await Application.Current.MainPage.DisplayAlert("Success", "Folders and file created successfully!", "OK");
+
+
+        }
+
+
+        private async void sectiondeTxtInventory(string sectionName)
+        {
+            var RakName = await exportedSectionInventoryEntity.GetRakNameBySectionName(sectionName);
+            var CardList = await exportedSectionInventoryEntity.GetCardsBySectionName(sectionName);
+
+
+
+
+
+            bool hasPermission = await CheckAndRequestStoragePermission();
+            if (!hasPermission)
+            {
+                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Storage permission is required to create folders and files.", "OK");
+                return;
+            }
+
+
+            string documentsPath = string.Empty;
+
+#if ANDROID
+            documentsPath = Path.Combine(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments).AbsolutePath, "Documents");
+#else
+            documentsPath = Path.Combine(FileSystem.AppDataDirectory, "Documents");
+#endif
+
+
+
+            string rakFolderPath = Path.Combine(documentsPath, RakName);
+
+            Directory.CreateDirectory(rakFolderPath);
+
+
+
+
+            string sectionFolderPath = Path.Combine(rakFolderPath, sectionName);
+
+            Directory.CreateDirectory(sectionFolderPath);
+
+
+
+
+
+
+            if (!Directory.Exists(rakFolderPath))
+            {
+                Debug.WriteLine("RakFolder does not exist. Creating...");
+                Directory.CreateDirectory(rakFolderPath);
+            }
+            else
+            {
+                Debug.WriteLine("RakFolder already exists.");
+            }
+
+            if (!Directory.Exists(sectionFolderPath))
+            {
+                Debug.WriteLine("SectionFolder does not exist. Creating...");
+                Directory.CreateDirectory(sectionFolderPath);
+            }
+            else
+            {
+                Debug.WriteLine("SectionFolder already exists.");
+            }
+
+            string filePath = Path.Combine(sectionFolderPath, "ItemCards.txt");
+            Debug.WriteLine($"File Path: {filePath}");
+
+
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                foreach (var itemCard in CardList)
+                {
+                    await writer.WriteLineAsync($"{itemCard.ScanningNum},{itemCard.Quantity}");
+                    Debug.WriteLine($"Written to file: {itemCard.ScanningNum}, Quantity: {itemCard.Quantity}");
+                }
+            }
+
+            await Application.Current.MainPage.DisplayAlert("Success", "Folders and file created successfully!", "OK");
+
+
+
+            Debug.WriteLine($"Export button tapped Section: {sectionName}");
+        }
+
+
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -8,17 +8,17 @@ namespace store.DTO
 {
     public class ProductApi
     {
-        public string ItemID { get; set; }
+        public string ItemID { get; set; } 
         public string ItemNum { get; set; }
         public string ItemName { get; set; }
-        public string UnitID { get; set; }
-        public string UnitDesc { get; set; }
-        public string UnitIDSel { get; set; }
-        public string SalePrice { get; set; }
-        public string SaleNetLL { get; set; }
-        public string SaleNetUSD { get; set; }
-        public string CurrencyIdSel { get; set; }
-        public string Rate { get; set; }
-        public string PackingPrincipalCost { get; set; }
+        public decimal BasePrice { get; set; }  
+        public decimal ConvertedPrice { get; set; } 
+        public string Unit { get; set; }  
+        public decimal CurrencyRate { get; set; }  
+        public int CurrencyID { get; set; }
+
+       
+        public string SaleNetLL => ConvertedPrice.ToString();
+        public string SaleNetUSD => BasePrice.ToString();
     }
 }

@@ -10,9 +10,6 @@ obj\Release\net9.0-android\android-x64\aot\EFCore.BulkExtensions.Oracle.dll.so
 obj\Release\net9.0-android\android-x64\aot\EFCore.BulkExtensions.PostgreSql.dll.so
 obj\Release\net9.0-android\android-x64\aot\EFCore.BulkExtensions.Sqlite.dll.so
 obj\Release\net9.0-android\android-x64\aot\EFCore.BulkExtensions.SqlServer.dll.so
-obj\Release\net9.0-android\android-x64\aot\ExCSS.dll.so
-obj\Release\net9.0-android\android-x64\aot\FFImageLoading.Maui.dll.so
-obj\Release\net9.0-android\android-x64\aot\HarfBuzzSharp.dll.so
 obj\Release\net9.0-android\android-x64\aot\InputKit.Maui.dll.so
 obj\Release\net9.0-android\android-x64\aot\MedallionTopologicalSort.dll.so
 obj\Release\net9.0-android\android-x64\aot\Microsoft.Bcl.AsyncInterfaces.dll.so
@@ -61,16 +58,10 @@ obj\Release\net9.0-android\android-x64\aot\Npgsql.EntityFrameworkCore.PostgreSQL
 obj\Release\net9.0-android\android-x64\aot\Oracle.EntityFrameworkCore.dll.so
 obj\Release\net9.0-android\android-x64\aot\Oracle.ManagedDataAccess.dll.so
 obj\Release\net9.0-android\android-x64\aot\Plainer.Maui.dll.so
-obj\Release\net9.0-android\android-x64\aot\ShimSkiaSharp.dll.so
-obj\Release\net9.0-android\android-x64\aot\SkiaSharp.dll.so
-obj\Release\net9.0-android\android-x64\aot\SkiaSharp.HarfBuzz.dll.so
 obj\Release\net9.0-android\android-x64\aot\SQLitePCLRaw.batteries_v2.dll.so
 obj\Release\net9.0-android\android-x64\aot\SQLitePCLRaw.core.dll.so
 obj\Release\net9.0-android\android-x64\aot\SQLitePCLRaw.lib.e_sqlite3.android.dll.so
 obj\Release\net9.0-android\android-x64\aot\SQLitePCLRaw.provider.e_sqlite3.dll.so
-obj\Release\net9.0-android\android-x64\aot\Svg.Custom.dll.so
-obj\Release\net9.0-android\android-x64\aot\Svg.Model.dll.so
-obj\Release\net9.0-android\android-x64\aot\Svg.Skia.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.ClientModel.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Configuration.ConfigurationManager.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Data.SqlClient.dll.so
@@ -199,7 +190,6 @@ obj\Release\net9.0-android\android-x64\aot\System.Text.Encodings.Web.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Text.RegularExpressions.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Threading.Channels.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Threading.Tasks.Extensions.dll.so
-obj\Release\net9.0-android\android-x64\aot\System.Threading.Tasks.Parallel.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Threading.Thread.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Threading.ThreadPool.dll.so
 obj\Release\net9.0-android\android-x64\aot\System.Threading.dll.so

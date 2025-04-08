@@ -57,9 +57,9 @@ namespace store
             Navigation.PushAsync(new View.CashVan(authService.Username));
         }
 
-        private async void ExportData(object sender, TappedEventArgs e)
+        private async void Inventory(object sender, TappedEventArgs e)
         {
-            Navigation.PushAsync(new View.ExportPage());
+            Navigation.PushAsync(new View.RakInventoryPage());
         }
 
         private async void itemPrice(object sender, TappedEventArgs e)

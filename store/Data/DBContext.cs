@@ -31,6 +31,12 @@ namespace store.Data
         public DbSet<Currency>Currency { get; set; }
       
         public DbSet<ClearData>ClearData { get; set; }
+        public DbSet<RakInventory> RakInventory { get; set; }
+        public DbSet<SectionInventory> SectionInventory { get; set; }
+        public DbSet<ItemCardsInventory> ItemCardsInventory { get; set; }
+        public DbSet<ExportedRakInventory> ExportedRakInventory { get; set; }
+        public DbSet<ExportedSectionInventory> ExportedSectionInventory { get; set; }
+        public DbSet<ExportedItemCardInventory> ExportedItemCardInventory { get; set; }
 
 
 
@@ -217,8 +223,7 @@ namespace store.Data
 
 
 
-      
-
+    
 
 
 

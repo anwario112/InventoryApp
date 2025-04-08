@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="store.View.SectionInventoryPage"
+             Title="SectionInventoryPage" BackgroundColor="{StaticResource Gray1000}">
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView ItemsSource="{Binding SectionItems}"
+                     Grid.Row="0"
+                     Margin="0,0,0,10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="Transparent"
+                         StrokeThickness="2"
+                         BackgroundColor="{StaticResource White}"
+                         HeightRequest="90"
+                         VerticalOptions="Start"
+                         Margin="16,8">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="15" />
+                        </Border.StrokeShape>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+
+                        <Grid Padding="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <BoxView WidthRequest="10" 
+                                BackgroundColor="{StaticResource teal}" 
+                                HorizontalOptions="Start" 
+                                VerticalOptions="Fill" />
+
+                            <StackLayout Grid.Column="1"
+                                    Orientation="Vertical" 
+                                    HorizontalOptions="Start" 
+                                    VerticalOptions="Center" 
+                                    Spacing="8" 
+                                    Padding="16,0">
+                                <Label Text="{Binding SectionName}" 
+                                    FontSize="18" 
+                                    FontAttributes="Bold" 
+                                    FontFamily="roman"/>
+                                <Label Text="{Binding DateCreated, StringFormat='{0:dd MMM yyyy}'}"
+                                    FontSize="14"
+                                    TextColor="{StaticResource Gray500}"/>
+                            </StackLayout>
+
+                            <Image Grid.Column="2" 
+                                Source="exit.png" 
+                                WidthRequest="20" 
+                                HeightRequest="20" 
+                                VerticalOptions="Center" 
+                                HorizontalOptions="End" 
+                                Margin="0,0,10,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                         Tapped="TapGestureRecognizer_Tapped_1"
+                                         CommandParameter="{Binding .}"/>
+
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Image Grid.Row="1"
+            Source="add.png" 
+            HeightRequest="60" 
+            WidthRequest="60" 
+            HorizontalOptions="End" 
+            VerticalOptions="End" 
+            Margin="0,0,20,20">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" />
+            </Image.GestureRecognizers>
+        </Image>
+    </Grid>
+</ContentPage>

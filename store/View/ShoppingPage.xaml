@@ -4,7 +4,7 @@
              x:Class="store.View.ShoppingPage"
              xmlns:local="clr-namespace:store.JsonConverter"
              xmlns:viewmodels="clr-namespace:store.ViewModels"
-             xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+        
              Title="ShoppingPage"
              BackgroundColor="{StaticResource Gray1000}">
 
@@ -20,6 +20,8 @@
 
 
     <StackLayout>
+        
+        
         <Grid BackgroundColor="{StaticResource teal}" Padding="10">
             <Grid RowDefinitions="Auto, Auto">
                 <Label 
@@ -203,7 +205,8 @@
 
 
         <StackLayout x:Name="ShoppingCartModeLayout" IsVisible="True">
-            <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="570">
+
+            <CollectionView ItemsSource="{Binding DisplayedItems}" ItemSizingStrategy="MeasureAllItems" HeightRequest="520"  Margin="0,0,0,50">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Stroke="Transparent"
@@ -309,7 +312,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </StackLayout>
-        <Grid Padding="10" VerticalOptions="End" BackgroundColor="LightGray">
+        <Grid Padding="10" BackgroundColor="LightGray" Margin="0,-50,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -317,30 +320,30 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="PreviousButton"
-            Grid.Column="0" 
-            Text="Previous" 
-            BackgroundColor="{StaticResource teal}"
-            TextColor="White"
-            Command="{Binding PreviousPageCommand}"
-            HorizontalOptions="Start"
-            MinimumWidthRequest="100"
-            Margin="10,0" />
+                Grid.Column="0" 
+                Text="Previous" 
+                BackgroundColor="{StaticResource teal}"
+                TextColor="White"
+                Command="{Binding PreviousPageCommand}"
+                HorizontalOptions="Start"
+                MinimumWidthRequest="100"
+                Margin="10,0" />
 
             <Label Grid.Column="1" 
-           Text="{Binding CurrentPage, StringFormat='Page {0} of {1}'}"
-           TextColor="Black" 
-           VerticalOptions="Center"
-           HorizontalOptions="Center" />
+               Text="{Binding CurrentPage, StringFormat='Page {0} of {1}'}"
+               TextColor="Black" 
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
 
             <Button x:Name="NextButton"
-            Grid.Column="2" 
-            Text="Next" 
-            BackgroundColor="{StaticResource teal}"
-            TextColor="White"
-            Command="{Binding NextPageCommand}"
-            HorizontalOptions="End"
-            MinimumWidthRequest="100"
-            Margin="10,0" />
+                Grid.Column="2" 
+                Text="Next" 
+                BackgroundColor="{StaticResource teal}"
+                TextColor="White"
+                Command="{Binding NextPageCommand}"
+                HorizontalOptions="End"
+                MinimumWidthRequest="100"
+                Margin="10,0" />
         </Grid>
 
     </StackLayout>

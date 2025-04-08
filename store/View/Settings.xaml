@@ -4,7 +4,8 @@
              x:Class="store.View.Settings"
              BackgroundColor="{StaticResource Gray1000}"
              Title="Settings">
-    <Grid>
+    <ScrollView>
+        <Grid>
         <ActivityIndicator x:Name="LoadingIndicator"
                 IsVisible="False"
                 IsRunning="True"
@@ -272,4 +273,5 @@
             </Border>
         </Grid>
     </Grid>
+    </ScrollView>
 </ContentPage>

@@ -8,12 +8,19 @@ namespace store.View;
 public partial class RakPage : ContentPage
 {
     private readonly RakEntity _rakEntity;
+  
+  
+  
 	public RakPage()
 	{
 		InitializeComponent();
         _rakEntity = new RakEntity();
+     
+
         LoadRak();
     }
+
+   
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
@@ -37,15 +44,18 @@ public partial class RakPage : ContentPage
 
     public async Task LoadRak()
     {
-        List<Rak> raks = await _rakEntity.GetAllRaks();
-        foreach (var rak in raks)
-        {
-            var rakCard = new RakCard();
-            rakCard.SetData(rak);
-            rakCard.RakDeleted += RakCard_RakDeleted;
-            RakStackLayout.Children.Add(rakCard); 
+      
+       
+            List<Rak> raks = await _rakEntity.GetAllRaks();
+            foreach (var rak in raks)
+            {
+                var rakCard = new RakCard();
+                rakCard.SetData(rak);
+                rakCard.RakDeleted += RakCard_RakDeleted;
+                RakStackLayout.Children.Add(rakCard);
 
-        }
+           }
+          
     }
 
     private async void RakCard_RakDeleted(object sender, int rakId)

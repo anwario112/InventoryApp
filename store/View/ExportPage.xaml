@@ -4,55 +4,155 @@
              x:Class="store.View.ExportPage"
              Title="ExportPage">
 
-    <CollectionView ItemsSource="{Binding RaksWithSections}">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <StackLayout Padding="20">
-                    <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                        <Label Text="{Binding Key}" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
-                        <Button Text="All in One" 
-                                BackgroundColor="{StaticResource teal}"
-                                TextColor="{StaticResource White}"
-                                WidthRequest="90"                            
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportAllInOne}" 
-                                CommandParameter="{Binding Key}" 
-                                VerticalOptions="Center" 
-                                Margin="10,0,0,0" />
-                        
-                        <Button Text="OneByOne" 
-                         BackgroundColor="{StaticResource teal}"
-                         TextColor="{StaticResource White}"
-                         WidthRequest="100"   
-                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportOneByOne}" 
-                         CommandParameter="{Binding Key}" 
-                         VerticalOptions="Center" 
-                         Margin="10,0,0,0" />
+    <Grid RowDefinitions="Auto,*">
+     
+        <Border Stroke="{StaticResource teal}"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10"
+                Margin="10"
+                Grid.Row="0">
+            <Grid ColumnDefinitions="*,*">
+                <Label Text="Inventory"
+                       x:Name="InventoryTab"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="20,10"
+                       FontSize="16">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInventoryTabTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
-                    </StackLayout>
+                <Label Text="Inventory NoData"
+                       x:Name="InventoryNoDataTab"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="20,10"
+                       FontSize="16"
+                       Grid.Column="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInventoryNoDataTabTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
-                
-                    <StackLayout>
-                        <Label Text="Sections:" FontAttributes="Italic" />
-                        <CollectionView ItemsSource="{Binding Value}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout Orientation="Horizontal" Padding="10">
-                                        <Label Text="{Binding}" FontSize="20" VerticalOptions="Center" />
-                                        <Button Text="TXT" 
-                                                BackgroundColor="Transparent"
-                                                TextColor="{StaticResource teal}"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExporttxtCommand}" 
-                                                CommandParameter="{Binding}" 
-                                                VerticalOptions="Center" />
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
+                <BoxView x:Name="SelectionIndicator"
+                         Color="{StaticResource teal}"
+                         HeightRequest="3"
+                         VerticalOptions="End"
+                         HorizontalOptions="Fill"
+                         WidthRequest="120"
+                         Margin="0,0,0,5"/>
+            </Grid>
+        </Border>
 
-                    <BoxView HeightRequest="2" BackgroundColor="{StaticResource teal}" Margin="0,5,0,5" />
-                </StackLayout>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+      
+        <Grid Grid.Row="1">
+           
+            <CollectionView x:Name="InventoryCollectionView"
+                            ItemsSource="{Binding RaksWithSections}"
+                            IsVisible="True">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="20">
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                                <Label Text="{Binding Key}" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Button Text="All in One" 
+                                        BackgroundColor="{StaticResource teal}"
+                                        TextColor="{StaticResource White}"
+                                        WidthRequest="90"                            
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportAllInOne}" 
+                                        CommandParameter="{Binding Key}" 
+                                        VerticalOptions="Center" 
+                                        Margin="10,0,0,0" />
+
+                                <Button Text="OneByOne" 
+                                 BackgroundColor="{StaticResource teal}"
+                                 TextColor="{StaticResource White}"
+                                 WidthRequest="100"   
+                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportOneByOne}" 
+                                 CommandParameter="{Binding Key}" 
+                                 VerticalOptions="Center" 
+                                 Margin="10,0,0,0" />
+                            </StackLayout>
+
+                            <StackLayout>
+                                <Label Text="Sections:" FontAttributes="Italic" />
+                                <CollectionView ItemsSource="{Binding Value}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal" Padding="10">
+                                                <Label Text="{Binding}" FontSize="20" VerticalOptions="Center" />
+                                                <Button Text="TXT" 
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="{StaticResource teal}"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExporttxtCommand}" 
+                                                        CommandParameter="{Binding}" 
+                                                        VerticalOptions="Center" />
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+
+                            <BoxView HeightRequest="2" BackgroundColor="{StaticResource teal}" Margin="0,5,0,5" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+           
+            <CollectionView x:Name="InventoryNoDataCollectionView"
+                           ItemsSource="{Binding InventoryNoDataItems}"
+                           IsVisible="False">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="20">
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                                <Label Text="{Binding Key}" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Button Text="All in One" 
+                            BackgroundColor="{StaticResource teal}"
+                            TextColor="{StaticResource White}"
+                            WidthRequest="90"                            
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportAllInOneInventory}" 
+                            CommandParameter="{Binding Key}" 
+                            VerticalOptions="Center" 
+                            Margin="10,0,0,0" />
+
+                                <Button Text="OneByOne" 
+                     BackgroundColor="{StaticResource teal}"
+                     TextColor="{StaticResource White}"
+                     WidthRequest="100"   
+                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportOneByOneInventory}" 
+                     CommandParameter="{Binding Key}" 
+                     VerticalOptions="Center" 
+                     Margin="10,0,0,0" />
+                            </StackLayout>
+
+                            <StackLayout>
+                                <Label Text="Sections:" FontAttributes="Italic" />
+                                <CollectionView ItemsSource="{Binding Value}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal" Padding="10">
+                                                <Label Text="{Binding}" FontSize="20" VerticalOptions="Center" />
+                                                <Button Text="TXT" 
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource teal}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExporttxtCommandInventory}" 
+                                            CommandParameter="{Binding}" 
+                                            VerticalOptions="Center" />
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+
+                            <BoxView HeightRequest="2" BackgroundColor="{StaticResource teal}" Margin="0,5,0,5" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
 </ContentPage>

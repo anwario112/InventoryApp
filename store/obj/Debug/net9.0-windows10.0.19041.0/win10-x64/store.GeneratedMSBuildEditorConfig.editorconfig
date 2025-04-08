@@ -135,6 +135,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.ExportPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ExportPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ExportPage.xaml
 
+[C:/Users/USER/source/repos/store/store/View/InventoryPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.InventoryPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\InventoryPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\InventoryPage.xaml
+
 [C:/Users/USER/source/repos/store/store/View/InvoiceDetails.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoiceDetails.xaml
@@ -183,6 +189,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.PackingPopup.xa
 build_metadata.AdditionalFiles.TargetPath = View\PackingPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\PackingPopup.xaml
 
+[C:/Users/USER/source/repos/store/store/View/QuantityInventoryPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.QuantityInventoryPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\QuantityInventoryPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\QuantityInventoryPopup.xaml
+
 [C:/Users/USER/source/repos/store/store/View/QuantityPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.QuantityPopup.xaml
@@ -195,6 +207,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\RakCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\RakCard.xaml
 
+[C:/Users/USER/source/repos/store/store/View/RakFolder.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakFolder.xaml
+build_metadata.AdditionalFiles.TargetPath = View\RakFolder.xaml
+build_metadata.AdditionalFiles.RelativePath = View\RakFolder.xaml
+
+[C:/Users/USER/source/repos/store/store/View/RakInventoryPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakInventoryPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\RakInventoryPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\RakInventoryPage.xaml
+
 [C:/Users/USER/source/repos/store/store/View/RakPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakPage.xaml
@@ -206,6 +230,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\SectionCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\SectionCard.xaml
+
+[C:/Users/USER/source/repos/store/store/View/SectionInventoryPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionInventoryPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\SectionInventoryPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\SectionInventoryPage.xaml
 
 [C:/Users/USER/source/repos/store/store/View/SectionPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

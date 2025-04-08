@@ -98,7 +98,7 @@
                     <RoundRectangle CornerRadius="20" />
                 </Border.StrokeShape>
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ExportData" />
+                    <TapGestureRecognizer Tapped="Inventory" />
                 </Border.GestureRecognizers>
                 <StackLayout Orientation="Vertical" HorizontalOptions="Start" VerticalOptions="Start">
                     <Image Source="export.png" 
@@ -107,13 +107,13 @@
                        HeightRequest="40"
                        WidthRequest="50" 
                        Margin="15,20,80,40" />
-                    <Label Text="Export file" 
+                    <Label Text="inventory" 
                        FontFamily="OpenSansRegular"
                        FontSize="18" 
                        HorizontalOptions="Start" 
                        VerticalOptions="Center" 
                        Margin="20,-25,0,0" />
-                    <Label Text="3 saved file" 
+                    <Label Text="No Data" 
                        FontFamily="OpenSansRegular"
                        FontSize="15" 
                        TextColor="{StaticResource Gray500}"

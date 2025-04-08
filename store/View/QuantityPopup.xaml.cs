@@ -26,15 +26,16 @@ namespace store.View
             Price = price;
 
             Debug.WriteLine($"in quantityPopup:ItemName:{ItemName},barcode:{Barcode},unitdesc:{UnitDesc}");
-
+            this.Opened += QuantityPopup_Opened;
            
 
                 
         }
-
+        private async void QuantityPopup_Opened(object? sender, EventArgs e)
+        {
+            QuantityField.Focus();
         
-
-
+        }
         private void Button_Clicked(object sender, EventArgs e)
         {
             if (int.TryParse(QuantityField.Text, out int quantity))
@@ -46,7 +47,8 @@ namespace store.View
             {
               
                 Application.Current.MainPage.DisplayAlert("Error", "Please enter a valid quantity.", "OK");
-                QuantityField.Text = string.Empty; 
+                QuantityField.Text = string.Empty;
+                QuantityField.Focus();
             }
         }
     }
