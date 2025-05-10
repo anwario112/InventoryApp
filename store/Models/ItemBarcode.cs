@@ -23,6 +23,8 @@ namespace store.Models
         public string? Barcode { get; set; }
 
 
+        [Column("UnitID")]
+        public int  UnitID { get; set; }
 
         [Column("UnitDesc")]
         public string? UnitDesc { get; set; }

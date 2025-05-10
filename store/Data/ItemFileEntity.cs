@@ -59,7 +59,7 @@ namespace store.Data
 
 
 
-        public async Task<List<(string Barcode, string UnitDesc, decimal Price)>> GetBarcodesUnitDescsAndPricesByItemNum(string itemNum)
+        public async Task<List<(string Barcode, string UnitDesc, decimal Price,int UnitID)>> GetBarcodesUnitDescsAndPricesByItemNum(string itemNum)
         {
             if (string.IsNullOrWhiteSpace(itemNum))
             {
@@ -74,7 +74,8 @@ namespace store.Data
                                  {
                                      itemBarcode.Barcode,
                                      itemBarcode.UnitDesc,
-                                     itemBarcode.price
+                                     itemBarcode.price,
+                                     itemBarcode.UnitID
                                  })
                                  .AsNoTracking()
                                  .Distinct()
@@ -82,7 +83,7 @@ namespace store.Data
 
 
             return results
-                .Select(r => (r.Barcode, r.UnitDesc, r.price ?? 0))
+                .Select(r => (r.Barcode, r.UnitDesc, r.price ?? 0,r.UnitID))
                 .ToList();
         }
 
@@ -145,7 +146,7 @@ namespace store.Data
             return item?.Price;
         }
 
-        public async Task<(string ItemBarcode, string ItemName, string UnitDesc,string Price)> GetItemByBarcodes(string barcode)
+        public async Task<(string ItemBarcode, string ItemName, string UnitDesc,string Price,int ItemID,int UnitID)> GetItemByBarcodes(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
             {
@@ -168,7 +169,9 @@ namespace store.Data
                     {
                         ItemBarcode = itemfile.ItemNum,
                         ItemName = itemfile.ItemName,
+                        ItemID=itemfile.ItemID ?? 0,
                         UnitDesc = itemUnit != null ? itemUnit.UnitDesc : null ,
+                        UnitID=itemUnit.UnitID,
                         Price= itemfile.Price
                     }
                 ).FirstOrDefaultAsync();
@@ -176,11 +179,11 @@ namespace store.Data
                 if (result == null)
                 {
                     Debug.WriteLine($"No item found for barcode: {barcode}");
-                    return (null, null, null,null);
+                    return (null, null, null,null,0,0);
                 }
 
                 Debug.WriteLine($"Item found: Barcode={result.ItemBarcode}, Name={result.ItemName}, UnitDesc={result.UnitDesc ?? "N/A"}");
-                return (result.ItemBarcode, result.ItemName, result.UnitDesc,result.Price);
+                return (result.ItemBarcode, result.ItemName, result.UnitDesc,result.Price,result.ItemID,result.UnitID);
             }
             catch (Exception ex)
             {
@@ -218,6 +221,18 @@ namespace store.Data
         public async Task UpsertItemFileData(List<ItemFile> itemFiles)
         {
             await _dbContext.BulkInsertOrUpdateAsync(itemFiles);
+        }
+
+        public async Task<bool> DoesBarcodeExistInItemFile(string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                throw new ArgumentException("Barcode cannot be null or empty.", nameof(barcode));
+            }
+
+            return await _dbContext.ItemFile
+                .AsNoTracking()
+                .AnyAsync(i => i.ItemNum == barcode);
         }
     }
 }

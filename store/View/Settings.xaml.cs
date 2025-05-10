@@ -119,4 +119,8 @@ public partial class Settings : ContentPage, INotifyPropertyChanged
     {
         Navigation.PushAsync(new View.ExportPage());
     }
+    private async void resendPage(object sender, TappedEventArgs e)
+    {
+        Navigation.PushAsync(new View.InvoiceInventoryResendPage());
+    }
 }

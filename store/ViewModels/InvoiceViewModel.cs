@@ -82,6 +82,9 @@ namespace store.ViewModels
 
 
 
+
+
+
         public Command SelectUnsentCommand { get; }
         public Command SelectSentCommand { get; }
         public string Username { get; private set; }
@@ -115,10 +118,14 @@ namespace store.ViewModels
 
         public async Task LoadInvoicesAsync(int userId)
         {
+          
+            _allInvoicesWithNames = new List<InvoiceWithCustomer>();
+            FilteredInvoices.Clear();
+
+           
             var invoicesWithNames = await _invoiceEntity.GetInvoicesWithCustomerNamesAsync();
             Debug.WriteLine($"Loaded {invoicesWithNames.Count} invoices from the database.");
 
-            
             _allInvoicesWithNames = invoicesWithNames
                 .Where(i => i.Invoice.UserID == userId)
                 .Select(i => new InvoiceWithCustomer
@@ -131,18 +138,23 @@ namespace store.ViewModels
 
             Debug.WriteLine($"Filtered invoices for user {userId}: {_allInvoicesWithNames.Count} invoices found.");
 
+       
             foreach (var invoice in _allInvoicesWithNames)
             {
-                FilteredInvoices.Add(invoice);
-                Debug.WriteLine($"Added InvoiceNum: {invoice.Invoice.InvoiceNum}, Customer: {invoice.FirstName} {invoice.LastName}, Status: {invoice.Invoice.Status}");
+                Debug.WriteLine($"Invoice {invoice.Invoice.InvoiceNum} status: {invoice.Invoice.Status}");
             }
 
-            Debug.WriteLine($"Total invoices displayed: {FilteredInvoices.Count} for user {userId}.");
+         
         }
-
         public void FilterInvoicesByStatus(string status)
         {
             if (_allInvoicesWithNames == null) return;
+
+            Debug.WriteLine($"Filtering invoices for status: '{status}'");
+            foreach (var inv in _allInvoicesWithNames)
+            {
+                Debug.WriteLine($"Invoice {inv.Invoice.InvoiceNum} has status '{inv.Invoice.Status}'");
+            }
 
             var filtered = _allInvoicesWithNames
                 .Where(i => i.Invoice.Status.Equals(status, StringComparison.OrdinalIgnoreCase))
@@ -150,14 +162,14 @@ namespace store.ViewModels
 
             Debug.WriteLine($"Filtered invoices count for status '{status}': {filtered.Count}");
 
-            FilteredInvoices.Clear(); 
+            FilteredInvoices.Clear();
             foreach (var invoice in filtered)
             {
                 FilteredInvoices.Add(invoice);
+                Debug.WriteLine($"Added filtered invoice: {invoice.Invoice.InvoiceNum}");
             }
         }
-
-        private void OnUnsentTapped()
+        public void OnUnsentTapped()
         {
             UnsentTextColor = (Color)Application.Current.Resources["teal"];
             UnsentBackgroundColor = Colors.White;
@@ -167,7 +179,7 @@ namespace store.ViewModels
             FilterInvoicesByStatus("not sent");
         }
 
-        private void OnSentTapped()
+        public void OnSentTapped()
         {
             SentTextColor = (Color)Application.Current.Resources["teal"];
             SentBackgroundColor = Colors.White;
@@ -181,6 +193,10 @@ namespace store.ViewModels
         {
             if (tappedInvoice != null)
             {
+                if(tappedInvoice.Invoice.Status == "sent")
+                {
+                    return;
+                }
                 Debug.WriteLine($"Tapped on Invoice: {tappedInvoice.Invoice.InvoiceNum}");
                 await Application.Current.MainPage.Navigation.PushAsync(new View.ShoppingCardPage(Username, "invoice", tappedInvoice.Invoice.InvoiceNum));
             }

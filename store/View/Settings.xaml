@@ -245,7 +245,7 @@
                 StrokeThickness="2"
                 BackgroundColor="{StaticResource White}"
                 HeightRequest="60"  WidthRequest="320"
-                Margin="10,10,10,10">
+                Margin="10,-70,10,10">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="15" />
                 </Border.StrokeShape>
@@ -271,7 +271,39 @@
                        Margin="90,0,0,0"/>
                 </StackLayout>
             </Border>
-        </Grid>
+
+                <Border Grid.Row="7" Grid.ColumnSpan="2"
+        Stroke="Transparent"
+        StrokeThickness="2"
+        BackgroundColor="{StaticResource White}"
+        HeightRequest="60"  WidthRequest="320"
+        Margin="10,80,10,10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="resendPage" />
+                    </Border.GestureRecognizers>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Center" Spacing="10" Padding="10,0">
+                        <Image Source="export.png" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center" 
+               HeightRequest="35" 
+               WidthRequest="50" />
+                        <Label Text="Invoice Resend" 
+               VerticalOptions="Center"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="{StaticResource Gray500}"  
+               Margin="0,-5,0,0"/>
+                        <Image Source="next.png" 
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               HeightRequest="30"
+               Margin="65,0,0,0"/>
+                    </StackLayout>
+                </Border>
+            </Grid>
     </Grid>
     </ScrollView>
 </ContentPage>

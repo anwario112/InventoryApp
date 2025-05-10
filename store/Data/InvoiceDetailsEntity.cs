@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using store.Models;
 using System;
 using System.Collections.Generic;
@@ -123,5 +124,54 @@ namespace store.Data
                 return false;
             }
         }
+
+        public async Task<List<InvoiceDetails>> GetAllByInvoiceIdAsync(int invoiceId)
+        {
+            return await dbContext.invoiceDetails
+                .Where(d => d.InvoiceID == invoiceId)
+                .ToListAsync();
+        }
+
+
+
+        public async Task<bool> UpdateItemQuantity(int itemId, int quantity)
+        {
+            try
+            {
+                var invoiceDetail = await dbContext.invoiceDetails.FindAsync(itemId);
+                if (invoiceDetail == null)
+                {
+                    Debug.WriteLine($"Item with ID {itemId} not found in database");
+                    return false;
+                }
+
+                
+                invoiceDetail.Quantity = quantity.ToString();
+
+          
+                if (decimal.TryParse(invoiceDetail.Price, out decimal price))
+                {
+                    decimal newTotal = price * quantity;
+                    invoiceDetail.TotalNet = newTotal.ToString("F2");
+                    Debug.WriteLine($"New total calculated: {newTotal}");
+                }
+                else
+                {
+                    Debug.WriteLine($"Failed to parse price: {invoiceDetail.Price}");
+                }
+
+                await dbContext.SaveChangesAsync();
+                Debug.WriteLine($"Item {itemId} quantity updated to {quantity} in database");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating item quantity: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
     }
 }

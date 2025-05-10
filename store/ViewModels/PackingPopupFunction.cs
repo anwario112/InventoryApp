@@ -66,12 +66,13 @@ namespace store.ViewModels
 
                     UnitDesc = i.UnitDesc,
 
-                    Price = i.Price
+                    Price = i.Price,
+                    UnitID=i.UnitID
 
                 }).ToList();
 
 
-                Debug.WriteLine($"Barcodes assigned for item number {itemNum}: {string.Join(", ", BarcodeItems.Select(b => $"{b.Barcode} (Unit: {b.UnitDesc}, Price: {b.Price})"))}");
+                Debug.WriteLine($"Barcodes assigned for item number {itemNum}: {string.Join(", ", BarcodeItems.Select(b => $"{b.Barcode} (Unit: {b.UnitDesc}, Price: {b.Price}),UnitID:{b.UnitID}"))}");
 
             }
 
@@ -113,6 +114,7 @@ namespace store.ViewModels
                         ScanningNum = item.Barcode,
                         Unit = item.UnitDesc,
                         Price = item.Price.ToString("F2"),
+                        UnitID=item.UnitID
                       
                     };
 

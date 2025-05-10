@@ -18,10 +18,11 @@ namespace store.ViewModels
         private readonly ItemCardEntity _itemCardEntity;
         private readonly TransferDataViewModel _transferData;
 
-
+        private Dictionary<string, int> _unitDescToIdMap;
         private string _itemNum;
         private List<string> _unitDescs;
         private string _selectedUnit;
+        private int _selectedUnitId;
 
         public string ItemNum
         {
@@ -50,6 +51,7 @@ namespace store.ViewModels
             }
         }
 
+
         public string SelectedUnit
         {
             get => _selectedUnit;
@@ -59,6 +61,30 @@ namespace store.ViewModels
                 {
                     _selectedUnit = value;
                     OnPropertyChanged(nameof(SelectedUnit));
+
+                 
+                    if (_unitDescToIdMap != null && _unitDescToIdMap.ContainsKey(value))
+                    {
+                        SelectedUnitId = _unitDescToIdMap[value];
+                        Debug.WriteLine($"Selected Unit: '{value}', Corresponding UnitID: {SelectedUnitId}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Selected Unit: '{value}', But no corresponding UnitID found in mapping dictionary");
+                    }
+                }
+            }
+        }
+
+        public int SelectedUnitId
+        {
+            get => _selectedUnitId;
+            private set
+            {
+                if (_selectedUnitId != value)
+                {
+                    _selectedUnitId = value;
+                    OnPropertyChanged(nameof(SelectedUnitId));
                 }
             }
         }
@@ -88,17 +114,25 @@ namespace store.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(ItemNum))
             {
-                var units = await _itemUnitEntity.GetUnitDescsByItemNum(ItemNum);
-                Debug.WriteLine($"Units fetched: {string.Join(", ", units)}");
-                UnitDescs = units;
+                var unitDetails = await _itemUnitEntity.GetUnitDetailsbyItemNum(ItemNum);
+                Debug.WriteLine($"Units fetched: {string.Join(", ", unitDetails.Select(u => u.UnitDesc))}");
+
+             
+                _unitDescToIdMap = unitDetails.ToDictionary(u => u.UnitDesc, u => u.UnitID);
+
+          
+                UnitDescs = unitDetails.Select(u => u.UnitDesc).ToList();
+
                 Debug.WriteLine($"Total units fetched: {UnitDescs.Count}");
             }
             else
             {
                 UnitDescs = new List<string>();
+                _unitDescToIdMap = new Dictionary<string, int>();
                 Debug.WriteLine("ItemNum is empty. No units fetched.");
             }
         }
+
         private async Task<decimal?> GetPriceByItemNum(string itemNum)
         {
             if (string.IsNullOrWhiteSpace(itemNum))
@@ -146,6 +180,7 @@ namespace store.ViewModels
                 {
                     itemToUpdate.ScanningNum = itemNum;
                     itemToUpdate.Unit = unit;
+                    itemToUpdate.UnitID = SelectedUnitId;
                     itemToUpdate.Price = price.Value.ToString("F2");
                 }
 

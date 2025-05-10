@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:store.JsonConverter"
+            xmlns:viewmodels="clr-namespace:store.ViewModels"
              x:Class="store.View.ExportPage"
              Title="ExportPage">
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+            <local:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <local:InverseBoolConverter x:Key="IsExportedConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
 
     <Grid RowDefinitions="Auto,*">
      
@@ -73,6 +83,28 @@
                                  CommandParameter="{Binding Key}" 
                                  VerticalOptions="Center" 
                                  Margin="10,0,0,0" />
+
+                                <Button 
+                                    x:Name="ExportDatabaseBtn"
+                                    Text="ToDatabase"
+                                    BackgroundColor="{StaticResource teal}"
+                                    TextColor="{StaticResource White}"
+                                    Command="{Binding ExportToDatabase}"
+                                    CommandParameter="{Binding Key}">       
+
+                                    <Button.Triggers>
+                                        <DataTrigger 
+                                            TargetType="Button"
+                                            Binding="{Binding Key, Converter={StaticResource StringInListConverter}, ConverterParameter={Binding ExportedRaksList}}"
+                                            Value="True">       
+
+                                            <Setter Property="Text" Value="Exported" />
+                                            <Setter Property="BackgroundColor" Value="Gray" />
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
+
                             </StackLayout>
 
                             <StackLayout>
@@ -110,23 +142,28 @@
                         <StackLayout Padding="20">
                             <StackLayout Orientation="Horizontal" VerticalOptions="Center">
                                 <Label Text="{Binding Key}" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" />
-                                <Button Text="All in One" 
+                                <Button Text="All in " 
                             BackgroundColor="{StaticResource teal}"
                             TextColor="{StaticResource White}"
-                            WidthRequest="90"                            
+                            WidthRequest="80"                            
                             Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportAllInOneInventory}" 
                             CommandParameter="{Binding Key}" 
                             VerticalOptions="Center" 
                             Margin="10,0,0,0" />
 
-                                <Button Text="OneByOne" 
+                                <Button Text="eachOne" 
                      BackgroundColor="{StaticResource teal}"
                      TextColor="{StaticResource White}"
-                     WidthRequest="100"   
+                     WidthRequest="80"   
                      Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportOneByOneInventory}" 
                      CommandParameter="{Binding Key}" 
                      VerticalOptions="Center" 
-                     Margin="10,0,0,0" />
+                     Margin="5,0,0,0" />
+                                <Image Source="exit.png" HeightRequest="30" WidthRequest="30" Margin="5,0,0,0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnImageTapped"  CommandParameter="{Binding .}"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </StackLayout>
 
                             <StackLayout>

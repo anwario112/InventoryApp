@@ -56,7 +56,7 @@ namespace store.Data
             existingCard.ScanningNum = table.ScanningNum;
             existingCard.ItemName = table.ItemName;
             existingCard.Quantity = table.Quantity;
-            existingCard.Unit = table.Unit;
+            existingCard.UnitID = table.UnitID;
             existingCard.SectionID = table.SectionID;
 
           

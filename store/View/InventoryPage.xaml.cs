@@ -14,7 +14,8 @@ public partial class InventoryPage : ContentPage
 
     private int SectionID {  get; set; }
     public readonly InventoryViewModel inventoryViewModel;
-   
+
+
     public InventoryPage(int sectionid)
 	{
 		InitializeComponent();

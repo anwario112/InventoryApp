@@ -2,6 +2,7 @@
 using store.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,6 +68,33 @@ namespace store.Data
         {
             return await _dbContext.ExportedItemCardInventory
                 .FirstOrDefaultAsync(c => c.ScanningNum == barcode);
+        }
+
+
+        public async Task DeleteCardsBySectionID(int sectionID)
+        {
+            try
+            {
+                var cardsToDelete = await _dbContext.ExportedItemCardInventory
+                    .Where(card => card.SectionID == sectionID)
+                    .ToListAsync();
+
+                if (cardsToDelete.Any())
+                {
+                    _dbContext.ExportedItemCardInventory.RemoveRange(cardsToDelete);
+                    await _dbContext.SaveChangesAsync();
+                    Debug.WriteLine($"Deleted {cardsToDelete.Count} exported cards with SectionID {sectionID}.");
+                }
+                else
+                {
+                    Debug.WriteLine($"No exported cards found with SectionID {sectionID}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error deleting exported cards by section ID: {ex.Message}");
+                throw;
+            }
         }
     }
 }

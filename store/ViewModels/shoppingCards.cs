@@ -195,7 +195,8 @@ namespace store.ViewModels
         }
 
 
-
+        public ICommand IncreaseQuantityCommand { get; }
+        public ICommand DecreaseQuantityCommand { get; }
 
 
         public ICommand SearchCustomerCommand { get; }
@@ -218,6 +219,11 @@ namespace store.ViewModels
             SearchCustomerCommand = new Command(async () => await SearchCustomers());
             ClearSelectedCustomerCommand = new Command(ClearSelectedCustomer);
             SelectCustomerCommand = new Command<Customer>(SelectCustomer);
+
+
+            IncreaseQuantityCommand = new Command<int>(async (itemId) => await UpdateItemQuantity(itemId, 1));
+            DecreaseQuantityCommand = new Command<int>(async (itemId) => await UpdateItemQuantity(itemId, -1));
+
             SelectedCustomer = null;
             IsCustomerSearchActive = false;
             IsCustomerSelected = false;
@@ -366,7 +372,8 @@ namespace store.ViewModels
                     UserID = userID,
                     Total = totalPrice.ToString(),
                     CustomerID = CustID,
-                    Status = "Not Sent"
+                    Status = "Not Sent",
+                    InvoiceTypeID=8
                 };
 
                 Debug.WriteLine($"InvoiceNum: {invoice.InvoiceNum}, CustomerID: {invoice.CustomerID}, UserID: {invoice.UserID}, Total: {invoice.Total}, Status: {invoice.Status}");
@@ -400,10 +407,12 @@ namespace store.ViewModels
                         ItemID = itemID,
                         Quantity = item.Quantity,
                         Price = price,
-                        TotalNet = item.Price
+                        TotalNet = item.Price,
+                        Barcode=item.ItemNum
+                        
                     };
 
-                  
+                    Debug.WriteLine($"Itemid:{invoiceDetail.ItemID},barcode:{invoiceDetail.Barcode}");
                     invoiceDetailsList.Add(invoiceDetail);
                 }
 
@@ -421,11 +430,87 @@ namespace store.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error sending data to API: {ex.Message}");
+                Debug.WriteLine($"Inner exception: {ex.InnerException?.Message}");
                 return false;
             }
         }
 
+
+
+        public async Task UpdateItemQuantity(int itemId, int change)
+        {
+            try
+            {
+               
+                var item = ShoppingCartItems.FirstOrDefault(i => i.ID == itemId);
+                if (item == null)
+                {
+                    Debug.WriteLine($"Item with ID {itemId} not found in ShoppingCartItems");
+                    return;
+                }
+
+             
+                int currentQuantity;
+                if (item.Quantity is string quantityString)
+                {
+                    int.TryParse(quantityString, out currentQuantity);
+                }
+                else
+                {
+                    currentQuantity = (int)item.Quantity;
+                }
+
+               
+                int newQuantity = currentQuantity + change;
+                if (newQuantity < 1)
+                {
+                    newQuantity = 1;
+                }
+
+            
+                bool success = await _shoppingCardEntity.UpdateItemQuantity(itemId, newQuantity);
+
+                if (success)
+                {
+                   
+                    string username = await SecureStorage.GetAsync("Username");
+
+               
+                    var updatedItem = await _shoppingCardEntity.GetShoppingCartItemById(itemId);
+
+                    if (updatedItem != null)
+                    {
+                     
+                        int index = -1;
+                        for (int i = 0; i < ShoppingCartItems.Count; i++)
+                        {
+                            if (ShoppingCartItems[i].ID == itemId)
+                            {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        if (index >= 0)
+                        {
+                           
+                            ShoppingCartItems[index] = updatedItem;
+                        }
+
+                   
+                        int userId = await _userEntity.FindUser(username) ?? 0;
+                        TotalPrice = await _shoppingCardEntity.CalculateTotalPrice(userId);
+
+                        OnPropertyChanged(nameof(ShoppingCartItems));
+                        OnPropertyChanged(nameof(TotalPrice));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating quantity: {ex.Message}");
+            }
+        }
 
 
 

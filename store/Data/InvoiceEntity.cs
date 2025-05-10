@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using store.DTO;
 using store.Models;
@@ -26,6 +27,15 @@ namespace store.Data
 
             await dBContext.AddAsync(table);
             await dBContext.SaveChangesAsync();
+           
+        }
+        public async Task<int> AddDataInvoice(Invoice table)
+        {
+            await dBContext.AddAsync(table);
+            await dBContext.SaveChangesAsync();
+
+  
+            return table.ID;
         }
 
         public Task AddDataRange(List<Invoice> tables)
@@ -78,6 +88,7 @@ namespace store.Data
             var invoicesWithNames = await (from invoice in dBContext.Invoice
                                            join customer in dBContext.Customer
                                            on invoice.CustomerID equals customer.ID
+                                           where invoice.InvoiceTypeID == 8
                                            select new
                                            {
                                                Invoice = invoice,
@@ -128,16 +139,20 @@ namespace store.Data
                                         join invoiceDetail in dBContext.invoiceDetails
                                         on invoice.ID equals invoiceDetail.InvoiceID
                                         join itemFile in dBContext.ItemFile
-                                        on invoiceDetail.ItemID equals itemFile.ItemID                                   
+                                        on invoiceDetail.ItemID equals itemFile.ItemID   
+                                        join ItemUnit in dBContext.ItemUnit
+                                        on itemFile.ItemID equals ItemUnit.ItemID
                                         where invoice.InvoiceNum == invoiceNum
                                         select new
                                         {
                                             ID=invoiceDetail.ID,
                                             DateCreated = invoice.DateCreated,
                                             QuantityString = invoiceDetail.Quantity, 
+                                            ItemNum=itemFile.ItemNum,
                                             PriceString = invoiceDetail.Price,
                                             TotalNetString = invoiceDetail.TotalNet,
                                             ItemName = itemFile.ItemName,
+                                            UnitID=ItemUnit.UnitID,
                                             ItemPriceString = itemFile.Price,
                                             Total = invoice.Total,
                                             ItemID = invoiceDetail.ItemID,
@@ -165,9 +180,11 @@ namespace store.Data
                     Price = price,
                     TotalNet = totalNet,
                     ItemName = x.ItemName,
+                    ItemNum=x.ItemNum,
                     TotalString = x.Total,
                     ImageUrl=x.ImageUrl,
-                    ItemID=x.ItemID
+                    ItemID=x.ItemID,
+                    UnitID=x.UnitID.ToString(),
                 };
             }).ToList();
 
@@ -275,6 +292,41 @@ namespace store.Data
             {
                 Debug.WriteLine($"Error fetching invoice status: {ex.Message}");
                 return null;
+            }
+        }
+
+        public async Task<List<Invoice>> GetInvoicesByTypeAsync(int typeId)
+        {
+            return await dBContext.Invoice
+                .Where(i => i.InvoiceTypeID == typeId)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+
+        public async Task<bool> UpdateInvoiceTotal(int invoiceNum, string newTotal)
+        {
+            try
+            {
+                var invoice = await dBContext.Invoice
+                    .FirstOrDefaultAsync(i => i.InvoiceNum == invoiceNum);
+
+                if (invoice == null)
+                {
+                    Debug.WriteLine($"Invoice with number {invoiceNum} not found");
+                    return false;
+                }
+
+                invoice.Total = newTotal;
+                int result = await dBContext.SaveChangesAsync();
+
+                Debug.WriteLine($"Updated total for invoice {invoiceNum} to {newTotal}. Affected rows: {result}");
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating invoice total: {ex.Message}");
+                return false;
             }
         }
     }

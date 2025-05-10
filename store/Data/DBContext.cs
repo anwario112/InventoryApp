@@ -37,7 +37,8 @@ namespace store.Data
         public DbSet<ExportedRakInventory> ExportedRakInventory { get; set; }
         public DbSet<ExportedSectionInventory> ExportedSectionInventory { get; set; }
         public DbSet<ExportedItemCardInventory> ExportedItemCardInventory { get; set; }
-
+        public DbSet<Category> Category { get; set; }
+        public DbSet<LogoCompany>LogoCompany { get; set; }
 
 
 
@@ -218,13 +219,17 @@ namespace store.Data
 
 
 
+
+            modelBuilder.Entity<ItemCardsInventory>()
+            .HasIndex(i => i.ScanningNum)
+            .HasDatabaseName("IX_ItemCardsInventory_ScanningNum");
+
+            modelBuilder.Entity<ItemCardsInventory>()
+             .HasIndex(i => new { i.SectionID, i.LastUpdate });
+
+
+
         }
-
-
-
-
-    
-
 
 
 

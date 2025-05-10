@@ -15,7 +15,7 @@ namespace store
         private AuthenticationService authService;
 
 
-        public MainPage(AuthenticationService authService,string apiKey="12345-ABCDE-67890-FGHIJ", string secretKey= "S3cr3tK3y!@#2023")
+        public MainPage(AuthenticationService authService,string apiKey= "12345-ABCDE-67890-FGHIJ", string secretKey= "S3cr3tK3y!@#2023")
         {
             InitializeComponent();
             var httpHelper = new HttpHelper(apiKey, secretKey);

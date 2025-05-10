@@ -18,10 +18,16 @@ namespace store.Models
         public string ItemName { get; set; }
 
         [Column("Quantity")]
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
 
-        [Column("Unit")]
-        public string? Unit { get; set; }
+        [Column("Price")]
+        public string Price { get; set; }
+
+        [Column("ItemID")]
+        public string ItemID { get; set; }
+
+        [Column("UnitID")]
+        public int UnitID { get; set; }
         public int SectionID { get; set; }
 
         [ForeignKey("SectionID")]

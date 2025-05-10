@@ -198,11 +198,11 @@ namespace store.ViewModels
             {
                 await Task.Delay(300, _cancellationTokenSource.Token);
 
-                (ItemBarcode itemBarcode, string itemName, string unitDesc, string price) = await _itemBarcode.GetItemByBarcode(barcode);
+                (ItemBarcode itemBarcode, string itemName, string unitDesc, string price,int ItemID,int UnitID) = await _itemBarcode.GetItemByBarcode(barcode);
                 if (itemBarcode == null)
                 {
                     Debug.WriteLine("Barcode not found in ItemBarcodeEntity. Searching in ItemFileEntity...");
-                    (string itemFileBarcode, string itemFileName, string itemFileUnitDesc, string itemPrice) = await itemFileEntity.GetItemByBarcodes(barcode);
+                    (string itemFileBarcode, string itemFileName, string itemFileUnitDesc, string itemPrice,int ItemFileItemID,int UnitIDItemFile) = await itemFileEntity.GetItemByBarcodes(barcode);
 
                     if (itemFileBarcode == null)
                     {
@@ -219,6 +219,8 @@ namespace store.ViewModels
                         itemName = itemFileName;
                         unitDesc = itemFileUnitDesc;
                         price = itemPrice;
+                        ItemID = ItemFileItemID;
+                        UnitID = UnitIDItemFile;
                     }
                 }
 
@@ -232,15 +234,15 @@ namespace store.ViewModels
                 {
                     if (isQuantityPopupChecked)
                     {
-                        var quantityPopup = new QuantityPopup(itemName, itemBarcode.Barcode, unitDesc, sectionID, itemBarcode.ItemID, price);
+                        var quantityPopup = new QuantityPopup(itemName, itemBarcode.Barcode, unitDesc, sectionID, itemBarcode.ItemID, price,UnitID);
 
                         Debug.WriteLine($"The data that will be updated: ItemName: {itemName}, UnitDesc: {unitDesc}, Barcode: {itemBarcode.Barcode}, Price: {price}");
-                        quantityPopup.OnQuantitySet = async (newQuantity, itemName, barcode, unitDesc, sectionId, price) =>
+                        quantityPopup.OnQuantitySet = async (newQuantity, itemName, barcode, unitDesc, sectionId, price,ItemID,UnitID) =>
                         {
                             if (existingItemCard != null)
                             {
                                 int totalQuantity = existingItemCard.Quantity + newQuantity;
-                                await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, totalQuantity, sectionId, price);
+                                await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, totalQuantity, sectionId, price,ItemID, UnitID);
 
                                 existingItemCard.Quantity = totalQuantity;
                                 existingItemCard.Price = price;
@@ -270,11 +272,10 @@ namespace store.ViewModels
                                     int totalQuantity = existingItemCard.Quantity + 1;
                                     Debug.WriteLine($" before existingCard after1");
 
-                                    // Handle potential null price
                                     string priceString = existingItemCard.Price?.ToString() ?? "0";
 
                                     await _insertDataApi.SaveItemCard(existingItemCard.ItemName, existingItemCard.ScanningNum,
-                                        existingItemCard.Unit, totalQuantity, sectionID, priceString);
+                                        existingItemCard.Unit, totalQuantity, sectionID, priceString,ItemID,UnitID);
                                     Debug.WriteLine($" before existingCard after2");
 
                                     existingItemCard.Quantity = totalQuantity;
@@ -305,13 +306,13 @@ namespace store.ViewModels
                 {
                     if (isQuantityPopupChecked)
                     {
-                        var quantityPopup = new QuantityPopup(itemName, itemBarcode.Barcode, unitDesc, sectionID, itemBarcode.ItemID, price);
+                        var quantityPopup = new QuantityPopup(itemName, itemBarcode.Barcode, unitDesc, sectionID, itemBarcode.ItemID, price,UnitID);
 
                         Debug.WriteLine($"The data that will be saved: ItemName: {itemName}, UnitDesc: {unitDesc}, Barcode: {itemBarcode.Barcode}, Price: {price}");
-                        quantityPopup.OnQuantitySet = async (quantity, itemName, barcode, unitDesc, sectionId, price) =>
+                        quantityPopup.OnQuantitySet = async (quantity, itemName, barcode, unitDesc, sectionId, price,ItemID, UnitID) =>
                         {
                             Debug.WriteLine($"Saving data: Quantity: {quantity}, Name: {itemName}, Barcode: {barcode}, Unit: {unitDesc}, SectionID: {sectionId}, Price: {price}");
-                            await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, quantity, sectionId, price);
+                            await _insertDataApi.SaveItemCard(itemName, barcode, unitDesc, quantity, sectionId, price,ItemID, UnitID);
                             var updatedItem = await _insertDataApi.GetItemDetails(barcode);
                             if (updatedItem != null)
                             {
@@ -321,7 +322,7 @@ namespace store.ViewModels
                                     ScanningNum = updatedItem.ScanningNum,
                                     ItemName = updatedItem.ItemName,
                                     Quantity = quantity,
-                                    Unit = updatedItem.Unit,
+                                    Unit = updatedItem.Unit,                               
                                     Price = price
                                 };
 
@@ -336,7 +337,7 @@ namespace store.ViewModels
                     }
                     else
                     {
-                        await _insertDataApi.SaveItemCard(itemName, itemBarcode.Barcode, unitDesc, 1, sectionID, price);
+                        await _insertDataApi.SaveItemCard(itemName, itemBarcode.Barcode, unitDesc, 1, sectionID, price,ItemID, UnitID);
                         var updatedItem = await _insertDataApi.GetItemDetails(itemBarcode.Barcode);
                         if (updatedItem != null)
                         {

@@ -36,7 +36,7 @@ namespace store.Data
             throw new NotImplementedException();
         }
 
-        public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc, string Price)> GetItemByBarcode(string barcode)
+        public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc, string Price,int ItemID,int UnitID)> GetItemByBarcode(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
             {
@@ -53,18 +53,21 @@ namespace store.Data
                     ItemBarcode = barcodeItem,
                     ItemName = itemFile.ItemName,
                     UnitDesc = barcodeItem.UnitDesc,
+                    UnitID=barcodeItem.UnitID,
+                    
+                    ItemID=barcodeItem.ItemID,
                     Price = barcodeItem.price
                 }
             ).FirstOrDefaultAsync();
 
             if (result == null)
             {
-                return (null, null, null, null);
+                return (null, null, null, null,0,0);
             }
 
             string priceAsString = result.Price?.ToString() ?? "0.00"; 
 
-            return (result.ItemBarcode, result.ItemName, result.UnitDesc, priceAsString);
+            return (result.ItemBarcode, result.ItemName, result.UnitDesc, priceAsString,result.ItemID,result.UnitID);
         }
 
         public async Task<(ItemBarcode ItemBarcode, string ItemName, string UnitDesc)> GetItemByBarcodes(string barcode)
@@ -88,6 +91,7 @@ namespace store.Data
                                     ItemBarcode = barcodeItem,
                                     ItemName = itemFile.ItemName,
                                     UnitDesc = barcodeItem.UnitDesc,
+                                    UnitID=barcodeItem.UnitID,
                                     Price= barcodeItem.price
                                 }).FirstOrDefaultAsync();
 

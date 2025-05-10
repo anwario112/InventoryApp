@@ -60,6 +60,9 @@ namespace store.Data
             }
         }
 
+
+
+
         public async Task<int> GetShoppingCartCount(int userId)
         {
             var shoppingCartCount = await dBContext.ShoppingCard
@@ -147,6 +150,72 @@ namespace store.Data
             }
         }
 
+
+
+
+        public async Task<bool> UpdateItemQuantity(int itemId, int newQuantity)
+        {
+            try
+            {
+                var item = await dBContext.ShoppingCard
+                    .FirstOrDefaultAsync(sc => sc.ID == itemId);
+
+                if (item != null)
+                {
+                   
+                    item.Quantity = newQuantity.ToString();
+
+                 
+                    var itemFile = await dBContext.ItemFile
+                        .FirstOrDefaultAsync(i => i.ItemID == item.ItemID);
+
+                    if (itemFile != null && decimal.TryParse(itemFile.Price, out decimal unitPrice))
+                    {
+                        decimal totalPrice = unitPrice * newQuantity;
+                        item.Price = totalPrice.ToString("F2");
+                    }
+
+                    await dBContext.SaveChangesAsync();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error updating item quantity: {ex.Message}");
+                return false;
+            }
+        }
+
+     
+        public async Task<dynamic> GetShoppingCartItemById(int itemId)
+        {
+            try
+            {
+                var item = await (from shoppingCard in dBContext.ShoppingCard
+                                  join itemFile in dBContext.ItemFile
+                                  on shoppingCard.ItemID equals itemFile.ItemID
+                                  where shoppingCard.ID == itemId
+                                  select new
+                                  {
+                                      shoppingCard.ID,
+                                      shoppingCard.UserID,
+                                      shoppingCard.Quantity,
+                                      shoppingCard.Price,
+                                      itemFile.ItemName,
+                                      itemFile.ItemNum,
+                                      itemFile.ImageUrl
+                                  }).FirstOrDefaultAsync();
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error getting shopping cart item: {ex.Message}");
+                return null;
+            }
+        }
         public async Task<ShoppingCard> GetShoppingCartItemByUser(int userId, int itemId)
         {
             return await dBContext.ShoppingCard

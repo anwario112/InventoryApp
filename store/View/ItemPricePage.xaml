@@ -82,7 +82,7 @@
                             <Label Grid.Row="3" Grid.Column="1" Text="{Binding Product.SaleNetUSD, StringFormat='${0:N2}'}" TextColor="#212529" />
 
                             <Label Grid.Row="4" Grid.Column="0" Text="Unit:" FontAttributes="Bold" TextColor="#6c757d" />
-                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Product.Unit}" TextColor="#212529" />
+                            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Product.UnitDesc}" TextColor="#212529" />
                         </Grid>
                     </VerticalStackLayout>
                 </Frame>
@@ -101,7 +101,7 @@
                                TextColor="#0d6efd" 
                                VerticalOptions="Center" />
 
-                        <Label Text="{Binding Product.CurrencyRate, StringFormat='1 USD = {0:N0} LL'}" 
+                        <Label Text="{Binding Product.Rate, StringFormat='1 USD = {0:N0} LL'}" 
                                TextColor="#0d6efd" 
                                Margin="5,0,0,0" 
                                VerticalOptions="Center" />

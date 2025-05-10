@@ -18,6 +18,7 @@ namespace store.Models
         public DateTime DateCreated { get; set; } = DateTime.Now;
         [Column("Price")]
         public string Price   { get; set; }
+      
 
         [Column("UserID")]
         public int UserID { get; set; }

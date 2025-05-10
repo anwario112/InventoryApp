@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 using ZXing.QrCode.Internal;
 using NetTopologySuite.Index.HPRtree;
+using System.Globalization;
 
 namespace store.ViewModels
 {
@@ -27,36 +28,44 @@ namespace store.ViewModels
         {
             try
             {
-                if (!int.TryParse(quantityText, out int quantity) || quantity <= 0)
+                if (!float.TryParse(quantityText, NumberStyles.Any, CultureInfo.InvariantCulture, out float quantity) || quantity <= 0)
                 {
                     await Application.Current.MainPage.DisplayAlert("Error", "Please enter a valid positive quantity", "OK");
                     return false;
                 }
 
-             
+                ItemCardsInventory item = null;
+
                 if (mergeEnabled)
                 {
                     var existingItems = await itemCardsInventoryEntity.GetItemsByBarcode(barcode, sectionID);
                     var existingItem = existingItems.FirstOrDefault();
-
                     if (existingItem != null)
                     {
                         existingItem.Quantity = quantity;
                         existingItem.LastUpdate = DateTime.Now;
+                        Debug.WriteLine($"quantity:{existingItem.Quantity}");
                         await itemCardsInventoryEntity.UpdateData(existingItem, existingItem.ID);
-                        return true;
+                        item = existingItem;
                     }
                 }
 
-               
-                var newItem = new ItemCardsInventory
+                if (item == null)
                 {
-                    ScanningNum = barcode,
-                    Quantity = quantity,
-                    SectionID = sectionID,
-                    LastUpdate = DateTime.Now
-                };
-                await itemCardsInventoryEntity.AddData(newItem);
+                    item = new ItemCardsInventory
+                    {
+                        ScanningNum = barcode,
+                        Quantity = quantity,
+                        SectionID = sectionID,
+                        LastUpdate = DateTime.Now
+                    };
+                    Debug.WriteLine($"scanning:{item.ScanningNum},quantity:{item.Quantity}");
+                    int newId = await itemCardsInventoryEntity.AddData(item);
+                    item.ID = newId;
+                }
+
+               
+                MessagingCenter.Send(this, "ItemUpdated", item);
                 return true;
             }
             catch (Exception ex)
@@ -66,29 +75,29 @@ namespace store.ViewModels
                 return false;
             }
         }
-        public event Action<int> ItemUpdated;
+
         public async Task<bool> UpdateQuantity(string qauntity, int itemId)
         {
             Debug.WriteLine($"quantity:{qauntity},itemid:{itemId}");
-            if (!int.TryParse(qauntity, out int parsedQuantity))
+            if (!float.TryParse(qauntity, NumberStyles.Any, CultureInfo.InvariantCulture, out float quantity) || quantity <= 0)
             {
+                await Application.Current.MainPage.DisplayAlert("Error", "Please enter a valid positive quantity", "OK");
                 return false;
             }
 
-            var UpdateCard = new ItemCardsInventory
+            var existingItem = await itemCardsInventoryEntity.GetItemById(itemId);
+            if (existingItem != null)
             {
-                ID = itemId,
-                Quantity = parsedQuantity,
-            };
+                existingItem.Quantity = quantity;
+                existingItem.LastUpdate = DateTime.Now;
+                await itemCardsInventoryEntity.UpdateData(existingItem, itemId);
 
-            await itemCardsInventoryEntity.UpdateData(UpdateCard, itemId);
-
-
-            MessagingCenter.Send(this, "DataSaved");
+                // Notify with updated item
+                MessagingCenter.Send(this, "ItemUpdated", existingItem);
+            }
 
             return true;
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)

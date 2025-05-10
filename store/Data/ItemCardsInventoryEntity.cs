@@ -4,192 +4,130 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace store.Data
 {
     public class ItemCardsInventoryEntity : IDataHelper<ItemCardsInventory>
     {
+        private readonly DBContext _dbContext;
 
-        private readonly DBContext dBContext;
+
+        private static readonly Func<DBContext, int, Task<List<ItemCardsInventory>>> _compiledToListQuery =
+     EF.CompileAsyncQuery((DBContext ctx, int sectionId) =>
+         ctx.ItemCardsInventory
+             .AsNoTracking()
+             .Where(i => i.SectionID == sectionId)
+             .OrderByDescending(i => i.LastUpdate)
+             .ToList());
+
 
         public ItemCardsInventoryEntity()
         {
-            dBContext = new DBContext();
-        }
-        public async Task AddData(ItemCardsInventory table)
-        {
-            await dBContext.AddAsync(table);
-            await dBContext.SaveChangesAsync();
+            _dbContext = new DBContext();
+
+            _ = _dbContext.Database.ExecuteSqlRaw("SELECT 1");
         }
 
-        public async Task<List<ItemCardsInventory>> GetAllItemCards(int sectionID)
+        public async Task<int> AddData(ItemCardsInventory table)
         {
-            return await dBContext.ItemCardsInventory
-                .Where(itemCard => itemCard.SectionID == sectionID)
-                .OrderByDescending(itemCard => itemCard.LastUpdate) 
-                .Select(itemCard => new ItemCardsInventory
-                {
-                    ID = itemCard.ID,
-                    ScanningNum = itemCard.ScanningNum,
-                    Quantity = itemCard.Quantity,
-                    SectionID = itemCard.SectionID,
-                    LastUpdate = itemCard.LastUpdate
-                })
-                .ToListAsync();
+            _dbContext.ItemCardsInventory.Add(table);
+            await _dbContext.SaveChangesAsync();
+            return table.ID;
         }
 
         public async Task DeleteCard(int ID, int sectionID)
         {
-            Debug.WriteLine($"the card that will be deleted:{ID}");
-            var itemCard = await dBContext.ItemCardsInventory.FindAsync(ID);
 
-            dBContext.ItemCardsInventory.Remove(itemCard);
-            await dBContext.SaveChangesAsync();
-            Debug.WriteLine($"deleted card is :{ID}");
+            await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"DELETE FROM ItemCardsInventory WHERE ID = {ID} AND SectionID = {sectionID}");
+            Debug.WriteLine($"Deleted card ID: {ID}");
         }
+
         public async Task<List<ItemCardsInventory>> GetItemsByBarcode(string barcode, int sectionID)
         {
             if (string.IsNullOrWhiteSpace(barcode))
-            {
                 throw new ArgumentException("Barcode cannot be null or empty.", nameof(barcode));
-            }
 
-            try
-            {
-                var items = await dBContext.ItemCardsInventory
-                    .Where(i => i.ScanningNum == barcode && i.SectionID == sectionID)
-                    .ToListAsync();
-
-                return items;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error fetching items by barcode and section ID: {ex.Message}");
-                throw;
-            }
+            return await _dbContext.ItemCardsInventory
+                .AsNoTracking()
+                .Where(i => i.ScanningNum == barcode && i.SectionID == sectionID)
+                .ToListAsync();
         }
+
         public async Task UpdateData(ItemCardsInventory table, int itemId)
         {
-            var existingItem = await dBContext.ItemCardsInventory
-                .FirstOrDefaultAsync(x => x.ID == itemId);
 
-            if (existingItem != null)
-            {
-                existingItem.Quantity = table.Quantity;
-                existingItem.LastUpdate = DateTime.Now;
-                await dBContext.SaveChangesAsync();
-            }
+            await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"UPDATE ItemCardsInventory SET Quantity = {table.Quantity}, LastUpdate = {DateTime.Now} WHERE ID = {itemId}");
         }
 
         public async Task<ItemCardsInventory> GetItemById(int itemId)
         {
-            try
-            {
-               
-
-                return await dBContext.ItemCardsInventory
-                    .Where(i => i.ID == itemId)
-                    .FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error getting item by ID: {ex}");
-                return null;
-            }
+            return await _dbContext.ItemCardsInventory
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.ID == itemId);
         }
 
-        public async Task<List<ItemCardsInventory>> GetItemCardsBySectionID(int sectionID)
+        public async Task<List<ItemCardsInventory>> GetItemCardsBySectionID(int sectionID, int page = 1, int pageSize = 50)
         {
-            try
-            {
-
-                var itemCardsToRetrieve = await dBContext.ItemCardsInventory
-                                                          .Where(ic => ic.SectionID == sectionID)
-                                                          .ToListAsync();
-
-
-               
-
-                return itemCardsToRetrieve;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"An error occurred while retrieving ItemCards: {ex.Message}");
-                throw;
-            }
+            return await _dbContext.ItemCardsInventory
+                .AsNoTracking()
+                .Where(i => i.SectionID == sectionID)
+                .OrderByDescending(i => i.LastUpdate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
-        public Task AddDataRange(List<ItemCardsInventory> tables)
+        public async Task<List<ItemCardsInventory>> GetItemCardsBySectionIDCompiled(int sectionID)
         {
-            throw new NotImplementedException();
+            return await _compiledToListQuery(_dbContext, sectionID);
         }
-
-        public Task<List<ItemCardsInventory>> GetConnection(string serverName, string databaseName, string username, string password, string year)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ItemBarcode> GetItemByBarcode(string barcode)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateData(ItemCardsInventory table)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public async Task DeleteData(int sectionID)
         {
+
+            await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"DELETE FROM ItemCardsInventory WHERE SectionID = {sectionID}");
+            Debug.WriteLine($"Deleted all items in section: {sectionID}");
+        }
+
+
+        public async Task<List<ItemCardsInventory>> GetPagedItems(int sectionID, int page = 1, int pageSize = 50)
+        {
+            return await _dbContext.ItemCardsInventory
+                .AsNoTracking()
+                .Where(i => i.SectionID == sectionID)
+                .OrderByDescending(i => i.LastUpdate)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+
+        public async Task<int> DeleteAllCards(int sectionId)
+        {
             try
             {
-                var itemsToDelete = await dBContext.ItemCardsInventory
 
-                    .Where(ic => ic.SectionID == sectionID)
+                int deletedCount = await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+                    $"DELETE FROM ItemCardsInventory WHERE SectionID = {sectionId}");
 
-                    .ToListAsync();
-
-
-                if (itemsToDelete.Any())
-                {
-
-                    dBContext.ItemCardsInventory.RemoveRange(itemsToDelete);
-
-                    await dBContext.SaveChangesAsync();
-
-                    Debug.WriteLine($"Deleted {itemsToDelete.Count} ItemCards with SectionID {sectionID}.");
-
-                }
-
-                else
-
-                {
-
-                    Debug.WriteLine($"No ItemCards found with SectionID {sectionID}.");
-
-                }
-
-            }
-            catch (DbUpdateException ex)
-            {
-
-                Debug.WriteLine($"Database update error: {ex.Message}");
-
-                throw;
+                Debug.WriteLine($"Deleted {deletedCount} cards from section {sectionId}");
+                return deletedCount;
             }
             catch (Exception ex)
             {
-
-                Debug.WriteLine($"An error occurred while deleting ItemCards: {ex.Message}");
-
+                Debug.WriteLine($"Error in DeleteAllCards: {ex.Message}");
                 throw;
-
             }
-
         }
 
+        public Task AddDataRange(List<ItemCardsInventory> tables) => throw new NotImplementedException();
+        public Task<List<ItemCardsInventory>> GetConnection(string serverName, string databaseName, string username, string password, string year) => throw new NotImplementedException();
+        public Task<ItemBarcode> GetItemByBarcode(string barcode) => throw new NotImplementedException();
+        public Task UpdateData(ItemCardsInventory table) => throw new NotImplementedException();
+        Task IDataHelper<ItemCardsInventory>.AddData(ItemCardsInventory table) => throw new NotImplementedException();
     }
 }

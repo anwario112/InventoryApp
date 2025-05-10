@@ -12,8 +12,9 @@ namespace store.Models
         public int InvoiceID { get; set; }
         public int ItemID { get; set; }
         public string   Quantity {  get; set; }
-        public int UnitID { get; set; }
+        public int? UnitID { get; set; }
         public string Price { get; set; }
+        public string? Barcode { get; set; }
         public bool? TVA { get; set; }
         public string? TvaValue { get; set; }
         public string TotalNet {  get; set; }

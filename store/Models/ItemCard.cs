@@ -21,8 +21,14 @@ namespace store.Models
         [Column("Quantity")]
         public int Quantity { get; set; }
 
+        [Column("ItemID")]
+        public int ItemID { get; set; }
+
         [Column("Unit")]
         public string? Unit { get; set; }
+
+        [Column("UnitID")]
+        public int? UnitID { get; set; }
 
         public string Price {  get; set; }
 

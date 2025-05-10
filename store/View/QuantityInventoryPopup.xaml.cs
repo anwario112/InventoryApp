@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Views;
 using store.ViewModels;
 using System.Diagnostics;
+using System.Globalization;
 using ZXing;
 
 namespace store.View;
@@ -11,7 +12,7 @@ public partial class QuantityInventoryPopup : Popup
 	public string Barcode { get; set; }
     public int SectionID { get; set; }
     public int? ItemId { get; set; }
-    private int _existingQuantity;
+    private float _existingQuantity;
     public enum InputType { Inventory, Edit }
     private readonly InputType _inputType;
     private readonly bool _mergeEnabled;
@@ -19,7 +20,7 @@ public partial class QuantityInventoryPopup : Popup
     private readonly QuantityInventoryPopupViewModel _viewModel;
     private readonly InventoryViewModel inventoryViewModel;
   
-    public QuantityInventoryPopup(InputType inputType,int sectionid, string barcode = null, int? itemId = null, int existingQuantity = 0, bool mergeEnabled = false)
+    public QuantityInventoryPopup(InputType inputType,int sectionid, string barcode = null, int? itemId = null, float existingQuantity = 0, bool mergeEnabled = false)
 	{
 		InitializeComponent();
    
@@ -61,12 +62,13 @@ public partial class QuantityInventoryPopup : Popup
         try
         {
             bool isSaved = false;
-            int quantityToSet=0;
+            float quantityToSet=0;
             bool isMergeQuantityChecked = Preferences.Get("MergeQuantityPreference", false);
 
-            if (!int.TryParse(QuantityField.Text, out int enteredQuantity) || enteredQuantity <= 0)
+            if (!float.TryParse(
+             QuantityField.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out float enteredQuantity) || enteredQuantity <= 0)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please enter a valid quantity", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", "Please enter a valid positive quantity", "OK");
                 return;
             }
             switch (_inputType)

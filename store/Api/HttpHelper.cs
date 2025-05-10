@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,6 +18,9 @@ namespace store.Api
             SecretKey = secretKey;
             Debug.WriteLine($"HttpHelper Constructor - ApiKey: {ApiKey}, SecretKey: {SecretKey}");
         }
+
+
+       
 
         private HttpClient CreateHttpClient()
         {
@@ -71,17 +75,20 @@ namespace store.Api
             }
         }
 
-        public async Task<string> PostResponse(string url, string jsonContent)
+        public async Task<string> PostResponse(string url, string jsonContent, string serverName = null, string databaseName = null, string username = null, string password = null, string year = null)
         {
             using (var client = CreateHttpClient())
             {
                 Debug.WriteLine($"PostResponse - URL: {url}");
-                Debug.WriteLine($"X-API-KEY: {ApiKey}, X-SECRET-KEY: {SecretKey}");
 
-                foreach (var header in client.DefaultRequestHeaders)
-                {
-                    Debug.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
-                }
+                client.DefaultRequestHeaders.Add("serverName", serverName);
+                client.DefaultRequestHeaders.Add("databaseName", databaseName);
+                client.DefaultRequestHeaders.Add("username", username);
+                client.DefaultRequestHeaders.Add("password", password);
+                client.DefaultRequestHeaders.Add("year", year);
+
+                Debug.WriteLine($"Headers: X-Server-Name: {serverName}, X-Database-Name: {databaseName}, X-Username: {username}, X-Password: {password}, X-Year: {year}");
+
 
                 var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
@@ -91,21 +98,53 @@ namespace store.Api
 
                     if (response.IsSuccessStatusCode)
                     {
-                        return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine($"API Success Response: {responseContent}");
+                        return responseContent;
                     }
                     else
                     {
                         string responseContent = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine($"Server response: {responseContent}");
-                        throw new Exception($"Error posting data to {url}: {response.StatusCode} - {response.ReasonPhrase}");
+                        Debug.WriteLine($"API Error Response: {responseContent}");
+                        throw new Exception($"API Error: {response.StatusCode} - {responseContent}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Request failed for {url}: {ex.Message}");
-                    throw new Exception($"Request failed for {url}: {ex.Message}", ex);
+                    Debug.WriteLine($"Request failed: {ex}");
+                    throw;
                 }
             }
         }
+
+            public async Task<string> LicenseGetResponse(string url,string licenseKey) 
+            {
+                using(var client = CreateHttpClient())
+                {
+                    try
+                    {
+                        client.DefaultRequestHeaders.Add("LicenseKey", licenseKey);
+                        HttpResponseMessage response = await client.GetAsync(url).ConfigureAwait(false);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            string responseContent = await response.Content.ReadAsStringAsync();
+                            Debug.WriteLine($"Server response: {responseContent}");
+                            throw new Exception($"Error fetching data from {url}: {response.StatusCode} - {response.ReasonPhrase}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Request failed for {url}: {ex.Message}");
+                        throw new Exception($"Request failed for {url}: {ex.Message}", ex);
+                    }
+            }
+            }
+        }
     }
-}
+    
+

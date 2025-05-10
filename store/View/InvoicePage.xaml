@@ -83,7 +83,7 @@
                     <StackLayout Orientation="Vertical" Padding="10">
                         <StackLayout Orientation="Horizontal">
                            
-                            <Border WidthRequest="50" HeightRequest="50" Stroke="Transparent" StrokeThickness="2" BackgroundColor="{StaticResource Gray200}" Margin="20,0,0,0">
+                            <Border WidthRequest="50" HeightRequest="50" Stroke="Transparent" StrokeThickness="2" BackgroundColor="{StaticResource Gray200}" Margin="10,0,0,0">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="25" />
                                    

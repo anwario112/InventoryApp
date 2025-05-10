@@ -14,15 +14,15 @@ using System.Threading.Tasks;
 
 namespace store.ViewModels
 {
-    public class InventoryViewModel: INotifyPropertyChanged
+    public class InventoryViewModel : INotifyPropertyChanged
     {
         private readonly SectionInventoryEntity sectionInventoryEntity;
         private readonly RakInventoryEntity rakInventoryEntity;
         private readonly ExportedRakInventoryEntity exportedRakInventoryEntity;
         private readonly ExportedSectionInventoryEntity exportedSectionInventoryEntity;
         private readonly ExportedCardsInventoryEntity exportedItemCardInventory;
-       
-        
+
+
         private CancellationTokenSource _debounceTokenSource;
 
         private string _barcodeText;
@@ -37,10 +37,10 @@ namespace store.ViewModels
                     _barcodeText = value;
                     OnPropertyChanged(nameof(BarcodeText));
 
-                 
+
                     _debounceTokenSource?.Cancel();
 
-                 
+
                     _debounceTokenSource = new CancellationTokenSource();
                     var token = _debounceTokenSource.Token;
 
@@ -48,10 +48,10 @@ namespace store.ViewModels
                     {
                         try
                         {
-                           
+
                             await Task.Delay(1000, token);
 
-                           
+
                             if (!token.IsCancellationRequested && !string.IsNullOrEmpty(_barcodeText))
                             {
                                 await MainThread.InvokeOnMainThreadAsync(() =>
@@ -60,7 +60,7 @@ namespace store.ViewModels
                         }
                         catch (TaskCanceledException)
                         {
-                           
+
                         }
                     });
                 }
@@ -84,96 +84,95 @@ namespace store.ViewModels
         private readonly ItemCardsInventoryEntity itemCardsInventoryEntity;
         public InventoryViewModel(int sectionId)
         {
-            
-            itemCardsInventoryEntity =new ItemCardsInventoryEntity();
+
+            itemCardsInventoryEntity = new ItemCardsInventoryEntity();
             SectionID = sectionId;
             sectionInventoryEntity = new SectionInventoryEntity();
             exportedRakInventoryEntity = new ExportedRakInventoryEntity();
             exportedSectionInventoryEntity = new ExportedSectionInventoryEntity();
             exportedItemCardInventory = new ExportedCardsInventoryEntity();
             rakInventoryEntity = new RakInventoryEntity();
-          
 
 
+            ItemCards = new ObservableCollection<ItemCardsInventory>();
 
+            MessagingCenter.Subscribe<QuantityInventoryPopupViewModel, ItemCardsInventory>(this, "ItemUpdated", (sender, item) =>
+            {
+                if (item.SectionID == SectionID)
+                {
 
-
-
+                    var existingItem = ItemCards.FirstOrDefault(i => i.ID == item.ID);
+                    if (existingItem != null)
+                    {
+                        int index = ItemCards.IndexOf(existingItem);
+                        ItemCards[index] = item;
+                    }
+                    else
+                    {
+                        ItemCards.Insert(0, item);
+                    }
+                }
+            });
         }
-
 
         public async Task LoadCards(int SectionID)
         {
+            var stopwatch = Stopwatch.StartNew();
             try
             {
                 Debug.WriteLine($"Starting LoadCards for SectionID: {SectionID}");
 
-                var items = await itemCardsInventoryEntity.GetAllItemCards(SectionID);
-                Debug.WriteLine($"Retrieved {items?.Count ?? 0} items from database");
-
-                ItemCards = new ObservableCollection<ItemCardsInventory>(items);
-                Debug.WriteLine($"ItemCards collection set with {ItemCards.Count} items");
-
+               
+                var firstBatchSize = 7;
+                var firstItems = await itemCardsInventoryEntity.GetItemCardsBySectionID(SectionID, 1, firstBatchSize);
+                ItemCards = new ObservableCollection<ItemCardsInventory>(firstItems);
                 OnPropertyChanged(nameof(ItemCards));
-                Debug.WriteLine("Property change notification sent for ItemCards");
+
+                Debug.WriteLine($"First batch of items loaded in {stopwatch.ElapsedMilliseconds}ms");
+
+            
+                var batchSize = 10;
+                var page = 2;
+
+                await Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        var items = await itemCardsInventoryEntity.GetItemCardsBySectionID(SectionID, page, batchSize);
+                        if (items.Count == 0)
+                        {
+                            break; 
+                        }
+
+                        foreach (var item in items)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                ItemCards.Add(item);
+                            });
+                        }
+
+                        page++;
+                        await Task.Delay(100); 
+                    }
+                });
+
+                Debug.WriteLine($"All items loaded in {stopwatch.ElapsedMilliseconds}ms");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error loading cards: {ex}");
             }
-        }
-
-
-
-
-        public async Task LoadSingleItem(int itemId)
-        {
-            try
+            finally
             {
-                Debug.WriteLine($"Loading single item with ID: {itemId}");
-
-             
-                var updatedItem = await itemCardsInventoryEntity.GetItemById(itemId);
-
-                if (updatedItem != null)
-                {
-                    await MainThread.InvokeOnMainThreadAsync(() => {
-                     
-                        var existingItemIndex = -1;
-                        for (int i = 0; i < ItemCards.Count; i++)
-                        {
-                            if (ItemCards[i].ID == itemId)
-                            {
-                                existingItemIndex = i;
-                                break;
-                            }
-                        }
-
-                        if (existingItemIndex != -1)
-                        {
-                         
-                            ItemCards.RemoveAt(existingItemIndex);
-                            ItemCards.Insert(existingItemIndex, updatedItem);
-
-                            Debug.WriteLine($"Updated item at index {existingItemIndex} with quantity {updatedItem.Quantity}");
-                        }
-                        else
-                        {
-                            ItemCards.Add(updatedItem);
-                            Debug.WriteLine($"Added new item with ID {itemId} and quantity {updatedItem.Quantity}");
-                        }
-                    });
-                }
-                else
-                {
-                    Debug.WriteLine($"Item {itemId} not found in database");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error loading single item: {ex}");
+                stopwatch.Stop();
+                Debug.WriteLine($"Total LoadCards execution: {stopwatch.ElapsedMilliseconds}ms");
             }
         }
+
+
+
+
 
 
         public void ShowQuantityPopup(string barcode)
@@ -185,7 +184,6 @@ namespace store.ViewModels
             {
                 try
                 {
-
                     var existingItems = await itemCardsInventoryEntity.GetItemsByBarcode(barcode, SectionID);
                     var existingItem = existingItems.FirstOrDefault();
 
@@ -205,17 +203,22 @@ namespace store.ViewModels
                                 if (Application.Current?.MainPage is Page mainPage)
                                 {
                                     var result = await mainPage.ShowPopupAsync(popup);
-                                    if (result is int quantityToAdd) 
+                                    if (result is float quantityToAdd)
                                     {
-                                       
-                                        await LoadCards(SectionID);
+
+                                        var updatedItem = await itemCardsInventoryEntity.GetItemById(existingItem.ID);
+                                        var itemInCollection = ItemCards.FirstOrDefault(i => i.ID == existingItem.ID);
+                                        if (itemInCollection != null && updatedItem != null)
+                                        {
+                                            int index = ItemCards.IndexOf(itemInCollection);
+                                            ItemCards[index] = updatedItem;
+                                        }
                                         BarcodeText = string.Empty;
                                     }
                                 }
                             }
                             else
                             {
-
                                 var popup = new QuantityInventoryPopup(
                                     QuantityInventoryPopup.InputType.Inventory,
                                     SectionID,
@@ -223,27 +226,40 @@ namespace store.ViewModels
 
                                 if (Application.Current?.MainPage is Page mainPage)
                                 {
-                                    await mainPage.ShowPopupAsync(popup);
+                                    var result = await mainPage.ShowPopupAsync(popup);
+                                    if (result is float quantity)
+                                    {
+
+                                        var newItems = await itemCardsInventoryEntity.GetItemsByBarcode(barcode, SectionID);
+                                        var newItem = newItems.FirstOrDefault();
+                                        if (newItem != null && !ItemCards.Any(i => i.ID == newItem.ID))
+                                        {
+                                            ItemCards.Insert(0, newItem);
+                                        }
+                                    }
                                 }
-                                await LoadCards(SectionID);
                                 BarcodeText = string.Empty;
                             }
                         }
                         else
                         {
-
                             if (existingItem != null)
                             {
-
                                 existingItem.Quantity += 1;
                                 existingItem.LastUpdate = DateTime.Now;
                                 await itemCardsInventoryEntity.UpdateData(existingItem, existingItem.ID);
-                                await LoadCards(SectionID);
+
+
+                                var itemInCollection = ItemCards.FirstOrDefault(i => i.ID == existingItem.ID);
+                                if (itemInCollection != null)
+                                {
+                                    int index = ItemCards.IndexOf(itemInCollection);
+                                    ItemCards[index] = existingItem;
+                                }
                                 BarcodeText = string.Empty;
                             }
                             else
                             {
-
                                 var newItem = new ItemCardsInventory
                                 {
                                     ScanningNum = barcode,
@@ -251,8 +267,12 @@ namespace store.ViewModels
                                     SectionID = SectionID,
                                     LastUpdate = DateTime.Now
                                 };
-                                await itemCardsInventoryEntity.AddData(newItem);
-                                await LoadCards(SectionID);
+
+
+                                int newItemId = await itemCardsInventoryEntity.AddData(newItem);
+                                newItem.ID = newItemId;
+
+                                ItemCards.Insert(0, newItem);
                                 BarcodeText = string.Empty;
                             }
                         }
@@ -272,10 +292,15 @@ namespace store.ViewModels
                                 var result = await mainPage.ShowPopupAsync(popup);
                                 Debug.WriteLine($"Popup result received: {result}");
 
-                                if (result is int newQuantity)
+                                if (result is float newQuantity)
                                 {
-                                    await LoadCards(SectionID);
-                                    Debug.WriteLine("Cards reloaded after popup operation");
+
+                                    var newItems = await itemCardsInventoryEntity.GetItemsByBarcode(barcode, SectionID);
+                                    var newItem = newItems.OrderByDescending(i => i.ID).FirstOrDefault();
+                                    if (newItem != null && !ItemCards.Any(i => i.ID == newItem.ID))
+                                    {
+                                        ItemCards.Insert(0, newItem);
+                                    }
                                     BarcodeText = string.Empty;
                                 }
                             }
@@ -290,12 +315,15 @@ namespace store.ViewModels
                                 SectionID = SectionID,
                                 LastUpdate = DateTime.Now
                             };
-                            await itemCardsInventoryEntity.AddData(newItem);
-                            Debug.WriteLine("New item added to the database");
 
-                            await LoadCards(SectionID);
+
+                            int newItemId = await itemCardsInventoryEntity.AddData(newItem);
+                            newItem.ID = newItemId;
+
+
+                            ItemCards.Insert(0, newItem);
                             BarcodeText = string.Empty;
-                            Debug.WriteLine("Cards reloaded after adding new item");
+                            Debug.WriteLine("New item added to the collection");
                         }
                     }
                 }
@@ -307,7 +335,6 @@ namespace store.ViewModels
             });
         }
 
-
         public async Task<bool> SaveItems(int sectionID)
         {
             try
@@ -316,21 +343,65 @@ namespace store.ViewModels
                 string sectionName = sectionDetails.sectionName;
                 string rakName = sectionDetails.rakName;
                 List<ItemCardsInventory> ItemCardsInventory = sectionDetails.itemCardsInventory;
-                Debug.WriteLine($"the rakname that will be inserted:{rakName}");
+                Debug.WriteLine($"The rakname that will be processed: {rakName}");
 
-                var rakNameExists = await rakInventoryEntity.RakNameExists(rakName);
+
                 var sectionNameExists = await exportedSectionInventoryEntity.SectionNameExists(sectionName);
 
-              
-                    var exportRak = new ExportedRakInventory
-                    {
-                        ExportedRakName = rakName
-                    };
-                    await exportedRakInventoryEntity.AddData(exportRak);
-                    Debug.WriteLine($"Data saved in export: ExportedRakName={rakName}");
+                if (sectionNameExists)
+                {
 
+                    var exportedSectionID = await exportedSectionInventoryEntity.GetSectionIdByName(sectionName);
+                    Debug.WriteLine($"Section already exists with ID: {exportedSectionID}");
+
+                    if (exportedSectionID.HasValue)
+                    {
+
+                        await exportedItemCardInventory.DeleteCardsBySectionID(exportedSectionID.Value);
+                        Debug.WriteLine($"Deleted existing cards for SectionID: {exportedSectionID.Value}");
+
+
+                        if (ItemCardsInventory != null && ItemCardsInventory.Any())
+                        {
+                            foreach (var itemCard in ItemCardsInventory)
+                            {
+                                var exportedCard = new ExportedItemCardInventory
+                                {
+                                    ScanningNum = itemCard.ScanningNum,
+                                    Quantity = itemCard.Quantity,
+                                    SectionID = exportedSectionID.Value
+                                };
+
+                                await exportedItemCardInventory.AddData(exportedCard);
+                                Debug.WriteLine($"Updated card in ExportedItemCardInventory: ScanningNum={itemCard.ScanningNum}, Quantity={itemCard.Quantity}, SectionID={exportedSectionID.Value}");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    Debug.WriteLine("Section doesn't exist, creating new entries");
+
+
+                    var rakNameExists = await rakInventoryEntity.RakNameExists(rakName);
                     var rakID = await exportedRakInventoryEntity.GetIdByRakName(rakName);
+
+                    if (!rakID.HasValue)
+                    {
+                        var exportRak = new ExportedRakInventory
+                        {
+                            ExportedRakName = rakName
+                        };
+                        await exportedRakInventoryEntity.AddData(exportRak);
+                        Debug.WriteLine($"Data saved in export: ExportedRakName={rakName}");
+
+
+                        rakID = await exportedRakInventoryEntity.GetIdByRakName(rakName);
+                    }
+
                     Debug.WriteLine($"The RakID that will be inserted in ExportedSection: RakID={rakID}");
+
 
                     var exportSection = new ExportedSectionInventory
                     {
@@ -344,6 +415,7 @@ namespace store.ViewModels
                     var exportedSectionID = await exportedSectionInventoryEntity.GetSectionIdByName(sectionName);
                     Debug.WriteLine($"The received SectionID: {exportedSectionID}");
 
+
                     if (ItemCardsInventory != null && ItemCardsInventory.Any())
                     {
                         foreach (var itemCard in ItemCardsInventory)
@@ -351,32 +423,34 @@ namespace store.ViewModels
                             var exportedCard = new ExportedItemCardInventory
                             {
                                 ScanningNum = itemCard.ScanningNum,
-                               
                                 Quantity = itemCard.Quantity,
-                              
                                 SectionID = exportedSectionID.Value
                             };
 
                             await exportedItemCardInventory.AddData(exportedCard);
-                            Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum},  Quantity={itemCard.Quantity},  SectionID={exportedSectionID.Value}");
+                            Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum}, Quantity={itemCard.Quantity}, SectionID={exportedSectionID.Value}");
                         }
                     }
-                
-
+                }
 
                 return true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in SaveExportData for SectionID {sectionID}: {ex.Message}");
-
                 return false;
             }
         }
-
-        public async Task<bool> DeletedCard(int ID,int SectionID)
+        public async Task<bool> DeletedCard(int ID, int SectionID)
         {
-            await itemCardsInventoryEntity.DeleteCard(ID,SectionID);
+            await itemCardsInventoryEntity.DeleteCard(ID, SectionID);
+
+
+            var itemToRemove = ItemCards.FirstOrDefault(i => i.ID == ID);
+            if (itemToRemove != null)
+            {
+                ItemCards.Remove(itemToRemove);
+            }
             return true;
         }
 

@@ -15,6 +15,7 @@ namespace store.Models
 
         [JsonConverter(typeof(IntConverter))]
         public int? ItemID { get; set; }
+        public int UnitID { get; set; }
 
 
 

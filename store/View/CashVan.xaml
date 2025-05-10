@@ -117,7 +117,7 @@
                     <StackLayout Grid.Column="1" 
                                  VerticalOptions="Center" 
                                  Padding="20,0">
-                        <Label Text="Items" 
+                        <Label Text="Order" 
                                FontSize="22" 
                                FontAttributes="Bold" 
                                TextColor="#333333" />
@@ -210,15 +210,16 @@
                                VerticalOptions="Center" />
                     </Frame>
 
+                                
 
                     <StackLayout Grid.Column="1" 
                                  VerticalOptions="Center" 
                                  Padding="20,0">
-                        <Label Text="Currency" 
+                        <Label Text="Company Logo" 
                                FontSize="22" 
                                FontAttributes="Bold" 
                                TextColor="#333333" />
-                        <Label Text="Manage sales transactions" 
+                        <Label Text="Add logo" 
                                FontSize="14" 
                                TextColor="#666666" 
                                Margin="0,5,0,0" />

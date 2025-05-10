@@ -17,7 +17,7 @@ namespace store.Models
        
 
         [Column("Quantity")]
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
 
 
         [Column("LastUpdate")]

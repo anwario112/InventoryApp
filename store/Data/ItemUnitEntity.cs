@@ -69,23 +69,38 @@ namespace store.Data
         }
 
 
-        public async Task<List<string>> GetUnitDescsByItemNum(string itemNum)
+        // In ItemUnitEntity.cs
+        public async Task<List<(int UnitID, string UnitDesc)>> GetUnitDetailsbyItemNum(string itemNum)
         {
             if (string.IsNullOrWhiteSpace(itemNum))
             {
                 throw new ArgumentException("ItemNum cannot be null or empty.", nameof(itemNum));
             }
 
-            var unitDescs = await (from itemFile in _dbContext.ItemFile
-                                   join itemUnit in _dbContext.ItemUnit
-                                   on itemFile.ItemID equals itemUnit.ItemID
-                                   where itemFile.ItemNum == itemNum
-                                   select itemUnit.UnitDesc)
-                                   .AsNoTracking() 
-                                   .Distinct() 
+            var unitDetails = await (from itemFile in _dbContext.ItemFile
+                                     join itemUnit in _dbContext.ItemUnit
+                                     on itemFile.ItemID equals itemUnit.ItemID
+                                     where itemFile.ItemNum == itemNum
+                                     select new { UnitID = itemUnit.UnitID, UnitDesc = itemUnit.UnitDesc })
+                                   .AsNoTracking()
+                                   .Distinct()
                                    .ToListAsync();
 
-            return unitDescs;
+            return unitDetails.Select(u => (u.UnitID, u.UnitDesc)).ToList();
+        }
+
+        public async Task<int?> GetUnitIdByUnitName(string unitName)
+        {
+            if (string.IsNullOrWhiteSpace(unitName))
+            {
+                throw new ArgumentException("Unit name cannot be null or empty.", nameof(unitName));
+            }
+
+            var unit = await _dbContext.ItemUnit
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.UnitDesc == unitName);
+
+            return unit?.Id;
         }
     }
 }

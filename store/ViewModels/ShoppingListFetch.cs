@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using store.Data;
@@ -27,6 +28,8 @@ namespace store.ViewModels
         private readonly InvoiceDetailsEntity _invoiceDetailsEntity;
         private readonly InvoiceEntity _invoiceEntity;
         private readonly ItemCacheService _cacheService;
+        private readonly CategoryEntity categoryEntity;
+        private Category _selectedCategory;
 
 
 
@@ -62,6 +65,35 @@ namespace store.ViewModels
                 {
                     _displayedItems = value;
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        private ObservableCollection<Category> _categoryItems;
+        public ObservableCollection<Category> CategoryItems
+        {
+            get=> _categoryItems ?? (_categoryItems = new ObservableCollection<Category>());
+            set
+            {
+                if( _categoryItems != value)
+                {
+                    _categoryItems = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        public Category SelectCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (_selectedCategory != value)
+                {
+                    _selectedCategory = value;
+                    OnPropertyChanged();
+                    FilterItems();
                 }
             }
         }
@@ -119,13 +151,15 @@ namespace store.ViewModels
             _itemFileEntity = new ItemFileEntity();
             _allItems = new ObservableCollection<ItemFile>();
             _displayedItems = new ObservableCollection<ItemFile>();
+            _categoryItems = new ObservableCollection<Category>();
             _itemQuantities = new Dictionary<string, int>();
             _userEntity = new UserEntity();
             _shoppingCardEntity = new ShoppingCardEntity();
             _invoiceDetailsEntity = new InvoiceDetailsEntity();
             _invoiceEntity = new InvoiceEntity();
             _cacheService = new ItemCacheService();
-     
+            categoryEntity = new CategoryEntity();
+
             _cacheService = ItemCacheService.Instance;
         }
         public Dictionary<string, int> ItemQuantities
@@ -207,24 +241,60 @@ namespace store.ViewModels
         }
 
 
+        public async Task DisplayCategories()
+        {
+            var categories = await categoryEntity.GetAllCategories();
+            Debug.WriteLine($"Retrieved {categories?.Count} categories from database");
+            categories.Insert(0, new Category { CategoryName = "All Categories" });
+           
+            CategoryItems = new ObservableCollection<Category>(categories);
+            Debug.WriteLine($"CategoryItems now contains {CategoryItems.Count} items");
+            SelectCategory = CategoryItems[0]; 
+        }
 
+        public void FilterByCategory(Category category)
+        {
+            SelectCategory = category;
+        }
+
+
+
+
+        // Update this method in your ShoppingListFetch.cs ViewModel
 
         private void FilterItems()
         {
             try
             {
-                Debug.WriteLine($"filtering with term: {SearchTerm}");
+                Debug.WriteLine($"Filtering with term: '{SearchTerm}' and category: '{SelectCategory?.CategoryName}'");
 
-                if (string.IsNullOrWhiteSpace(SearchTerm))
+              
+                var filteredByCategory = AllItems;
+
+                if (SelectCategory != null && SelectCategory.CategoryName != "All Categories")
                 {
-                    UpdateDisplayedItems();
+                  
+                    Debug.WriteLine($"Selected Category ID: {SelectCategory.CategoryID}, Name: {SelectCategory.CategoryName}");
+
+                    foreach (var item in AllItems.Take(5))
+                    {
+                        Debug.WriteLine($"Item: {item.ItemName}, CategoryID: {item.ItemFileCategoryID}");
+                    }
+
+                 
+                    filteredByCategory = new ObservableCollection<ItemFile>(
+                        AllItems.Where(item => item.ItemFileCategoryID == SelectCategory.CategoryID)
+                    );
+
+                    Debug.WriteLine($"Filtered by category: Found {filteredByCategory.Count} items for category {SelectCategory.CategoryName}");
                 }
-                else
+
+             
+                if (!string.IsNullOrWhiteSpace(SearchTerm))
                 {
                     var matchingItems = new List<ItemFile>();
 
-                   
-                    foreach (var item in AllItems)
+                    foreach (var item in filteredByCategory)
                     {
                         try
                         {
@@ -236,18 +306,41 @@ namespace store.ViewModels
                         catch (Exception ex)
                         {
                             Debug.WriteLine($"Error filtering individual item: {ex.Message}");
-                         
                         }
                     }
 
-                    DisplayedItems = new ObservableCollection<ItemFile>(matchingItems);
-                    Debug.WriteLine($"Found {matchingItems.Count} matching items");
+                    _totalItems = matchingItems.Count;
+                    CurrentPage = 1;
+
+                    var paginatedItems = matchingItems
+                        .Skip((_currentPage - 1) * _pageSize)
+                        .Take(_pageSize)
+                        .ToList();
+
+                    DisplayedItems = new ObservableCollection<ItemFile>(paginatedItems);
+                    Debug.WriteLine($"Found {matchingItems.Count} total items matching search criteria");
                 }
+                else
+                {
+                  
+                    _totalItems = filteredByCategory.Count;
+
+                    var paginatedItems = filteredByCategory
+                        .Skip((_currentPage - 1) * _pageSize)
+                        .Take(_pageSize)
+                        .ToList();
+
+                    DisplayedItems = new ObservableCollection<ItemFile>(paginatedItems);
+                }
+
+                TotalPages = (_totalItems + _pageSize - 1) / _pageSize;
+                OnPropertyChanged(nameof(TotalPages));
+                (_previousPageCommand as Command)?.ChangeCanExecute();
+                (_nextPageCommand as Command)?.ChangeCanExecute();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in FilterItems: {ex.Message}\n{ex.StackTrace}");
-                // Fallback to showing all items
                 UpdateDisplayedItems();
             }
         }
@@ -412,18 +505,20 @@ namespace store.ViewModels
             Debug.WriteLine($"Checking for existing cart item - UserID: {userId}, ItemID: {itemID}");
             var existingCartItem = await _shoppingCardEntity.GetShoppingCartItemByUser(userId, itemID);
             Debug.WriteLine($"Existing cart item found: {existingCartItem != null}");
+            int countToShow = int.Parse(quantity);
 
             if (existingCartItem != null)
             {
                 int newQuantity = int.Parse(existingCartItem.Quantity) + int.Parse(quantity);
                 existingCartItem.Quantity = newQuantity.ToString();
-
+                countToShow = newQuantity;
                 decimal existingPrice = decimal.Parse(existingCartItem.Price);
                 decimal newPrice = decimal.Parse(unitPrice);
                 existingCartItem.Price = (existingPrice + newPrice).ToString("F2");
 
                 await _shoppingCardEntity.UpdateData(existingCartItem);
                 Debug.WriteLine($"Updated existing item in cart: ItemID: {existingCartItem.ItemID}, New Quantity: {existingCartItem.Quantity}, New Price: {existingCartItem.Price}, UserID: {existingCartItem.UserID}");
+                Toast.Make($"Item has been updated to {countToShow}", ToastDuration.Long).Show();
             }
             else
             {
@@ -434,10 +529,19 @@ namespace store.ViewModels
                     Quantity = quantity,
                     Price = unitPrice
                 };
+                countToShow = int.Parse(shoppingCartItem.Quantity);
                 await _shoppingCardEntity.AddData(shoppingCartItem);
-                Debug.WriteLine($"Inserted to cart: ItemID: {shoppingCartItem.ItemID}, Quantity: {shoppingCartItem.Quantity}, Total Price: {shoppingCartItem.Price}, UserID: {shoppingCartItem.UserID}");
-            }
 
+                Debug.WriteLine($"Inserted to cart: ItemID: {shoppingCartItem.ItemID}, Quantity: {shoppingCartItem.Quantity}, Total Price: {shoppingCartItem.Price}, UserID: {shoppingCartItem.UserID}");
+                Toast.Make($"{countToShow} Item has been added", ToastDuration.Long).Show();
+            }
+            _itemQuantities[itemNum.Trim()] = 0;
+
+            var affectItem = AllItems.FirstOrDefault(item => item.ItemNum == itemNum);
+            if (affectItem != null) 
+            {
+                NotifyItemQuantityChanged(affectItem);
+            }
             await UpdateShoppingCartCount(username);
         }
         public async Task UpdateShoppingCartCount(string username)

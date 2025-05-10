@@ -93,7 +93,7 @@ namespace store.ViewModels
         {
             try
             {
-                await Task.Delay(100); 
+                await Task.Delay(100);
 
                 var connection = await connectionEntity.FetchConnectionData();
 
@@ -106,7 +106,7 @@ namespace store.ViewModels
                 Debug.WriteLine($"Connection Details: ServerName={connection.ServerName}, DatabaseName={connection.DatabaseName}, Username={connection.Username}, Password={connection.Password}, Year={connection.Year}");
 
                 var httpHelper = new HttpHelper("12345-ABCDE-67890-FGHIJ", "S3cr3tK3y!@#2023");
-                string url = $"  https://2474-80-79-145-165.ngrok-free.app/api/itemPrice?itemBarcode={barcode}&currencyID={currencyID}";
+                string url = $"http://192.168.1.5:8000/api/itemPrice?itemBarcode={barcode}&currencyID={currencyID}";
 
                 Debug.WriteLine($"Fetching item price for barcode: {barcode}");
 
@@ -121,14 +121,15 @@ namespace store.ViewModels
 
                 Debug.WriteLine($"API Response: {response}");
 
-               
+             
                 var apiResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<ApiResponse>(response);
 
-                if (apiResponse != null && apiResponse.Success && apiResponse.Data != null)
+                if (apiResponse != null && apiResponse.Success && apiResponse.Data != null && apiResponse.Data.Count > 0)
                 {
-                    Product = apiResponse.Data;
+                  
+                    Product = apiResponse.Data[0];
                     DisplayedBarcode = barcode;
-                    Debug.WriteLine($"Product Fetched: {Product.ItemName}, Price LL: {Product.SaleNetLL}, Price USD: {Product.SaleNetUSD},Rate:{Product.CurrencyRate}");
+                    Debug.WriteLine($"Product Fetched: {Product.ItemName}, Price LL: {Product.SaleNetLL}, Price USD: {Product.SaleNetUSD}, Rate: {Product.Rate},unit:{Product.UnitDesc}");
                 }
                 else
                 {

@@ -183,7 +183,7 @@
                                                    TextColor="{StaticResource Gray500}"  
                                                    Margin="0,-5,0,0"/>
 
-                                                <Label Text="{Binding Price, StringFormat='{0:C}'}"
+                                                <Label Text="{Binding Price, StringFormat='{}{0:C2}'}"
                                                        VerticalOptions="Center"
                                                        FontSize="14" 
                                                        TextColor="{StaticResource Gray500}"  

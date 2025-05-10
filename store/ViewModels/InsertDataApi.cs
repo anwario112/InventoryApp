@@ -34,6 +34,8 @@ namespace store.ViewModels
         private readonly ExportedSectionEntity _exportedSectionEntity;
         private readonly ExportedCardEntity _exportedCardEntity;
         private string _searchDate;
+        private readonly CategoryEntity categoryEntity;
+
 
         public string SearchDate
         {
@@ -60,6 +62,7 @@ namespace store.ViewModels
             _exportedSectionEntity = new ExportedSectionEntity();
             _exportedCardEntity = new ExportedCardEntity();
             connectionEntity = new ConnectionEntity();
+            categoryEntity = new CategoryEntity();
         }
 
 
@@ -68,7 +71,7 @@ namespace store.ViewModels
 
         public async Task InsertApiData()
         {
-            string url = "  https://146a-213-204-95-77.ngrok-free.app/api/items";
+            string url = "http://192.168.1.9:8000/api/items";
 
             try
             {
@@ -128,38 +131,112 @@ namespace store.ViewModels
                     return;
                 }
 
+            
+                if (jsonResponse.Length > 5_000_000) 
+                {
+                    Debug.WriteLine("Warning: Very large JSON response detected");
+                }
+
+              
+                Debug.WriteLine($"First 100 chars: {jsonResponse.Substring(0, Math.Min(100, jsonResponse.Length))}");
+                if (jsonResponse.Length > 200)
+                {
+                    Debug.WriteLine($"Last 100 chars: {jsonResponse.Substring(jsonResponse.Length - 100)}");
+                }
+
+              
+                if (!ValidateJsonStructure(jsonResponse))
+                {
+                    Debug.WriteLine("Invalid JSON structure detected. Attempting to repair...");
+                    jsonResponse = TryRepairJson(jsonResponse);
+
+                    if (jsonResponse == null)
+                    {
+                        Debug.WriteLine("Could not repair JSON. Aborting deserialization.");
+                        return;
+                    }
+                }
+
                 List<ApiQueryDTO> queryResults;
                 try
                 {
-                    var wrapper = JsonSerializer.Deserialize<ApiResponseWrapper>(jsonResponse);
+                  
+                    var options = new JsonSerializerOptions
+                    {
+                        AllowTrailingCommas = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        MaxDepth = 64
+                    };
+
+                    var wrapper = JsonSerializer.Deserialize<ApiResponseWrapper>(jsonResponse, options);
                     queryResults = wrapper?.DataQuery1;
+
+                    if (queryResults == null || queryResults.Count == 0)
+                    {
+                        Debug.WriteLine("No data found in DataQuery1 property or wrapper is null.");
+                        return;
+                    }
                 }
                 catch (JsonException ex)
                 {
                     Debug.WriteLine($"JSON deserialization failed: {ex.Message}");
-                    return;
+                    Debug.WriteLine($"Path: {ex.Path}, LineNumber: {ex.LineNumber}, BytePositionInLine: {ex.BytePositionInLine}");
+
+                   
+                    string fixedJson = AttemptJsonFix(jsonResponse, ex);
+                    if (fixedJson != null)
+                    {
+                        try
+                        {
+                            var options = new JsonSerializerOptions
+                            {
+                                AllowTrailingCommas = true,
+                                ReadCommentHandling = JsonCommentHandling.Skip
+                            };
+
+                            var wrapper = JsonSerializer.Deserialize<ApiResponseWrapper>(fixedJson, options);
+                            queryResults = wrapper?.DataQuery1;
+
+                            if (queryResults == null || queryResults.Count == 0)
+                            {
+                                Debug.WriteLine("Repair attempt succeeded but no data found in result.");
+                                return;
+                            }
+
+                            Debug.WriteLine("JSON repair successful, continuing with processing.");
+                        }
+                        catch (Exception repairEx)
+                        {
+                            Debug.WriteLine($"Repair attempt failed: {repairEx.Message}");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Could not repair the JSON response. Processing aborted.");
+                        return;
+                    }
                 }
 
-                if (queryResults == null || queryResults.Count == 0)
-                {
-                    Debug.WriteLine("No data to process.");
-                    return;
-                }
-
+               
                 // Process ItemFile data
                 var distinctItemFileData = queryResults
-                    .GroupBy(q => q.ItemNum) 
-                    .Select(g => g.First())  
+                    .GroupBy(q => q.ItemNum)
+                    .Select(g => g.First())
                     .Select(q => new ItemFile
                     {
                         ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
                         ItemNum = q.ItemNum,
                         ItemName = q.ItemName,
                         Price = q.Price,
-                        ImageUrl = q.ImageUrl
+                        ImageUrl = q.ImageUrl,
+                        ItemFileCategoryID = !string.IsNullOrEmpty(q.ItemFileCategoryID) &&
+                                            int.TryParse(q.ItemFileCategoryID, out int categoryId) ?
+                                            categoryId : 0 
                     })
                     .ToList();
                 await _itemFile.UpsertItemFileData(distinctItemFileData);
+                Debug.WriteLine($"itemfile saved");
 
                 // Process ItemBarcode data
                 var itemBarcodeData = queryResults
@@ -168,11 +245,13 @@ namespace store.ViewModels
                         ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
                         Barcode = q.Barcode,
                         price = decimal.TryParse(q.BarcodePrice, out decimal price) ? price : 0,
-                        UnitDesc = q.UnitDesc
+                        UnitDesc = q.UnitDesc,
+                        UnitID = int.TryParse(q.UnitIDBarcode, out int unitId) ? unitId : 0,
                     })
                     .ToList();
 
                 await _itemBarcode.UpsertItemBarcodeData(itemBarcodeData);
+                Debug.WriteLine($"itemBarcode saved");
 
                 // Process ItemUnit data
                 var unitData = queryResults
@@ -181,11 +260,33 @@ namespace store.ViewModels
                     .Select(q => new ItemUnit
                     {
                         ItemID = int.TryParse(q.ItemID, out int itemId) ? itemId : 0,
+                        UnitID = int.TryParse(q.UnitID, out int unitId) ? unitId : 0,
                         UnitDesc = q.ItemNumUnit ?? "N/A"
                     })
                     .ToList();
 
                 await _itemUnit.UpsertItemUnitData(unitData);
+
+
+
+                var distinctCategories = queryResults
+                  .Where(q => !string.IsNullOrEmpty(q.CategoryID) && !string.IsNullOrEmpty(q.CategoryName))
+                  .GroupBy(q => q.CategoryID)
+                  .Select(g => g.First())
+                  .Select(q => new Category 
+                  {
+                      CategoryID = int.TryParse(q.CategoryID, out int catId) ? catId : 0,
+                      CategoryName = q.CategoryName
+                  })
+                  .ToList();
+
+                if (distinctCategories.Any())
+                {
+                    
+                
+                    await categoryEntity.UpsertCategoryData(distinctCategories);
+                    Debug.WriteLine($"Saved {distinctCategories.Count} distinct categories");
+                }
 
                 Debug.WriteLine("Data insertion/update completed successfully.");
             }
@@ -197,6 +298,158 @@ namespace store.ViewModels
                     Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
             }
+        }
+
+       
+        private bool ValidateJsonStructure(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return false;
+
+       
+            int curlyBraceCount = 0;
+            int squareBracketCount = 0;
+            bool inString = false;
+            bool escaped = false;
+
+            foreach (char c in json)
+            {
+                if (escaped)
+                {
+                    escaped = false;
+                    continue;
+                }
+
+                if (c == '\\' && inString)
+                {
+                    escaped = true;
+                    continue;
+                }
+
+                if (c == '"')
+                {
+                    inString = !inString;
+                    continue;
+                }
+
+                if (!inString)
+                {
+                    if (c == '{') curlyBraceCount++;
+                    else if (c == '}') curlyBraceCount--;
+                    else if (c == '[') squareBracketCount++;
+                    else if (c == ']') squareBracketCount--;
+
+                    
+                    if (curlyBraceCount < 0 || squareBracketCount < 0)
+                        return false;
+                }
+            }
+
+           
+            return curlyBraceCount == 0 && squareBracketCount == 0 && !inString;
+        }
+
+      
+        private string TryRepairJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return null;
+
+            
+            int curlyBraceCount = 0;
+            int squareBracketCount = 0;
+            bool inString = false;
+            bool escaped = false;
+
+            foreach (char c in json)
+            {
+                if (escaped)
+                {
+                    escaped = false;
+                    continue;
+                }
+
+                if (c == '\\' && inString)
+                {
+                    escaped = true;
+                    continue;
+                }
+
+                if (c == '"')
+                {
+                    inString = !inString;
+                    continue;
+                }
+
+                if (!inString)
+                {
+                    if (c == '{') curlyBraceCount++;
+                    else if (c == '}') curlyBraceCount--;
+                    else if (c == '[') squareBracketCount++;
+                    else if (c == ']') squareBracketCount--;
+                }
+            }
+
+          
+            StringBuilder repairedJson = new StringBuilder(json);
+
+       
+            for (int i = 0; i < squareBracketCount; i++)
+            {
+                repairedJson.Append("]");
+            }
+
+          
+            for (int i = 0; i < curlyBraceCount; i++)
+            {
+                repairedJson.Append("}");
+            }
+
+            return repairedJson.ToString();
+        }
+
+        private string AttemptJsonFix(string json, JsonException ex)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return null;
+
+            try
+            {
+               
+                if (ex.BytePositionInLine > 0)
+                {
+                   
+                    int lastValidPos = FindLastValidJsonBrace(json);
+                    if (lastValidPos > 0 && lastValidPos < json.Length)
+                    {
+                    
+                        string truncated = json.Substring(0, lastValidPos + 1);
+                        return TryRepairJson(truncated);
+                    }
+                }
+
+              
+                return TryRepairJson(json);
+            }
+            catch (Exception fixEx)
+            {
+                Debug.WriteLine($"Error during JSON fix attempt: {fixEx.Message}");
+                return null;
+            }
+        }
+
+     
+        private int FindLastValidJsonBrace(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return -1;
+
+          
+            int lastCloseBrace = json.LastIndexOf("}");
+            int lastCloseBracket = json.LastIndexOf("]");
+
+          
+            return Math.Max(lastCloseBrace, lastCloseBracket);
         }
 
 
@@ -211,7 +464,7 @@ namespace store.ViewModels
             Debug.WriteLine($"Scanned barcode: {barcode}");
 
 
-            var (itemBarcode, itemName, unitDesc,price) = await _itemBarcode.GetItemByBarcode(barcode);
+            var (itemBarcode, itemName, unitDesc,price,ItemID,UnitID) = await _itemBarcode.GetItemByBarcode(barcode);
 
             if (itemBarcode == null)
             {
@@ -264,7 +517,7 @@ namespace store.ViewModels
             Debug.WriteLine($"{SearchData}");
         }
 
-        public async Task SaveItemCard(string itemName, string barcode, string unitDesc, int quantity, int sectionID, string price)
+        public async Task SaveItemCard(string itemName, string barcode, string unitDesc, int quantity, int sectionID, string price,int ItemID,int UnitID)
         {
             Debug.WriteLine($"itemName passed to SaveItemCard: {itemName}, unit: {unitDesc}");
 
@@ -285,9 +538,10 @@ namespace store.ViewModels
                         existingItem.Unit = unitDesc;
                         existingItem.Quantity = quantity;
                         existingItem.Price = price;
+                        existingItem.UnitID = UnitID;
                         existingItem.LastUpdate= DateTime.Now;
 
-                        Debug.WriteLine($"Updating existing ItemCard: ItemName={existingItem.ItemName}, Barcode={existingItem.ScanningNum}, Unit={existingItem.Unit}, Quantity={existingItem.Quantity}, SectionID={existingItem.SectionID}");
+                        Debug.WriteLine($"Updating existing ItemCard: ItemName={existingItem.ItemName}, Barcode={existingItem.ScanningNum}, Unit={existingItem.Unit}, Quantity={existingItem.Quantity}, SectionID={existingItem.SectionID},UnitID:{existingItem.UnitID}");
 
                         await _itemCardEntity.UpdateData(existingItem);
                     }
@@ -302,11 +556,13 @@ namespace store.ViewModels
                             Quantity = quantity,
                             SectionID = sectionID,
                             Price = price,
+                            ItemID=ItemID,
+                            UnitID=UnitID,
                             LastUpdate=DateTime.Now
 
                         };
 
-                        Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price}");
+                        Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price},itemID:{itemData.ItemID},unitID:{itemData.UnitID}");
 
                         await _itemCardEntity.AddData(itemData);
                     }
@@ -321,11 +577,13 @@ namespace store.ViewModels
                         Unit = unitDesc,
                         Quantity = quantity,
                         SectionID = sectionID,
-                        Price = price
+                        Price = price,
+                        ItemID=ItemID,
+                        UnitID=UnitID
 
                     };
 
-                    Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price}");
+                    Debug.WriteLine($"Adding new ItemCard: ItemName={itemData.ItemName}, Barcode={itemData.ScanningNum}, Unit={itemData.Unit}, Quantity={itemData.Quantity}, SectionID={itemData.SectionID},price={itemData.Price},itemID:{itemData.ItemID},unitID:{itemData.UnitID}");
 
                     await _itemCardEntity.AddData(itemData);
                 }
@@ -349,6 +607,8 @@ namespace store.ViewModels
                 var rakNameExists = await _exportedRakEntity.RakNameExists(rakName);
                 var sectionNameExists = await _exportedSectionEntity.SectionNameExists(sectionName);
 
+              
+
                 if (rakNameExists)
                 {
                     var existingSectionID = await _exportedSectionEntity.GetSectionIdByName(sectionName);
@@ -364,7 +624,8 @@ namespace store.ViewModels
                                 // Update existing card
                                 existingCard.Quantity += itemCard.Quantity;
                                 existingCard.ItemName = itemCard.ItemName;
-                                existingCard.Unit = itemCard.Unit;
+                                existingCard.UnitID = itemCard.UnitID ?? 0;
+                                existingCard.Price = itemCard.Price;
 
                                 await _exportedCardEntity.UpdateData(existingCard);
                                 Debug.WriteLine($"Updated existing card: ScanningNum={itemCard.ScanningNum}, Quantity={existingCard.Quantity}");
@@ -377,12 +638,14 @@ namespace store.ViewModels
                                     ScanningNum = itemCard.ScanningNum,
                                     ItemName = itemCard.ItemName,
                                     Quantity = itemCard.Quantity,
-                                    Unit = itemCard.Unit,
+                                    UnitID=itemCard.UnitID ?? 0,
+                                    Price=itemCard.Price,     
+                                    ItemID=itemCard.ItemID.ToString(),
                                     SectionID = existingSectionID.Value
                                 };
 
                                 await _exportedCardEntity.AddData(exportedCard);
-                                Debug.WriteLine($"Saved new card: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={existingSectionID.Value}");
+                                Debug.WriteLine($"Saved new card: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={existingSectionID.Value},unitID:{itemCard.UnitID}");
                             }
                         }
                     }
@@ -412,12 +675,14 @@ namespace store.ViewModels
                                     ScanningNum = itemCard.ScanningNum,
                                     ItemName = itemCard.ItemName,
                                     Quantity = itemCard.Quantity,
-                                    Unit = itemCard.Unit,
+                                    UnitID=itemCard.UnitID ?? 0,
+                                    Price=itemCard.Price,
+                                    ItemID=itemCard.ItemID.ToString(),
                                     SectionID = exportedSectionID.Value
                                 };
 
                                 await _exportedCardEntity.AddData(exportedCard);
-                                Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={exportedSectionID.Value}");
+                                Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={exportedSectionID.Value},untiID:{itemCard.UnitID}");
                             }
                         }
                     }
@@ -455,12 +720,14 @@ namespace store.ViewModels
                                 ScanningNum = itemCard.ScanningNum,
                                 ItemName = itemCard.ItemName,
                                 Quantity = itemCard.Quantity,
-                                Unit = itemCard.Unit,
+                                UnitID=itemCard.UnitID ?? 0,
+                                Price=itemCard.Price,
+                                ItemID=itemCard.ItemID.ToString(),
                                 SectionID = exportedSectionID.Value
                             };
 
                             await _exportedCardEntity.AddData(exportedCard);
-                            Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={exportedSectionID.Value}");
+                            Debug.WriteLine($"The saved data in ExportedCard: ScanningNum={itemCard.ScanningNum}, ItemName={itemCard.ItemName}, Quantity={itemCard.Quantity}, Unit={itemCard.Unit}, SectionID={exportedSectionID.Value},unitID:{itemCard.UnitID}");
                         }
                     }
                 }

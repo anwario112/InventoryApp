@@ -9,6 +9,6 @@ namespace store.DTO
     public class ApiResponse
     {
         public bool Success { get; set; }
-        public ProductApi Data { get; set; }
+        public List<ProductApi> Data { get; set; }
     }
 }

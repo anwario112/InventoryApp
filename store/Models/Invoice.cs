@@ -14,7 +14,7 @@ namespace store.Models
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public int? CurrencyID { get; set; }
         public string? Rate {  get; set; }
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         public int? BranchID { get; set; }
         public string Total { get; set; }
         public string? Discount { get; set; }
@@ -22,6 +22,7 @@ namespace store.Models
         public string? TvaValue { get; set; }
         public string? NetTotalTVA { get; set; }
         public int? CustomerID { get; set; }
+       
         public string Status { get; set; }
         public int? CashierID { get; set; }
 

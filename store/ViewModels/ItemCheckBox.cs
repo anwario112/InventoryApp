@@ -20,6 +20,8 @@ namespace store.ViewModels
 
         public decimal Price { get; set; }
 
+        public int UnitID { get; set; }
+
 
         // Reference to the parent view model
 

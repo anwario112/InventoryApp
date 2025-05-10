@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace store.ViewModels
 {
@@ -17,6 +18,7 @@ namespace store.ViewModels
     {
         private readonly InvoiceEntity _invoiceEntity;
         private readonly InvoiceDetailsEntity invoiceDetailsEntity;
+        private readonly ConnectionEntity _connectionEntity;
 
         private int _invoiceNum;
         public int InvoiceNum
@@ -126,7 +128,8 @@ namespace store.ViewModels
             }
         }
 
-      
+        public ICommand IncreaseQuantityCommand { get; }
+        public ICommand DecreaseQuantityCommand { get; }
         public bool IsSendButtonEnabled => InvoiceStatus != "sent";
 
 
@@ -137,12 +140,71 @@ namespace store.ViewModels
         {
             InvoiceNum = invoiceNum;
             _invoiceEntity = new InvoiceEntity();
+            _connectionEntity=new ConnectionEntity();
             invoiceDetailsEntity = new InvoiceDetailsEntity();
             InvoiceItems = new ObservableCollection<InvoiceDetailDTO>();
+
+            IncreaseQuantityCommand = new Command<int>(async (itemId) => await UpdateItemQuantity(itemId, 1));
+            DecreaseQuantityCommand = new Command<int>(async (itemId) => await UpdateItemQuantity(itemId, -1));
             GetCustomerPhone();
             
         }
 
+        public async Task UpdateItemQuantity(int itemId, int change)
+        {
+            Debug.WriteLine($"Attempting to update item {itemId} with change {change}");
+
+            var item = InvoiceItems.FirstOrDefault(i => i.ID == itemId);
+            if (item == null)
+            {
+                Debug.WriteLine($"Item {itemId} not found");
+                return;
+            }
+
+            Debug.WriteLine($"Current quantity: {item.Quantity}, New quantity: {item.Quantity + change}");
+
+           
+            if (item.Quantity + change < 1)
+            {
+                Debug.WriteLine("Quantity would be less than 1, aborting");
+                return;
+            }
+
+            
+            int newQuantity = item.Quantity + change;
+
+          
+            bool updated = await invoiceDetailsEntity.UpdateItemQuantity(itemId, newQuantity);
+            Debug.WriteLine($"Database update result: {updated}");
+
+            if (updated)
+            {
+                
+                int index = InvoiceItems.IndexOf(item);
+
+               
+                item.Quantity = newQuantity;
+
+               
+                item.TotalNet = item.Price * item.Quantity;
+
+               
+                decimal total = InvoiceItems.Sum(i => i.TotalNet);
+                TotalString = total.ToString("F2");
+
+            
+                await _invoiceEntity.UpdateInvoiceTotal(InvoiceNum, TotalString);
+
+              
+                var tempCollection = new ObservableCollection<InvoiceDetailDTO>(InvoiceItems);
+                InvoiceItems = null;
+                InvoiceItems = tempCollection;
+            }
+            else
+            {
+                Debug.WriteLine($"Failed to update quantity for item {itemId}");
+            }
+        }
         public async Task GetCustomerPhone()
         {
             CustomerPhone = await _invoiceEntity.GetCustomerPhoneByInvoiceNum(InvoiceNum);
@@ -204,23 +266,38 @@ namespace store.ViewModels
 
             return isDeleted; 
         }
-
+        public event EventHandler NavigationRequested;
         public async Task SendData()
         {
             try
             {
+
+
+                
+
+                var connectionData = await _connectionEntity.FetchConnectionData();
+                if (connectionData == null)
+                {
+                    Debug.WriteLine("Connection data is null. Cannot proceed with API request.");
+                    return;
+                }
+
                 var invoiceData = new
                 {
                     InvoiceNum,
                     TotalString,
                     InvoiceDate = DateCreated?.ToString("o"),
+                    InvoiceTypeID=8,
                     InvoiceItems = InvoiceItems.Select(item => new
                     {
                         ItemId = item.ItemID,
                         ItemName = item.ItemName,
+                        Barcode = item.ItemNum,
+                        UnitID=item.UnitID,
                         Quantity = (int)item.Quantity,
                         Price = item.Price,
-                        Total = item.TotalNet
+                        Total = item.TotalNet,
+                        
                     }).ToList()
                 };
 
@@ -232,13 +309,16 @@ namespace store.ViewModels
                 var httpHelper = new HttpHelper(apiKey, secretKey);
 
                 
-                var response = await httpHelper.PostResponse("https://aa86-213-204-95-49.ngrok-free.app/api/InvoiceData", json);
+                var response = await httpHelper.PostResponse("http://192.168.1.4:8000/api/InvoiceData", json,connectionData.ServerName,connectionData.DatabaseName,connectionData.Username,connectionData.Password,connectionData.Year);
 
                 if (!string.IsNullOrEmpty(response))
                 {
                     Debug.WriteLine("Data sent successfully.");
                     InvoiceStatus = "sent";
                     await UpdateInvoiceStatus(InvoiceNum, InvoiceStatus);
+
+                    NavigationRequested?.Invoke(this, EventArgs.Empty);
+
                 }
                 else
                 {

@@ -106,5 +106,77 @@ namespace store.Data
             }
         }
 
+        public async Task<bool> DeleteByRakName(string rakName)
+        {
+            try
+            {
+                Debug.WriteLine($"Attempting to delete rak: {rakName}");
+
+              
+                var rakToDelete = await dbContext.ExportedRakInventory
+                    .FirstOrDefaultAsync(r => r.ExportedRakName == rakName);
+
+                if (rakToDelete == null)
+                {
+                    Debug.WriteLine($"Rak '{rakName}' not found");
+                    return false;
+                }
+
+            
+                var sectionsToDelete = await dbContext.ExportedSectionInventory
+                    .Where(s => s.ExportedakID == rakToDelete.ID)
+                    .ToListAsync();
+
+                var itemCardsToDelete = new List<ExportedItemCardInventory>();
+                foreach (var section in sectionsToDelete)
+                {
+                    var cards = await dbContext.ExportedItemCardInventory
+                        .Where(c => c.SectionID == section.ID)
+                        .ToListAsync();
+                    itemCardsToDelete.AddRange(cards);
+                }
+
+              
+                using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                      
+                        if (itemCardsToDelete.Any())
+                        {
+                            dbContext.ExportedItemCardInventory.RemoveRange(itemCardsToDelete);
+                            await dbContext.SaveChangesAsync();
+                        }
+
+                      
+                        if (sectionsToDelete.Any())
+                        {
+                            dbContext.ExportedSectionInventory.RemoveRange(sectionsToDelete);
+                            await dbContext.SaveChangesAsync();
+                        }
+
+                     
+                        dbContext.ExportedRakInventory.Remove(rakToDelete);
+                        await dbContext.SaveChangesAsync();
+
+                        await transaction.CommitAsync();
+                        Debug.WriteLine($"Successfully deleted rak '{rakName}' and all related data");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Debug.WriteLine($"Error deleting rak '{rakName}': {ex.Message}");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in DeleteByRakName: {ex}");
+                return false;
+            }
+        }
+
     }
 }

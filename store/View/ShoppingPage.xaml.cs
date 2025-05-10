@@ -59,6 +59,7 @@ namespace store.View
               
                 bool forceRefresh = false;
 
+                await _fetchList.DisplayCategories();
                 await _fetchList.FetchAllItems(forceRefresh);
                 Debug.WriteLine("fetch end");
 
@@ -74,7 +75,21 @@ namespace store.View
             }
         }
 
-      
+        private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
+        {
+            if (sender is Border border && border.BindingContext is Models.Category category)
+            {
+                var viewModel = (ViewModels.ShoppingListFetch)BindingContext;
+
+               
+                viewModel.SelectCategory = category;
+
+             
+
+                System.Diagnostics.Debug.WriteLine($"Category selected: {category.CategoryName}");
+            }
+        }
+
         private async void LoadItems()
         {
           
@@ -155,7 +170,7 @@ namespace store.View
 
         private async void AddToInvoice(object sender, TappedEventArgs e)
         {
-            Debug.WriteLine("AddToInvoice triggered"); // Check if this logs
+            Debug.WriteLine("AddToInvoice triggered"); 
 
             var border = sender as Border;
             if (border == null)
@@ -208,6 +223,11 @@ namespace store.View
             {
                 image.Source = "gold.png"; 
             }
+        }
+
+        private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+        {
+
         }
     }
 }

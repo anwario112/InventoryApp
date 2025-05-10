@@ -12,13 +12,13 @@ namespace store.DTO
         public string ItemNum { get; set; }
         public string ItemName { get; set; }
         public decimal BasePrice { get; set; }  
-        public decimal ConvertedPrice { get; set; } 
-        public string Unit { get; set; }  
-        public decimal CurrencyRate { get; set; }  
+        public decimal ConvertedPrice { get; set; }
+        public string UnitDesc { get; set; }
+        public decimal Rate { get; set; }
         public int CurrencyID { get; set; }
 
-       
-        public string SaleNetLL => ConvertedPrice.ToString();
-        public string SaleNetUSD => BasePrice.ToString();
+
+        public decimal SaleNetLL { get; set; }   
+        public decimal SaleNetUSD { get; set; }
     }
 }

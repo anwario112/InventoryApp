@@ -6,6 +6,7 @@ public partial class CashVan : ContentPage
 {
 
     public string username { get; set; }
+    
 	public CashVan(string Username)
 	{
 		InitializeComponent();

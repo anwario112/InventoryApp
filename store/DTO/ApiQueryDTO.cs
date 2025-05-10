@@ -15,7 +15,12 @@ namespace store.DTO
         public string ImageUrl { get; set; }
         public string ItemNumUnit {  get; set; }
         public string UnitDesc { get; set; }
+        public string UnitIDBarcode { get; set; }
+        public string UnitID { get; set; }
         public string Barcode { get; set; }
         public string BarcodePrice { get; set; }
+        public string ItemFileCategoryID { get; set; }
+        public string CategoryID { get; set; }
+        public string CategoryName { get; set; }
     }
 }

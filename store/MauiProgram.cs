@@ -11,9 +11,9 @@ using store.ViewModels;
 using store.Service;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
-
-
-
+using Microsoft.Maui.LifecycleEvents;
+using store.View;
+using Google.Api;
 
 
 
@@ -43,15 +43,19 @@ namespace store
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("OPTITimes-Roman.otf", "roman");
                 });
-         
+     
             builder.Services.AddSingleton<ItemCacheService>();
             builder.Services.AddSingleton<ShoppingListFetch>();
+
+         
 
 
 
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+
 
 
             return builder.Build();
@@ -74,13 +78,6 @@ namespace store
 
                     Debug.WriteLine("Database initialized and tables created.");
 
-
-
-
-
-
-
-                   
 
 
 

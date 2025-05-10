@@ -1,22 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\store\\",
+  "WorkspaceRootPath": "C:\\Users\\USER\\source\\repos\\MauiApp\\store\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\viewmodels\\inventoryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\mauiapp\\store\\store\\viewmodels\\inventoryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\inventoryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\inventorypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\inventorypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\viewmodels\\quantityinventorypopupviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\viewmodels\\quantityinventorypopupviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|c:\\users\\user\\source\\repos\\store\\store\\view\\quantityinventorypopup.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F4D8A49-ACA8-4A40-8289-6E3FCBF38BC0}|store\\store.csproj|solutionrelative:store\\view\\quantityinventorypopup.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,12 +13,25 @@
       "VerticalTabListWidth": 100,
       "DocumentGroups": [
         {
-          "DockedWidth": 62,
-          "SelectedChildIndex": 11,
+          "DockedWidth": 159,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InventoryViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\MauiApp\\store\\store\\ViewModels\\InventoryViewModel.cs",
+              "RelativeDocumentMoniker": "store\\ViewModels\\InventoryViewModel.cs",
+              "ToolTip": "C:\\Users\\USER\\source\\repos\\MauiApp\\store\\store\\ViewModels\\InventoryViewModel.cs",
+              "RelativeToolTip": "store\\ViewModels\\InventoryViewModel.cs",
+              "ViewState": "AgIAACwBAAAAAAAAAAAUwDIBAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T11:43:11.259Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -59,55 +60,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "InventoryPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InventoryPage.xaml.cs",
-              "RelativeDocumentMoniker": "store\\View\\InventoryPage.xaml.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\InventoryPage.xaml.cs",
-              "RelativeToolTip": "store\\View\\InventoryPage.xaml.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAYwC4AAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T11:03:49.152Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "QuantityInventoryPopupViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\QuantityInventoryPopupViewModel.cs",
-              "RelativeDocumentMoniker": "store\\ViewModels\\QuantityInventoryPopupViewModel.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\QuantityInventoryPopupViewModel.cs",
-              "RelativeToolTip": "store\\ViewModels\\QuantityInventoryPopupViewModel.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwFUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T11:04:02.264Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "QuantityInventoryPopup.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\QuantityInventoryPopup.xaml.cs",
-              "RelativeDocumentMoniker": "store\\View\\QuantityInventoryPopup.xaml.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\View\\QuantityInventoryPopup.xaml.cs",
-              "RelativeToolTip": "store\\View\\QuantityInventoryPopup.xaml.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAA1wCIAAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T11:05:54.45Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "InventoryViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\InventoryViewModel.cs",
-              "RelativeDocumentMoniker": "store\\ViewModels\\InventoryViewModel.cs",
-              "ToolTip": "C:\\Users\\USER\\source\\repos\\store\\store\\ViewModels\\InventoryViewModel.cs",
-              "RelativeToolTip": "store\\ViewModels\\InventoryViewModel.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAQwFYAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T11:04:45.681Z",
-              "EditorCaption": ""
             }
           ]
         }

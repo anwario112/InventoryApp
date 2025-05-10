@@ -29,6 +29,9 @@ namespace store.Models
         [Column("ImageUrl")]
         public string? ImageUrl { get; set; }
 
+        [Column("ItemFileCategoryID")]
+        public int ItemFileCategoryID { get; set; }
+
 
 
         [JsonConverter(typeof(IntConverter))]

@@ -17,253 +17,265 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = store
-build_property.ProjectDir = C:\Users\USER\source\repos\store\store\
+build_property.ProjectDir = C:\Users\USER\source\repos\MauiApp\store\store\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/USER/source/repos/store/store/App.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/Users/USER/source/repos/store/store/AppShell.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/USER/source/repos/store/store/MainPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 
-[C:/Users/USER/source/repos/store/store/Resources/Styles/Colors.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/Users/USER/source/repos/store/store/Resources/Styles/Styles.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
-[C:/Users/USER/source/repos/store/store/View/AddUserPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/AddLogo.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.AddLogo.xaml
+build_metadata.AdditionalFiles.TargetPath = View\AddLogo.xaml
+build_metadata.AdditionalFiles.RelativePath = View\AddLogo.xaml
+
+[C:/Users/USER/source/repos/MauiApp/store/store/View/AddUserPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.AddUserPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\AddUserPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\AddUserPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CameraPopupPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CameraPopupPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CameraPopupPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CameraPopupPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CameraPopupPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CardList.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CardList.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CardList.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CardList.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CardList.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CashVan.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CashVan.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CashVan.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CashVan.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CashVan.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ChangePopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ChangePopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ChangePopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ChangePopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ChangePopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ClearDataPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ClearDataPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ClearDataPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ClearDataPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ClearDataPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ConnectionBox.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ConnectionBox.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ConnectionBox.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ConnectionBox.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ConnectionBox.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CreateFolder.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CreateFolder.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CreateFolder.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CreateFolder.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CreateFolder.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CurrencyPopup.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = store.View.CurrencyPopup.xaml
-build_metadata.AdditionalFiles.TargetPath = View\CurrencyPopup.xaml
-build_metadata.AdditionalFiles.RelativePath = View\CurrencyPopup.xaml
-
-[C:/Users/USER/source/repos/store/store/View/CustomerPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CustomerPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CustomerPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CustomerPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CustomerPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/CustomerPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/CustomerPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.CustomerPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\CustomerPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\CustomerPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/EditQuantityPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/EditQuantityPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.EditQuantityPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\EditQuantityPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\EditQuantityPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ExportPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ExportPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ExportPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ExportPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ExportPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/InventoryPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/InventoryPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.InventoryPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\InventoryPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\InventoryPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/InvoiceDetails.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/InvoiceDetails.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoiceDetails.xaml
 build_metadata.AdditionalFiles.TargetPath = View\InvoiceDetails.xaml
 build_metadata.AdditionalFiles.RelativePath = View\InvoiceDetails.xaml
 
-[C:/Users/USER/source/repos/store/store/View/InvoicePage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/InvoiceInventoryResendPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoiceInventoryResendPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\InvoiceInventoryResendPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\InvoiceInventoryResendPage.xaml
+
+[C:/Users/USER/source/repos/MauiApp/store/store/View/InvoicePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.InvoicePage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\InvoicePage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\InvoicePage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ItemCard.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ItemCard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ItemCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ItemCard.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ItemCardArchive.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ItemCardArchive.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemCardArchive.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ItemCardArchive.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ItemCardArchive.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ItemPricePage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ItemPricePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ItemPricePage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ItemPricePage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ItemPricePage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/LoginPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/LicenseKeyPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = store.View.LicenseKeyPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\LicenseKeyPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\LicenseKeyPage.xaml
+
+[C:/Users/USER/source/repos/MauiApp/store/store/View/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.LoginPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\LoginPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/packingCard.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/packingCard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.packingCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\packingCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\packingCard.xaml
 
-[C:/Users/USER/source/repos/store/store/View/PackingPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/PackingPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.PackingPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\PackingPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\PackingPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/QuantityInventoryPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/QuantityInventoryPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.QuantityInventoryPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\QuantityInventoryPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\QuantityInventoryPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/QuantityPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/QuantityPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.QuantityPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\QuantityPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\QuantityPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/RakCard.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/RakCard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\RakCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\RakCard.xaml
 
-[C:/Users/USER/source/repos/store/store/View/RakFolder.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/RakFolder.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakFolder.xaml
 build_metadata.AdditionalFiles.TargetPath = View\RakFolder.xaml
 build_metadata.AdditionalFiles.RelativePath = View\RakFolder.xaml
 
-[C:/Users/USER/source/repos/store/store/View/RakInventoryPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/RakInventoryPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakInventoryPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\RakInventoryPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\RakInventoryPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/RakPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/RakPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.RakPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\RakPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\RakPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/SectionCard.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/SectionCard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionCard.xaml
 build_metadata.AdditionalFiles.TargetPath = View\SectionCard.xaml
 build_metadata.AdditionalFiles.RelativePath = View\SectionCard.xaml
 
-[C:/Users/USER/source/repos/store/store/View/SectionInventoryPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/SectionInventoryPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionInventoryPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\SectionInventoryPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\SectionInventoryPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/SectionPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/SectionPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\SectionPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\SectionPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/SectionPopup.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/SectionPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.SectionPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = View\SectionPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = View\SectionPopup.xaml
 
-[C:/Users/USER/source/repos/store/store/View/Settings.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/Settings.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.Settings.xaml
 build_metadata.AdditionalFiles.TargetPath = View\Settings.xaml
 build_metadata.AdditionalFiles.RelativePath = View\Settings.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ShoppingCardPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ShoppingCardPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ShoppingCardPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ShoppingCardPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ShoppingCardPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/ShoppingPage.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/ShoppingPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.ShoppingPage.xaml
 build_metadata.AdditionalFiles.TargetPath = View\ShoppingPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\ShoppingPage.xaml
 
-[C:/Users/USER/source/repos/store/store/View/TransferData.xaml]
+[C:/Users/USER/source/repos/MauiApp/store/store/View/TransferData.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = store.View.TransferData.xaml
 build_metadata.AdditionalFiles.TargetPath = View\TransferData.xaml
